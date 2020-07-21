@@ -38,14 +38,12 @@ USAGE
 * [`lf-cli brand_views [FILE]`](#lf-cli-brand_views-file)
 * [`lf-cli brand_views:get [FILE]`](#lf-cli-brand_viewsget-file)
 * [`lf-cli brand_views:list [FILE]`](#lf-cli-brand_viewslist-file)
-* [`lf-cli config [FILE]`](#lf-cli-config-file)
-* [`lf-cli config:create [FILE]`](#lf-cli-configcreate-file)
-* [`lf-cli config:list [FILE]`](#lf-cli-configlist-file)
-* [`lf-cli config:new [FILE]`](#lf-cli-confignew-file)
-* [`lf-cli config:show [FILE]`](#lf-cli-configshow-file)
-* [`lf-cli config:verify [FILE]`](#lf-cli-configverify-file)
+* [`lf-cli config`](#lf-cli-config)
+* [`lf-cli config:create`](#lf-cli-configcreate)
+* [`lf-cli config:show`](#lf-cli-configshow)
+* [`lf-cli config:verify`](#lf-cli-configverify)
 * [`lf-cli datasets [FILE]`](#lf-cli-datasets-file)
-* [`lf-cli datasets:field_values [FILE]`](#lf-cli-datasetsfield_values-file)
+* [`lf-cli datasets:field-values [FILE]`](#lf-cli-datasetsfield-values-file)
 * [`lf-cli datasets:get [FILE]`](#lf-cli-datasetsget-file)
 * [`lf-cli datasets:list [FILE]`](#lf-cli-datasetslist-file)
 * [`lf-cli help [COMMAND]`](#lf-cli-help-command)
@@ -210,98 +208,69 @@ OPTIONS
 
 _See code: [src/commands/brand_views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/list.ts)_
 
-## `lf-cli config [FILE]`
+## `lf-cli config`
 
-describe the command here
+List configuration profiles
 
 ```
 USAGE
-  $ lf-cli config [FILE]
+  $ lf-cli config
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help  show CLI help
+
+ALIASES
+  $ lf-cli config:index
+  $ lf-cli config:list
 ```
 
 _See code: [src/commands/config/index.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/index.ts)_
 
-## `lf-cli config:create [FILE]`
+## `lf-cli config:create`
 
-describe the command here
+Create or update a configuration profile
 
 ```
 USAGE
-  $ lf-cli config:create [FILE]
+  $ lf-cli config:create
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  -p, --profile=profile  [default: default] the name of the profile
+
+ALIASES
+  $ lf-cli config:index
+  $ lf-cli config:create
 ```
 
 _See code: [src/commands/config/create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/create.ts)_
 
-## `lf-cli config:list [FILE]`
+## `lf-cli config:show`
 
-describe the command here
-
-```
-USAGE
-  $ lf-cli config:list [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/config/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/list.ts)_
-
-## `lf-cli config:new [FILE]`
-
-describe the command here
+Show the configuration profile
 
 ```
 USAGE
-  $ lf-cli config:new [FILE]
+  $ lf-cli config:show
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/config/new.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/new.ts)_
-
-## `lf-cli config:show [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ lf-cli config:show [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  -p, --profile=profile  [default: default] the name of the profile
 ```
 
 _See code: [src/commands/config/show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/show.ts)_
 
-## `lf-cli config:verify [FILE]`
+## `lf-cli config:verify`
 
-describe the command here
+Verify the profile
 
 ```
 USAGE
-  $ lf-cli config:verify [FILE]
+  $ lf-cli config:verify
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  -p, --profile=profile  [default: default] the name of the profile
 ```
 
 _See code: [src/commands/config/verify.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/verify.ts)_
@@ -322,13 +291,13 @@ OPTIONS
 
 _See code: [src/commands/datasets/index.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/index.ts)_
 
-## `lf-cli datasets:field_values [FILE]`
+## `lf-cli datasets:field-values [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ lf-cli datasets:field_values [FILE]
+  $ lf-cli datasets:field-values [FILE]
 
 OPTIONS
   -f, --force
@@ -336,7 +305,7 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/datasets/field_values.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/field_values.ts)_
+_See code: [src/commands/datasets/field-values.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/field-values.ts)_
 
 ## `lf-cli datasets:get [FILE]`
 
