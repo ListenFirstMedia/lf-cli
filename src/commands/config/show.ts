@@ -1,16 +1,16 @@
-import { Command, flags } from '@oclif/command';
-import { profileFlag } from '../../cli-flags';
+import { flags } from '@oclif/command';
+import BaseCommand from '../../base-command';
 
-export default class ConfigShow extends Command {
+export default class ConfigShow extends BaseCommand {
     static description = 'Show the configuration profile';
 
     static flags = {
         help: flags.help({ char: 'h' }),
-        profile: profileFlag(),
+        ...BaseCommand.flags,
     };
 
     async run() {
-        const opts = this.parse(ConfigShow);
-        this.log(`showing configuration profile: ${opts.flags.profile}`);
+        const profile = await this.lfapiConfigProfile();
+        this.log(JSON.stringify(profile, null, 2));
     }
 }
