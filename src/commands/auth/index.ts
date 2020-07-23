@@ -4,8 +4,7 @@ import { obtainAccessToken } from '../../lfapi/auth';
 import cli from 'cli-ux';
 
 export default class AuthIndex extends BaseCommand {
-    static description =
-        'Use client credentials to authenticate and obtain an access token';
+    static description = 'Obtain an access token';
 
     static flags = {
         help: flags.help({ char: 'h' }),

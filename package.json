@@ -64,7 +64,15 @@
         "bin": "lf-cli",
         "plugins": [
             "@oclif/plugin-help"
-        ]
+        ],
+        "topics": {
+            "config": {
+                "description": "Manage configuration profiles"
+            },
+            "datasets": {
+                "description": "Access the ListenFirst Data Dictionary"
+            }
+        }
     },
     "repository": "ListenFirstMedia/lf-cli",
     "scripts": {
