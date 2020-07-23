@@ -1,33 +1,27 @@
-import { Command, flags } from '@oclif/command';
+import BaseCommand from '../../base-command';
 import * as inquirer from 'inquirer';
-import { Config } from '../../lfapi/config';
-import * as path from 'path';
 
-export default class ConfigCreate extends Command {
+export default class ConfigCreate extends BaseCommand {
     static description = 'Create or update a configuration profile';
 
     static flags = {
-        help: flags.help({ char: 'h' }),
+        ...BaseCommand.flags,
     };
 
     async run() {
         const opts = this.parse(ConfigCreate);
-
-        const configFn = path.join(this.config.configDir, 'profiles.toml');
-        const config = new Config(configFn);
-        await config.reload();
-
+        const config = await this.lfapiConfig();
         const questions = [
             {
                 type: 'input',
                 name: 'profile',
                 message: 'Profile Name',
-                default: opts.flags.profile,
+                default: () => opts.flags.profile,
                 validate: async (str: string) => {
                     if (str.match(/^[\w_-]+$/i)) {
                         return true;
                     }
-                    return 'Profile names must only alphanumeric characters, dashes or underscores';
+                    return 'Profile names are required and must only alphanumeric characters, dashes or underscores';
                 },
             },
             {
@@ -106,6 +100,6 @@ export default class ConfigCreate extends Command {
         }
         config.addProfile(answers.profile, answers.make_default, answers);
         await config.save();
-        this.log(`wrote ${answers.profile} profile to: ${configFn}`);
+        this.log(`wrote ${answers.profile} profile to: ${this.lfapiConfgFn}`);
     }
 }

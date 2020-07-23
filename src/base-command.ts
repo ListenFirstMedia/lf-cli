@@ -12,6 +12,15 @@ export default abstract class BaseCommand extends Command {
         }),
     };
 
+    parsedGlobalFlags(): flags.Output {
+        // a bit of typescript gynmnastics with static flags
+        const opts = this.parse(
+            (this.constructor as unknown) as flags.Input<any>
+        );
+        const flags = opts.flags as flags.Output;
+        return flags;
+    }
+
     lfapiConfgFn(): string {
         return path.join(this.config.configDir, 'profiles.toml');
     }
@@ -24,18 +33,21 @@ export default abstract class BaseCommand extends Command {
 
     async lfapiConfigProfile(): Promise<Profile> {
         const cfg = await this.lfapiConfig();
-        const opts = this.parse(BaseCommand);
-
+        const flags = this.parsedGlobalFlags();
         let profile;
-        if (opts.flags.profile === undefined) {
+        if (flags.profile === undefined) {
             profile = cfg.getDefaultProfile();
         } else {
-            profile = cfg.getProfile(opts.flags.profile);
+            profile = cfg.getProfile(flags.profile);
         }
 
         if (profile === undefined) {
             throw new Error('Configuration profile does not exist');
         }
         return profile;
+    }
+
+    pp(data: any): void {
+        this.log(JSON.stringify(data, null, 2));
     }
 }
