@@ -1,17 +1,13 @@
 import { Command, flags } from '@oclif/command';
-import { profileFlag } from '../../cli-flags';
 import * as inquirer from 'inquirer';
 import { Config } from '../../lfapi/config';
 import * as path from 'path';
 
 export default class ConfigCreate extends Command {
-    static aliases = ['config:index', 'config:create'];
-
     static description = 'Create or update a configuration profile';
 
     static flags = {
         help: flags.help({ char: 'h' }),
-        profile: profileFlag(),
     };
 
     async run() {

@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import BaseCommand from '../../base-command';
 
 export default class ConfigIndex extends BaseCommand {
@@ -7,7 +6,6 @@ export default class ConfigIndex extends BaseCommand {
     static description = 'List configuration profiles';
 
     static flags = {
-        help: flags.help({ char: 'h' }),
         ...BaseCommand.flags,
     };
 

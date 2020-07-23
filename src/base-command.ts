@@ -1,11 +1,15 @@
-import { Command } from '@oclif/command';
+import { Command, flags } from '@oclif/command';
 import { Config, Profile } from './lfapi/config';
 import * as path from 'path';
-import { profileFlag } from './cli-flags';
 
 export default abstract class BaseCommand extends Command {
     static flags = {
-        profile: profileFlag(),
+        help: flags.help({ char: 'h' }),
+        profile: flags.string({
+            char: 'p',
+            description: 'the name of the configuration profile',
+            env: 'LFM_API_PROFILE',
+        }),
     };
 
     lfapiConfgFn(): string {
