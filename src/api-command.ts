@@ -2,7 +2,7 @@ import { flags } from '@oclif/command';
 import BaseCommand from './base-command';
 import cli, { Table } from 'cli-ux';
 import * as _ from 'lodash';
-import Client from './lfapi/client';
+import Client, { ClientFetchError } from './lfapi/client';
 import { obtainAccessToken } from './lfapi/auth';
 
 export interface RecordsResponse {
@@ -14,6 +14,16 @@ export interface RecordResponse {
 }
 
 export default abstract class ApiCommand extends BaseCommand {
+    async catch(error: any) {
+        if (error instanceof ClientFetchError) {
+            this.warn('API request failed');
+            this.warn(`API status code: ${error.statusCode}`);
+            this.warn(JSON.stringify(error.details, null, 2));
+        }
+
+        throw error;
+    }
+
     static flags = {
         format: flags.string({
             description: 'output format of the results',

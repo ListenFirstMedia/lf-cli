@@ -1,27 +1,45 @@
-import { Command, flags } from '@oclif/command';
+import ApiCommand from '../../api-command';
+import * as _ from 'lodash';
+import { table } from 'cli-ux/lib/styled/table';
 
-export default class DatasetsFieldValues extends Command {
-    static description = 'describe the command here';
+export default class DatasetsFieldValues extends ApiCommand {
+    static description = 'Retrieve all distinct values for a given Field';
 
     static flags = {
-        help: flags.help({ char: 'h' }),
-        // flag with a value (-n, --name=VALUE)
-        name: flags.string({ char: 'n', description: 'name to print' }),
-        // flag with no value (-f, --force)
-        force: flags.boolean({ char: 'f' }),
+        ...ApiCommand.flags,
     };
 
-    static args = [{ name: 'file' }];
+    static args = [
+        {
+            name: 'field',
+            description: 'the ID of the Field to retrieve',
+            required: true,
+        },
+    ];
 
     async run() {
-        const { args, flags } = this.parse(DatasetsFieldValues);
+        const opts = this.parse(DatasetsFieldValues);
 
-        const name = flags.name ?? 'world';
-        this.log(
-            `hello ${name} from /Users/mps/git/lf-cli/src/commands/datasets/field_values.ts`
-        );
-        if (args.file && flags.force) {
-            this.log(`you input --force and --file: ${args.file}`);
+        // eslint doesn't like the \. escape in the regexp but it's required
+        // eslint-disable-next-line no-useless-escape
+        if (!opts.args.field.match(/^[\w\._]+$/i)) {
+            this.error('Invalid dataset field ID');
+            this.exit(1);
         }
+
+        const res = await this.fetch(
+            `/v20200626/dictionary/field_values?field=${opts.args.field}`,
+            undefined,
+            `fetching field values for ${opts.args.field}'`
+        );
+
+        const cols: table.Columns<any> = { value: {} };
+        if (opts.flags.format === 'table') {
+            res.records = _.map(res.records, (val) => {
+                return { value: val };
+            });
+        }
+
+        this.outputRecords(res, cols);
     }
 }
