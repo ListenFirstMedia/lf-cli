@@ -1,27 +1,19 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
+import BaseCommand from '../../base-command';
+import { obtainAccessToken } from '../../lfapi/auth';
 
-export default class AuthIndex extends Command {
-    static description = 'describe the command here';
+export default class AuthIndex extends BaseCommand {
+    static description =
+        'Use client credentials to authenticate and obtain an access token';
 
     static flags = {
         help: flags.help({ char: 'h' }),
-        // flag with a value (-n, --name=VALUE)
-        name: flags.string({ char: 'n', description: 'name to print' }),
-        // flag with no value (-f, --force)
-        force: flags.boolean({ char: 'f' }),
+        ...BaseCommand.flags,
     };
 
-    static args = [{ name: 'file' }];
-
     async run() {
-        const { args, flags } = this.parse(AuthIndex);
-
-        const name = flags.name ?? 'world';
-        this.log(
-            `hello ${name} from /Users/mps/git/lf-cli/src/commands/auth/index.ts`
-        );
-        if (args.file && flags.force) {
-            this.log(`you input --force and --file: ${args.file}`);
-        }
+        const profile = await this.lfapiConfigProfile();
+        const token = await obtainAccessToken(profile);
+        this.log(JSON.stringify(token, null, 2));
     }
 }
