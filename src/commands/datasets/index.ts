@@ -1,6 +1,8 @@
 import ApiCommand from '../../api-command';
 
 export default class DatasetsIndex extends ApiCommand {
+    static aliases = ['datasets:list'];
+
     static description = 'List available datasets';
 
     static flags = {

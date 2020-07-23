@@ -9,6 +9,10 @@ export interface RecordsResponse {
     records: Array<any>;
 }
 
+export interface RecordResponse {
+    record: any;
+}
+
 export default abstract class ApiCommand extends BaseCommand {
     static flags = {
         format: flags.string({
@@ -53,8 +57,18 @@ export default abstract class ApiCommand extends BaseCommand {
         return res;
     }
 
-    outputRecords(res: RecordsResponse, cols: Table.table.Columns<any>): void {
+    outputRecords(
+        res: RecordsResponse | RecordResponse,
+        cols: Table.table.Columns<any>
+    ): void {
         const apiFlags = this.parsedApiFlags();
+
+        let unwrappedRecords: Array<any>;
+        if ('records' in res) {
+            unwrappedRecords = res.records;
+        } else {
+            unwrappedRecords = [res.record];
+        }
 
         switch (apiFlags.format) {
             case 'raw':
@@ -66,15 +80,15 @@ export default abstract class ApiCommand extends BaseCommand {
                 break;
             case 'doc':
                 if (apiFlags.pretty) {
-                    res.records.forEach((rec: any) => this.pp(rec));
+                    unwrappedRecords.forEach((rec: any) => this.pp(rec));
                 } else {
-                    res.records.forEach((rec: any) =>
+                    unwrappedRecords.forEach((rec: any) =>
                         this.log(JSON.stringify(rec))
                     );
                 }
                 break;
             case 'table':
-                cli.table(res.records, cols, {
+                cli.table(unwrappedRecords, cols, {
                     printLine: this.log,
                     ..._.pick(apiFlags as any, _.keys(cli.table.flags())),
                 });
