@@ -1,27 +1,76 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
+import ApiCommand from '../../api-command';
+import * as fs from 'fs';
 
-export default class AnalyticsFetch extends Command {
-    static description = 'describe the command here';
+export default class AnalyticsFetch extends ApiCommand {
+    static description = `Perform an analytical query
+
+Submit a multi-dimensional, aggregate, time series analytical query. 
+Start and End time parameters are used to specify the time window of 
+the query. The Dataset ID determines the scope of dimensions and 
+metrics available in the query for selection, filtering, grouping, 
+and sorting. Consult the Data Dictionary for available Datasets, 
+Fields and their capabilities.
+                   `;
 
     static flags = {
-        help: flags.help({ char: 'h' }),
-        // flag with a value (-n, --name=VALUE)
-        name: flags.string({ char: 'n', description: 'name to print' }),
-        // flag with no value (-f, --force)
-        force: flags.boolean({ char: 'f' }),
+        fields: flags.boolean({
+            description: 'list fields in output',
+            default: true,
+            allowNo: true,
+        }),
+        ...ApiCommand.flags,
     };
 
-    static args = [{ name: 'file' }];
+    static args = [
+        {
+            name: 'query_file',
+            description: 'a file containing the query json document',
+            required: true,
+            default: '-',
+        },
+    ];
 
     async run() {
-        const { args, flags } = this.parse(AnalyticsFetch);
+        const opts = this.parse(AnalyticsFetch);
 
-        const name = flags.name ?? 'world';
-        this.log(
-            `hello ${name} from /Users/mps/git/lf-cli/src/commands/analytics/fetch.ts`
-        );
-        if (args.file && flags.force) {
-            this.log(`you input --force and --file: ${args.file}`);
+        let query: any;
+
+        if (opts.args.query_file === '-') {
+            if (process.stdin.isTTY) {
+                this.error(
+                    'stdin specified for query file, but no data was provided',
+                    { exit: 1 }
+                );
+            }
+
+            const stdin: any = process.stdin;
+            query = JSON.parse(fs.readFileSync(stdin.fd, 'utf-8'));
+        } else if (fs.existsSync(opts.args.query_file)) {
+            query = JSON.parse(fs.readFileSync(opts.args.query_file, 'utf-8'));
+        } else {
+            this.error(`query file ${opts.args.query_file} does not exist`, {
+                exit: 2,
+            });
         }
+
+        const reqOpts = {
+            method: 'post',
+            body: JSON.stringify(query),
+        };
+        const res = await this.fetch(
+            '/v20200626/analytics/fetch',
+            reqOpts,
+            'performing query'
+        );
+
+        const cols: { [index: string]: any } = {};
+        res.columns.forEach((col: any, idx: number) => {
+            cols[col.id as string] = {
+                header: col.name as string,
+                get: (row: any) => row[idx],
+            };
+        });
+        this.outputRecords(res, cols);
     }
 }
