@@ -1,8 +1,6 @@
 import BaseCommand from '../../base-command';
 
-export default class ConfigIndex extends BaseCommand {
-    static aliases = ['config:index', 'config:list'];
-
+export default class ConfigList extends BaseCommand {
     static description = 'List configuration profiles';
 
     static flags = {

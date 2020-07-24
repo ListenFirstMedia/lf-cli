@@ -1,6 +1,6 @@
 import ApiCommand from '../../api-command';
 
-export default class DatasetsIndex extends ApiCommand {
+export default class DatasetsList extends ApiCommand {
     static aliases = ['datasets:list'];
 
     static description = `List Datasets

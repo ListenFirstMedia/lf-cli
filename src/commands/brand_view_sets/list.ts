@@ -1,8 +1,6 @@
 import ApiCommand from '../../api-command';
 
-export default class BrandViewSetsIndex extends ApiCommand {
-    static aliases = ['brand_view_sets:list'];
-
+export default class BrandViewSetsList extends ApiCommand {
     static description = `List Brand View Sets
     
 Retrieve the list of a Brand View Sets available to the ListenFirst 
