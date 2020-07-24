@@ -4,6 +4,7 @@ import cli, { Table } from 'cli-ux';
 import * as _ from 'lodash';
 import Client, { ClientFetchError } from './lfapi/client';
 import { obtainAccessToken } from './lfapi/auth';
+import * as querystring from 'querystring';
 
 export interface RecordsResponse {
     records: Array<any>;
@@ -65,6 +66,50 @@ export default abstract class ApiCommand extends BaseCommand {
         const res = await client.fetch(relPath, fetchOpts);
         cli.action.stop();
         return res;
+    }
+
+    async fetchAllPages(
+        relPath: string,
+        fetchOpts: any | undefined,
+        actionMsg: string | undefined,
+        maxPage: number,
+        pageCB: (res: any) => void
+    ): Promise<boolean> {
+        let args: any = {};
+        let path = relPath;
+        let queryStr = '';
+        if (relPath.includes('?')) {
+            const idx = relPath.indexOf('?');
+            queryStr = relPath.substr(idx + 1);
+            path = relPath.substr(0, idx);
+
+            if (queryStr.length > 0) {
+                args = querystring.parse(queryStr);
+            }
+        }
+
+        if (args.page === undefined) {
+            args.page = 1;
+        }
+
+        const fetchPath = `${path}?${querystring.stringify(args)}`;
+
+        const fetchActionMsg = `${actionMsg || 'fetching'} (page ${args.page})`;
+        const res = await this.fetch(fetchPath, fetchOpts, fetchActionMsg);
+        pageCB(res);
+        const belowPageLimit = maxPage < 0 || maxPage > Number(args.page);
+        if (res.has_more_pages === true && belowPageLimit === true) {
+            args.page = Number(args.page) + 1;
+            const nextPath = `${path}?${querystring.stringify(args)}`;
+            return this.fetchAllPages(
+                nextPath,
+                fetchOpts,
+                actionMsg,
+                maxPage,
+                pageCB
+            );
+        }
+        return true;
     }
 
     outputRecords(

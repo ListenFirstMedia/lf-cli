@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command';
 import ApiCommand from '../../api-command';
 import * as fs from 'fs';
+import { parseStdin } from '../../utils';
 
 export default class AnalyticsFetch extends ApiCommand {
     static description = `Perform an analytical query
@@ -44,8 +45,7 @@ Fields and their capabilities.
                 );
             }
 
-            const stdin: any = process.stdin;
-            query = JSON.parse(fs.readFileSync(stdin.fd, 'utf-8'));
+            query = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
             query = JSON.parse(fs.readFileSync(opts.args.query_file, 'utf-8'));
         } else {
