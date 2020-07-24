@@ -4,7 +4,10 @@ import * as _ from 'lodash';
 import { table } from 'cli-ux/lib/styled/table';
 
 export default class DatasetsGet extends ApiCommand {
-    static description = 'Get a dataset by ID';
+    static description = `Show a single dataset
+
+Retrieve a single Dataset by its unique identifier. All the 
+dataset's attributes and fields will be returned.`;
 
     static flags = {
         fields: flags.boolean({
@@ -18,7 +21,7 @@ export default class DatasetsGet extends ApiCommand {
     static args = [
         {
             name: 'ID',
-            description: 'the dataset ID to retrieve',
+            description: 'the Dataset ID to retrieve',
             required: true,
         },
     ];
@@ -27,7 +30,7 @@ export default class DatasetsGet extends ApiCommand {
         const opts = this.parse(DatasetsGet);
 
         if (!opts.args.ID.match(/^[\w_]+$/i)) {
-            this.error('Invalid dataset ID');
+            this.error('Invalid Dataset ID');
             this.exit(1);
         }
 

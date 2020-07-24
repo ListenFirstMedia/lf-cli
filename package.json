@@ -67,10 +67,19 @@
         ],
         "topics": {
             "config": {
-                "description": "Manage configuration profiles"
+                "description": "Manage lf-cli configuration profiles"
             },
             "datasets": {
-                "description": "Access the ListenFirst Data Dictionary"
+                "description": "Query the ListenFirst Data Dictionary"
+            },
+            "analytics": {
+                "description": "Produce and submit analytical queries"
+            },
+            "brand_views": {
+                "description": "Query available Brand Views"
+            },
+            "brand_view_sets": {
+                "description": "Query avaible Brand View Sets"
             }
         }
     },

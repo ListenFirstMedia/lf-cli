@@ -1,27 +1,43 @@
-import { Command, flags } from '@oclif/command';
+import ApiCommand from '../../api-command';
 
-export default class BrandViewSetsGet extends Command {
-    static description = 'describe the command here';
+export default class BrandViewSetGet extends ApiCommand {
+    static description = `Get a Brand View Aet
+
+Retrieve a Brand View Set by id.`;
 
     static flags = {
-        help: flags.help({ char: 'h' }),
-        // flag with a value (-n, --name=VALUE)
-        name: flags.string({ char: 'n', description: 'name to print' }),
-        // flag with no value (-f, --force)
-        force: flags.boolean({ char: 'f' }),
+        ...ApiCommand.flags,
     };
 
-    static args = [{ name: 'file' }];
+    static args = [
+        {
+            name: 'ID',
+            description: 'the ID of the Brand View Set to retrieve',
+            required: true,
+        },
+    ];
 
     async run() {
-        const { args, flags } = this.parse(BrandViewSetsGet);
+        const opts = this.parse(BrandViewSetGet);
 
-        const name = flags.name ?? 'world';
-        this.log(
-            `hello ${name} from /Users/mps/git/lf-cli/src/commands/brand_view_sets/get.ts`
-        );
-        if (args.file && flags.force) {
-            this.log(`you input --force and --file: ${args.file}`);
+        if (!opts.args.ID.match(/^[\d]+$/i)) {
+            this.error('Invalid Brand View Set ID', { exit: 1 });
         }
+
+        const res = await this.fetch(
+            `/v20200626/brand_view_sets/${opts.args.ID}`,
+            undefined,
+            `fetching Brand View Set ${opts.args.ID}'`
+        );
+
+        const cols = {
+            id: {
+                header: 'ID',
+                minWidth: 10,
+            },
+            name: {},
+        };
+
+        this.outputRecords(res, cols);
     }
 }

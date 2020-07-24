@@ -1,27 +1,31 @@
-import { Command, flags } from '@oclif/command';
+import ApiCommand from '../../api-command';
 
-export default class BrandViewSetsIndex extends Command {
-    static description = 'describe the command here';
+export default class BrandViewSetsIndex extends ApiCommand {
+    static aliases = ['brand_view_sets:list'];
+
+    static description = `List Brand View Sets
+    
+Retrieve the list of a Brand View Sets available to the ListenFirst 
+Account associated with the access token.`;
 
     static flags = {
-        help: flags.help({ char: 'h' }),
-        // flag with a value (-n, --name=VALUE)
-        name: flags.string({ char: 'n', description: 'name to print' }),
-        // flag with no value (-f, --force)
-        force: flags.boolean({ char: 'f' }),
+        ...ApiCommand.flags,
     };
 
-    static args = [{ name: 'file' }];
-
     async run() {
-        const { args, flags } = this.parse(BrandViewSetsIndex);
-
-        const name = flags.name ?? 'world';
-        this.log(
-            `hello ${name} from /Users/mps/git/lf-cli/src/commands/brand_view_sets/index.ts`
+        const res = await this.fetch(
+            '/v20200626/brand_view_sets?per_page=1000',
+            undefined,
+            'fetching brand view sets'
         );
-        if (args.file && flags.force) {
-            this.log(`you input --force and --file: ${args.file}`);
-        }
+        const cols = {
+            id: {
+                header: 'ID',
+                minWidth: 10,
+            },
+            name: {},
+        };
+
+        this.outputRecords(res, cols);
     }
 }

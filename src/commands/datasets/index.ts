@@ -3,7 +3,11 @@ import ApiCommand from '../../api-command';
 export default class DatasetsIndex extends ApiCommand {
     static aliases = ['datasets:list'];
 
-    static description = 'List available datasets';
+    static description = `List Datasets
+
+Retrieves all Datasets available. See the Data Dictionary 
+for available Datasets. A subset of the dataset attributes 
+will be returned in the response.`;
 
     static flags = {
         ...ApiCommand.flags,
