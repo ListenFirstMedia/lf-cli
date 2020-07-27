@@ -43,7 +43,9 @@ export default abstract class ApiCommand extends BaseCommand {
             default: false,
         }),
         ...BaseCommand.flags,
-        ...cli.table.flags({ except: ['extended', 'output'] }),
+        ...cli.table.flags({
+            except: ['extended', 'output', 'filter', 'sort'],
+        }),
     };
 
     parsedApiFlags(): flags.Output {
