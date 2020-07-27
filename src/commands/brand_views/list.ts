@@ -1,6 +1,8 @@
 import ApiCommand from '../../api-command';
 import { flags } from '@oclif/command';
 import * as querystring from 'querystring';
+import { split as _split, capitalize as _capitalize } from 'lodash';
+import { Table } from 'cli-ux';
 
 export default class BrandViewsList extends ApiCommand {
     static description = `List Brand Views
@@ -10,6 +12,10 @@ Account associated with the access token. Results may be filtered
 and sorted by Brand Metadata Dimensions.`;
 
     static flags = {
+        fields: flags.string({
+            description: 'Comma seperated list of fields to include',
+            required: false,
+        }),
         'per-page': flags.integer({
             description: 'number of results per page',
             default: 1000,
@@ -27,22 +33,43 @@ and sorted by Brand Metadata Dimensions.`;
 
     async run() {
         const opts = this.parse(BrandViewsList);
-        const args = {
+        const queryArgs: { [index: string]: any } = {
             per_page: opts.flags['per-page'],
             page: opts.flags.page,
         };
 
-        const cols = {
+        let fields: string[] = [];
+        if (opts.flags.fields) {
+            fields = _split(opts.flags.fields, ',');
+        }
+
+        const cols: Table.table.Columns<any> = {
             id: {
                 header: 'ID',
                 minWidth: 10,
             },
-            name: {},
-            type: {},
+            name: {
+                header: 'Brand View Name',
+            },
+            brand_name: {
+                header: 'Brand Name',
+                get: (row) => row.dimensions['lfm.brand.name'],
+            },
         };
 
-        const queryStr = querystring.stringify(args);
+        if (fields.length > 0) {
+            queryArgs.fields = opts.flags.fields;
+            fields.forEach((field: string) => {
+                cols[field] = {
+                    header: _capitalize(_split(field, '.').pop()),
+                    get: (row) => row.dimensions[field],
+                };
+            });
+        }
+
+        const queryStr = querystring.stringify(queryArgs);
         const path = `/v20200626/brand_views?${queryStr}`;
+
         let total = 0;
         await this.fetchAllPages(
             { relPath: path, actionMsg: 'fetching brand views' },
