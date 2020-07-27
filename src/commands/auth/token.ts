@@ -3,7 +3,7 @@ import BaseCommand from '../../base-command';
 import { obtainAccessToken } from '../../lfapi/auth';
 import cli from 'cli-ux';
 
-export default class AuthIndex extends BaseCommand {
+export default class AuthToken extends BaseCommand {
     static description = `Obtain an access token
 
 This command provides the ability to obtain an access

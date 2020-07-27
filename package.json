@@ -66,6 +66,9 @@
             "@oclif/plugin-help"
         ],
         "topics": {
+            "auth": {
+                "description": "Authentication related commands"
+            },
             "config": {
                 "description": "Manage lf-cli configuration profiles"
             },
