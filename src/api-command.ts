@@ -14,6 +14,12 @@ export interface RecordResponse {
     record: any;
 }
 
+export interface FetchParams {
+    relPath: string;
+    fetchOpts?: any;
+    actionMsg?: string;
+}
+
 export default abstract class ApiCommand extends BaseCommand {
     async catch(error: any) {
         if (error instanceof ClientFetchError) {
@@ -69,12 +75,11 @@ export default abstract class ApiCommand extends BaseCommand {
     }
 
     async fetchAllPages(
-        relPath: string,
-        fetchOpts: any | undefined,
-        actionMsg: string | undefined,
+        fetchParams: FetchParams,
         maxPage: number,
         pageCB: (res: any) => void
     ): Promise<boolean> {
+        const { relPath, fetchOpts, actionMsg } = fetchParams;
         let args: any = {};
         let path = relPath;
         let queryStr = '';
@@ -102,9 +107,7 @@ export default abstract class ApiCommand extends BaseCommand {
             args.page = Number(args.page) + 1;
             const nextPath = `${path}?${querystring.stringify(args)}`;
             return this.fetchAllPages(
-                nextPath,
-                fetchOpts,
-                actionMsg,
+                { relPath: nextPath, fetchOpts, actionMsg },
                 maxPage,
                 pageCB
             );

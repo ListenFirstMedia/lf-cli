@@ -45,9 +45,7 @@ and sorted by Brand Metadata Dimensions.`;
         const path = `/v20200626/brand_views?${queryStr}`;
         let total = 0;
         await this.fetchAllPages(
-            path,
-            undefined,
-            'fetching brand views',
+            { relPath: path, actionMsg: 'fetching brand views' },
             opts.flags['max-page'],
             (res) => {
                 total += res.records.length;
