@@ -8,6 +8,7 @@ import * as querystring from 'querystring';
 
 export interface RecordsResponse {
     records: Array<any>;
+    page?: number;
 }
 
 export interface RecordResponse {
@@ -130,6 +131,7 @@ export default abstract class ApiCommand extends BaseCommand {
             unwrappedRecords = [res.record];
         }
 
+        const tableOpts = _.pick(apiFlags as any, _.keys(cli.table.flags()));
         switch (apiFlags.format) {
             case 'raw':
                 if (apiFlags.pretty) {
@@ -148,9 +150,13 @@ export default abstract class ApiCommand extends BaseCommand {
                 }
                 break;
             case 'table':
+                if ('page' in res && res.page && res.page > 1) {
+                    tableOpts['no-header'] = true;
+                }
+                this.pp(tableOpts);
                 cli.table(unwrappedRecords, cols, {
                     printLine: this.log,
-                    ..._.pick(apiFlags as any, _.keys(cli.table.flags())),
+                    ...tableOpts,
                 });
                 break;
             default:
