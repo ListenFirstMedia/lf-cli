@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import BaseCommand from '../../base-command';
 import * as Listr from 'listr';
 import { obtainAccessToken } from '../../lfapi/auth';
@@ -8,7 +7,6 @@ export default class ConfigVerify extends BaseCommand {
     static description = 'Verify the profile';
 
     static flags = {
-        help: flags.help({ char: 'h' }),
         ...BaseCommand.flags,
     };
 

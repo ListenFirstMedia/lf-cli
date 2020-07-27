@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import BaseCommand from '../../base-command';
 import { obtainAccessToken } from '../../lfapi/auth';
 import cli from 'cli-ux';
@@ -15,7 +14,6 @@ The access token will be written to stdout.`;
     static examples = ['$ lf-cli auth', '$ lf-cli auth > access-token.json'];
 
     static flags = {
-        help: flags.help({ char: 'h' }),
         ...BaseCommand.flags,
     };
 

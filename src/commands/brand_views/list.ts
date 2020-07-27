@@ -1,8 +1,10 @@
 import ApiCommand from '../../api-command';
 import { flags } from '@oclif/command';
 import * as querystring from 'querystring';
-import { split as _split, capitalize as _capitalize } from 'lodash';
-import { Table } from 'cli-ux';
+import {
+    parseBrandViewFieldsFlag,
+    brandViewFlags,
+} from '../../support/brand-view-commands';
 
 export default class BrandViewsList extends ApiCommand {
     static description = `List Brand Views
@@ -12,10 +14,7 @@ Account associated with the access token. Results may be filtered
 and sorted by Brand Metadata Dimensions.`;
 
     static flags = {
-        fields: flags.string({
-            description: 'Comma seperated list of fields to include',
-            required: false,
-        }),
+        ...brandViewFlags,
         'per-page': flags.integer({
             description: 'number of results per page',
             default: 1000,
@@ -38,33 +37,10 @@ and sorted by Brand Metadata Dimensions.`;
             page: opts.flags.page,
         };
 
-        let fields: string[] = [];
-        if (opts.flags.fields) {
-            fields = _split(opts.flags.fields, ',');
-        }
+        const pf = parseBrandViewFieldsFlag(opts.flags.fields);
 
-        const cols: Table.table.Columns<any> = {
-            id: {
-                header: 'ID',
-                minWidth: 10,
-            },
-            name: {
-                header: 'Brand View Name',
-            },
-            brand_name: {
-                header: 'Brand Name',
-                get: (row) => row.dimensions['lfm.brand.name'],
-            },
-        };
-
-        if (fields.length > 0) {
+        if (pf.fields.length > 0) {
             queryArgs.fields = opts.flags.fields;
-            fields.forEach((field: string) => {
-                cols[field] = {
-                    header: _capitalize(_split(field, '.').pop()),
-                    get: (row) => row.dimensions[field],
-                };
-            });
         }
 
         const queryStr = querystring.stringify(queryArgs);
@@ -76,7 +52,7 @@ and sorted by Brand Metadata Dimensions.`;
             opts.flags['max-page'],
             (res) => {
                 total += res.records.length;
-                this.outputRecords(res, cols);
+                this.outputRecords(res, pf.cols);
             }
         );
 
