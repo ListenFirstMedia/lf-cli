@@ -34,8 +34,11 @@ USAGE
 * [`lf-cli auth:token`](#lf-cli-authtoken)
 * [`lf-cli brand_view_sets:get ID`](#lf-cli-brand_view_setsget-id)
 * [`lf-cli brand_view_sets:list`](#lf-cli-brand_view_setslist)
+* [`lf-cli brand_views:by-brand-set-name BRAND_SET_NAME`](#lf-cli-brand_viewsby-brand-set-name-brand_set_name)
+* [`lf-cli brand_views:generate`](#lf-cli-brand_viewsgenerate)
 * [`lf-cli brand_views:get ID`](#lf-cli-brand_viewsget-id)
-* [`lf-cli brand_views:list`](#lf-cli-brand_viewslist)
+* [`lf-cli brand_views:list [PARAMS_FILE]`](#lf-cli-brand_viewslist-params_file)
+* [`lf-cli brand_views:my-brands`](#lf-cli-brand_viewsmy-brands)
 * [`lf-cli config:create`](#lf-cli-configcreate)
 * [`lf-cli config:list`](#lf-cli-configlist)
 * [`lf-cli config:show`](#lf-cli-configshow)
@@ -62,12 +65,13 @@ OPTIONS
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
   --[no-]fields           list fields in output
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
+  --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
+  --page=page             [default: 1] starting page number
+  --per-page=per-page     number of results per page
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Submit a multi-dimensional, aggregate, time series analytical query. 
@@ -108,12 +112,10 @@ OPTIONS
   -p, --profile=profile   the name of the configuration profile
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Retrieve metadata for the currently authenticated ListenFirst
@@ -164,12 +166,10 @@ OPTIONS
   -p, --profile=profile   the name of the configuration profile
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Retrieve a Brand View Set by id.
@@ -190,12 +190,10 @@ OPTIONS
   -p, --profile=profile   the name of the configuration profile
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Retrieve the list of a Brand View Sets available to the ListenFirst 
@@ -203,6 +201,68 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/brand_view_sets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_view_sets/list.ts)_
+
+## `lf-cli brand_views:by-brand-set-name BRAND_SET_NAME`
+
+List Brands from the specified Brand View Set
+
+```
+USAGE
+  $ lf-cli brand_views:by-brand-set-name BRAND_SET_NAME
+
+ARGUMENTS
+  BRAND_SET_NAME  a brand set to fetch
+
+OPTIONS
+  -h, --help              show CLI help
+  -p, --profile=profile   the name of the configuration profile
+  --columns=columns       only show provided columns (comma-separated)
+  --csv                   output is csv format [alias: --output=csv]
+  --fields=fields         Comma seperated list of fields to include
+  --format=raw|table|doc  [default: raw] output format of the results
+  --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
+  --no-header             hide table header from output
+  --no-truncate           do not truncate output to fit screen
+  --page=page             [default: 1] starting page number
+  --per-page=per-page     number of results per page
+  --pretty                pretty print json responses (applies to raw or doc formats)
+
+DESCRIPTION
+  Convenience command to fetch the Brand Views associated with the specified (by name)
+  Brand View Set
+
+EXAMPLES
+  $ lf-cli brand_views:by-brand-set-name --pretty --fields lfm.brand.primary_genre My Brands
+  $ lf-cli brand_views:by-brand-set-name --max-page -1 --format table LF // TV Universe
+  $ lf-cli brand_views:by-brand-set-name --max-page -1 --format table LF // TV Universe
+```
+
+_See code: [src/commands/brand_views/by-brand-set-name.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/by-brand-set-name.ts)_
+
+## `lf-cli brand_views:generate`
+
+Generate a list parameters object example
+
+```
+USAGE
+  $ lf-cli brand_views:generate
+
+OPTIONS
+  -h, --help             show CLI help
+  -p, --profile=profile  the name of the configuration profile
+
+DESCRIPTION
+  The /brand_views endpoint allows filters, fields, and sort options
+  passed in as parameters.  The endpoint can be a little tricky as
+  parameter values are complex objects that need to be serialized
+  as a JSON string.   The cli's brand_views:list command provides
+  a convenience option to pass in the options as a JSON document.  
+  The command will prepare the request query for you making it
+  easier to use for complex queries.   This command produces
+  a complex example that can be used as a template.
+```
+
+_See code: [src/commands/brand_views/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/generate.ts)_
 
 ## `lf-cli brand_views:get ID`
 
@@ -221,12 +281,10 @@ OPTIONS
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
   --fields=fields         Comma seperated list of fields to include
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Retrieve a Brand View by id.
@@ -234,13 +292,16 @@ DESCRIPTION
 
 _See code: [src/commands/brand_views/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/get.ts)_
 
-## `lf-cli brand_views:list`
+## `lf-cli brand_views:list [PARAMS_FILE]`
 
 List Brand Views
 
 ```
 USAGE
-  $ lf-cli brand_views:list
+  $ lf-cli brand_views:list [PARAMS_FILE]
+
+ARGUMENTS
+  PARAMS_FILE  [default: -] a file containing optional filter, field, and sort parameters
 
 OPTIONS
   -h, --help              show CLI help
@@ -248,15 +309,13 @@ OPTIONS
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
   --fields=fields         Comma seperated list of fields to include
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --page=page             [default: 1] starting page number
-  --per-page=per-page     [default: 1000] number of results per page
+  --per-page=per-page     number of results per page
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Returns an array of all Brand Views available to the ListenFirst 
@@ -265,6 +324,35 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/brand_views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/list.ts)_
+
+## `lf-cli brand_views:my-brands`
+
+List My Brands
+
+```
+USAGE
+  $ lf-cli brand_views:my-brands
+
+OPTIONS
+  -h, --help              show CLI help
+  -p, --profile=profile   the name of the configuration profile
+  --columns=columns       only show provided columns (comma-separated)
+  --csv                   output is csv format [alias: --output=csv]
+  --fields=fields         Comma seperated list of fields to include
+  --format=raw|table|doc  [default: raw] output format of the results
+  --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
+  --no-header             hide table header from output
+  --no-truncate           do not truncate output to fit screen
+  --page=page             [default: 1] starting page number
+  --per-page=per-page     number of results per page
+  --pretty                pretty print json responses (applies to raw or doc formats)
+
+DESCRIPTION
+  Convenience command to fetch the Brand Views associated with the "My Brands"
+  Brand View Set
+```
+
+_See code: [src/commands/brand_views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/my-brands.ts)_
 
 ## `lf-cli config:create`
 
@@ -342,12 +430,10 @@ OPTIONS
   -p, --profile=profile   the name of the configuration profile
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 ```
 
 _See code: [src/commands/datasets/field-values.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/field-values.ts)_
@@ -369,12 +455,10 @@ OPTIONS
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
   --[no-]fields           list fields in output
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Retrieve a single Dataset by its unique identifier. All the 
@@ -396,12 +480,10 @@ OPTIONS
   -p, --profile=profile   the name of the configuration profile
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
-  --filter=filter         filter property by partial string matching, ex: name=foo
   --format=raw|table|doc  [default: raw] output format of the results
   --no-header             hide table header from output
   --no-truncate           do not truncate output to fit screen
   --pretty                pretty print json responses (applies to raw or doc formats)
-  --sort=sort             property to sort by (prepend '-' for descending)
 
 DESCRIPTION
   Retrieves all Datasets available. See the Data Dictionary 
