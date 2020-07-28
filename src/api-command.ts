@@ -85,7 +85,9 @@ export default abstract class ApiCommand extends BaseCommand {
         actionMsg?: string
     ): Promise<any> {
         const client = await this.lfmapClient();
-        cli.action.start(actionMsg || 'fetching');
+        if (!this.silent()) {
+            cli.action.start(actionMsg || 'fetching');
+        }
         const res = await client.fetch(relPath, fetchOpts);
         cli.action.stop();
         return res;
@@ -100,7 +102,7 @@ export default abstract class ApiCommand extends BaseCommand {
 
         let currentPage = 1;
 
-        // extract current page from query parameters
+        // extract current page from query arameters
         let queryArgs: any = {};
         let path = relPath;
         let queryStr = '';

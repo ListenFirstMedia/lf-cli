@@ -10,6 +10,9 @@ export default abstract class BaseCommand extends Command {
             description: 'the name of the configuration profile',
             env: 'LFM_API_PROFILE',
         }),
+        silent: flags.boolean({
+            description: 'hide spinners and other log output',
+        }),
     };
 
     parsedGlobalFlags(): flags.Output {
@@ -45,6 +48,10 @@ export default abstract class BaseCommand extends Command {
             throw new Error('Configuration profile does not exist');
         }
         return profile;
+    }
+
+    silent(): boolean {
+        return this.parsedGlobalFlags().silent;
     }
 
     pp(data: any): void {
