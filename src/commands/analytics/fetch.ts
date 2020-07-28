@@ -2,6 +2,7 @@ import { flags } from '@oclif/command';
 import ApiCommand from '../../api-command';
 import * as fs from 'fs';
 import { parseStdin } from '../../utils';
+import { pagingFlags } from '../../support/paging';
 
 export default class AnalyticsFetch extends ApiCommand {
     static description = `Perform an analytical query
@@ -20,6 +21,7 @@ Fields and their capabilities.
             default: true,
             allowNo: true,
         }),
+        ...pagingFlags,
         ...ApiCommand.flags,
     };
 
@@ -54,23 +56,35 @@ Fields and their capabilities.
             });
         }
 
+        if (opts.flags.page) {
+            query.page = Number(opts.flags.page);
+        }
+        if (opts.flags['per-page']) {
+            query.per_page = Number(opts.flags['per-page']);
+        }
+
         const reqOpts = {
             method: 'post',
             body: JSON.stringify(query),
         };
-        const res = await this.fetch(
-            '/v20200626/analytics/fetch',
-            reqOpts,
-            'performing query'
-        );
 
-        const cols: { [index: string]: any } = {};
-        res.columns.forEach((col: any, idx: number) => {
-            cols[col.id as string] = {
-                header: col.name as string,
-                get: (row: any) => row[idx],
-            };
-        });
-        this.outputRecords(res, cols);
+        await this.fetchAllPages(
+            {
+                relPath: '/v20200626/analytics/fetch',
+                actionMsg: 'fetching analysis results',
+                fetchOpts: reqOpts,
+            },
+            opts.flags['max-page'],
+            (res) => {
+                const cols: { [index: string]: any } = {};
+                res.columns.forEach((col: any, idx: number) => {
+                    cols[col.id as string] = {
+                        header: col.name as string,
+                        get: (row: any) => row[idx],
+                    };
+                });
+                this.outputRecords(res, cols);
+            }
+        );
     }
 }

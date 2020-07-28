@@ -1,10 +1,10 @@
 import ApiCommand from '../../api-command';
-import { flags } from '@oclif/command';
 import * as querystring from 'querystring';
 import {
     parseBrandViewFieldsFlag,
     brandViewFlags,
 } from '../../support/brand-view-commands';
+import { pagingFlags } from '../../support/paging';
 
 export default class BrandViewsList extends ApiCommand {
     static description = `List Brand Views
@@ -15,27 +15,19 @@ and sorted by Brand Metadata Dimensions.`;
 
     static flags = {
         ...brandViewFlags,
-        'per-page': flags.integer({
-            description: 'number of results per page',
-            default: 1000,
-        }),
-        page: flags.integer({
-            description: 'starting page number',
-            default: 1,
-        }),
-        'max-page': flags.integer({
-            description: 'the max page number to fetch (-1 for all pages)',
-            default: 1,
-        }),
+        ...pagingFlags,
         ...ApiCommand.flags,
     };
 
     async run() {
         const opts = this.parse(BrandViewsList);
         const queryArgs: { [index: string]: any } = {
-            per_page: opts.flags['per-page'],
+            per_page: 1000,
             page: opts.flags.page,
         };
+        if (opts.flags['per-page']) {
+            queryArgs.per_page = Number(opts.flags['per-page']);
+        }
 
         const pf = parseBrandViewFieldsFlag(opts.flags.fields);
 
@@ -46,16 +38,12 @@ and sorted by Brand Metadata Dimensions.`;
         const queryStr = querystring.stringify(queryArgs);
         const path = `/v20200626/brand_views?${queryStr}`;
 
-        let total = 0;
         await this.fetchAllPages(
             { relPath: path, actionMsg: 'fetching brand views' },
             opts.flags['max-page'],
             (res) => {
-                total += res.records.length;
                 this.outputRecords(res, pf.cols);
             }
         );
-
-        this.log('total results: ' + total);
     }
 }

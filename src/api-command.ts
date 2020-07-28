@@ -11,6 +11,20 @@ export interface RecordsResponse {
     page?: number;
 }
 
+export interface TableResponseColumn {
+    id: string;
+    name: string;
+    class: string;
+    data_type: string;
+}
+
+export interface TableResponse {
+    columns: Array<TableResponseColumn>;
+    records: Array<any>;
+    page: number;
+    has_more_pages?: boolean;
+}
+
 export interface RecordResponse {
     record: any;
 }
@@ -83,7 +97,11 @@ export default abstract class ApiCommand extends BaseCommand {
         pageCB: (res: any) => void
     ): Promise<boolean> {
         const { relPath, fetchOpts, actionMsg } = fetchParams;
-        let args: any = {};
+
+        let currentPage = 1;
+
+        // extract current page from query parameters
+        let queryArgs: any = {};
         let path = relPath;
         let queryStr = '';
         if (relPath.includes('?')) {
@@ -92,23 +110,46 @@ export default abstract class ApiCommand extends BaseCommand {
             path = relPath.substr(0, idx);
 
             if (queryStr.length > 0) {
-                args = querystring.parse(queryStr);
+                queryArgs = querystring.parse(queryStr);
             }
         }
 
-        if (args.page === undefined) {
-            args.page = 1;
+        if (queryArgs.page) {
+            currentPage = Number(queryArgs.page);
         }
 
-        const fetchPath = `${path}?${querystring.stringify(args)}`;
+        // extract current page from post body
+        let isPost = false;
+        let bodyData: any = {};
+        if (fetchOpts.method && /post/i.test(fetchOpts.method)) {
+            isPost = true;
+            if (fetchOpts.body) {
+                bodyData = JSON.parse(fetchOpts.body);
+                if (bodyData.page) {
+                    currentPage = Number(bodyData.page);
+                }
+            }
+        }
 
-        const fetchActionMsg = `${actionMsg || 'fetching'} (page ${args.page})`;
+        const fetchPath = `${path}?${querystring.stringify(queryArgs)}`;
+        const msgPrefix = actionMsg || 'fetching';
+        const fetchActionMsg = `${msgPrefix} (page ${currentPage})`;
+
         const res = await this.fetch(fetchPath, fetchOpts, fetchActionMsg);
         pageCB(res);
-        const belowPageLimit = maxPage < 0 || maxPage > Number(args.page);
+
+        // handle next page
+        const belowPageLimit = maxPage < 0 || maxPage > currentPage;
         if (res.has_more_pages === true && belowPageLimit === true) {
-            args.page = Number(args.page) + 1;
-            const nextPath = `${path}?${querystring.stringify(args)}`;
+            const nextPage = currentPage + 1;
+            if (isPost) {
+                delete queryArgs.page;
+                bodyData.page = nextPage;
+                fetchOpts.body = JSON.stringify(bodyData);
+            } else {
+                queryArgs.page = nextPage;
+            }
+            const nextPath = `${path}?${querystring.stringify(queryArgs)}`;
             return this.fetchAllPages(
                 { relPath: nextPath, fetchOpts, actionMsg },
                 maxPage,
@@ -119,7 +160,7 @@ export default abstract class ApiCommand extends BaseCommand {
     }
 
     outputRecords(
-        res: RecordsResponse | RecordResponse,
+        res: RecordsResponse | RecordResponse | TableResponse,
         cols: Table.table.Columns<any>
     ): void {
         const apiFlags = this.parsedApiFlags();
@@ -141,6 +182,12 @@ export default abstract class ApiCommand extends BaseCommand {
                 }
                 break;
             case 'doc':
+                if ('columns' in res) {
+                    const keys = _.map(res.columns, (val) => val.id);
+                    unwrappedRecords = _.map(res.records, (row) => {
+                        return _.zipObject(keys, row);
+                    });
+                }
                 if (apiFlags.pretty) {
                     unwrappedRecords.forEach((rec: any) => this.pp(rec));
                 } else {
@@ -153,7 +200,6 @@ export default abstract class ApiCommand extends BaseCommand {
                 if ('page' in res && res.page && res.page > 1) {
                     tableOpts['no-header'] = true;
                 }
-                this.pp(tableOpts);
                 cli.table(unwrappedRecords, cols, {
                     printLine: this.log,
                     ...tableOpts,
