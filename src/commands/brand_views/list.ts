@@ -3,8 +3,18 @@ import * as querystring from 'querystring';
 import {
     parseBrandViewFieldsFlag,
     brandViewFlags,
+    brandViewColumns,
 } from '../../support/brand-view-commands';
 import { pagingFlags } from '../../support/paging';
+import { parseStdin } from '../../utils';
+import { join as _join, concat as _concat } from 'lodash';
+import * as fs from 'fs';
+
+interface ParamsObject {
+    fields?: string[];
+    filters?: Array<any>;
+    sort?: Array<any>;
+}
 
 export default class BrandViewsList extends ApiCommand {
     static description = `List Brand Views
@@ -18,6 +28,16 @@ and sorted by Brand Metadata Dimensions.`;
         ...pagingFlags,
         ...ApiCommand.flags,
     };
+
+    static args = [
+        {
+            name: 'params_file',
+            description:
+                'a file containing optional filter, field, and sort parameters',
+            required: false,
+            default: '-',
+        },
+    ];
 
     async run() {
         const opts = this.parse(BrandViewsList);
@@ -33,6 +53,29 @@ and sorted by Brand Metadata Dimensions.`;
 
         if (pf.fields.length > 0) {
             queryArgs.fields = opts.flags.fields;
+        }
+
+        let optionalParams: ParamsObject = {};
+        if (opts.args.params_file === '-' && !process.stdin.isTTY) {
+            optionalParams = await parseStdin();
+        } else if (fs.existsSync(opts.args.query_file)) {
+            optionalParams = JSON.parse(
+                fs.readFileSync(opts.args.query_file, 'utf-8')
+            );
+        }
+
+        if (optionalParams.filters) {
+            queryArgs.filters = JSON.stringify(optionalParams.filters);
+        }
+
+        if (optionalParams.fields) {
+            const allFields = _concat([], pf.fields, optionalParams.fields);
+            queryArgs.fields = _join(allFields, ',');
+            pf.cols = brandViewColumns(allFields);
+        }
+
+        if (optionalParams.sort) {
+            queryArgs.sort = JSON.stringify(optionalParams.sort);
         }
 
         const queryStr = querystring.stringify(queryArgs);

@@ -121,7 +121,7 @@ export default abstract class ApiCommand extends BaseCommand {
         // extract current page from post body
         let isPost = false;
         let bodyData: any = {};
-        if (fetchOpts.method && /post/i.test(fetchOpts.method)) {
+        if (fetchOpts && fetchOpts.method && /post/i.test(fetchOpts.method)) {
             isPost = true;
             if (fetchOpts.body) {
                 bodyData = JSON.parse(fetchOpts.body);
