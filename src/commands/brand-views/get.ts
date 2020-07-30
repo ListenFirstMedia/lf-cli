@@ -25,6 +25,11 @@ Retrieve a Brand View by id.`;
     async run() {
         const opts = this.parse(BrandViewGet);
 
+        if (opts.args.ID === 'help') {
+            await BrandViewGet.run(['-h']);
+            this.exit(0);
+        }
+
         if (!opts.args.ID.match(/^[\d]+$/i)) {
             this.error('Invalid Brand View ID', { exit: 1 });
         }

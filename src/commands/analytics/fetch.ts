@@ -39,6 +39,11 @@ Fields and their capabilities.
 
         let query: any;
 
+        if (opts.args.query_file === 'help') {
+            await AnalyticsFetch.run(['-h']);
+            this.exit(0);
+        }
+
         if (opts.args.query_file === '-') {
             if (process.stdin.isTTY) {
                 this.error(

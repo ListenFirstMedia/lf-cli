@@ -29,6 +29,11 @@ dataset's attributes and fields will be returned.`;
     async run() {
         const opts = this.parse(DatasetsGet);
 
+        if (opts.args.ID === 'help') {
+            await DatasetsGet.run(['-h']);
+            this.exit(0);
+        }
+
         if (!opts.args.ID.match(/^[\w_]+$/i)) {
             this.error('Invalid Dataset ID');
             this.exit(1);
