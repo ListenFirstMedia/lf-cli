@@ -78,10 +78,10 @@
             "analytics": {
                 "description": "Produce and submit analytical queries"
             },
-            "brand_views": {
+            "brand-views": {
                 "description": "Query available Brand Views"
             },
-            "brand_view_sets": {
+            "brand-view-sets": {
                 "description": "Query avaible Brand View Sets"
             }
         }

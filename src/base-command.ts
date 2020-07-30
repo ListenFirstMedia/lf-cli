@@ -8,7 +8,12 @@ export default abstract class BaseCommand extends Command {
         profile: flags.string({
             char: 'p',
             description: 'the name of the configuration profile',
-            env: 'LFM_API_PROFILE',
+            env: 'LF_ClI_API_PROFILE',
+        }),
+        'account-id': flags.string({
+            char: 'A',
+            description: 'swith accounts (overrides profile setting)',
+            env: 'LF_CLI_ACCOUNT_ID',
         }),
         silent: flags.boolean({
             description: 'hide spinners and other log output',
@@ -47,6 +52,11 @@ export default abstract class BaseCommand extends Command {
         if (profile === undefined) {
             throw new Error('Configuration profile does not exist');
         }
+
+        if (flags['account-id']) {
+            profile.account_id = Number(flags['account-id']);
+        }
+
         return profile;
     }
 

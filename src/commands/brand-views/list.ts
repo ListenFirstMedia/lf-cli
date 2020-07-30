@@ -55,6 +55,11 @@ and sorted by Brand Metadata Dimensions.`;
             queryArgs.fields = opts.flags.fields;
         }
 
+        if (opts.args.params_file === 'help') {
+            await BrandViewsList.run(['-h']);
+            this.exit(0);
+        }
+
         let optionalParams: ParamsObject = {};
         if (opts.args.params_file === '-' && !process.stdin.isTTY) {
             optionalParams = await parseStdin();
