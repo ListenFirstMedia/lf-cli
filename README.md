@@ -39,6 +39,7 @@ USAGE
 * [`lf-cli brand-views:get ID`](#lf-cli-brand-viewsget-id)
 * [`lf-cli brand-views:list [PARAMS_FILE]`](#lf-cli-brand-viewslist-params_file)
 * [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
+* [`lf-cli brand_view_sets:get ID`](#lf-cli-brand_view_setsget-id)
 * [`lf-cli config:create`](#lf-cli-configcreate)
 * [`lf-cli config:edit`](#lf-cli-configedit)
 * [`lf-cli config:list`](#lf-cli-configlist)
@@ -431,6 +432,36 @@ EXAMPLES
 
 _See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/my-brands.ts)_
 
+## `lf-cli brand_view_sets:get ID`
+
+Get a Brand View Aet
+
+```
+USAGE
+  $ lf-cli brand_view_sets:get ID
+
+ARGUMENTS
+  ID  the ID of the Brand View Set to retrieve
+
+OPTIONS
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --fields=fields              Comma seperated list of fields to include
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
+
+DESCRIPTION
+  Retrieve a Brand View Set by id.
+```
+
+_See code: [src/commands/brand_view_sets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_view_sets/get.ts)_
+
 ## `lf-cli config:create`
 
 Create or update a configuration profile
@@ -596,8 +627,8 @@ DESCRIPTION
 
 EXAMPLES
   $ lf-cli datasets:get dataset_brand_metadata --pretty
-  $ lf-cli datasets:get dataset_brand_metadata --format table
-  $ lf-cli datasets:get dataset_brand_metadata --pretty --no-show-fields
+  $ lf-cli datasets:get dataset_content_instagram --format table
+  $ lf-cli datasets:get dataset_content_metadata --pretty --no-show-fields
   $ lf-cli datasets:get dataset_brand_facebook --format table --show-fields
 ```
 

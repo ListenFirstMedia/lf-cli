@@ -28,8 +28,8 @@ dataset's attributes and fields will be returned.`;
 
     static examples = [
         '$ lf-cli datasets:get dataset_brand_metadata --pretty',
-        '$ lf-cli datasets:get dataset_brand_metadata --format table',
-        '$ lf-cli datasets:get dataset_brand_metadata --pretty --no-show-fields',
+        '$ lf-cli datasets:get dataset_content_instagram --format table',
+        '$ lf-cli datasets:get dataset_content_metadata --pretty --no-show-fields',
         '$ lf-cli datasets:get dataset_brand_facebook --format table --show-fields',
     ];
 
