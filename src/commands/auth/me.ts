@@ -11,6 +11,13 @@ platform user and associated, active ListenFirst Account`;
         ...ApiCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli auth:me',
+        '$ lf-cli auth:me --pretty',
+        '$ lf-cli auth:me --pretty --format doc',
+        '$ lf-cli auth:me --pretty --account-id <ACCOUNT_ID>',
+    ];
+
     async run() {
         const res = await this.fetch(
             `/v20200626/me`,

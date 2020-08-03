@@ -11,7 +11,10 @@ The process authenticates using the Client ID and
 Client Secret found in the lf-cli configuration profile.
 The access token will be written to stdout.`;
 
-    static examples = ['$ lf-cli auth', '$ lf-cli auth > access-token.json'];
+    static examples = [
+        '$ lf-cli auth:token',
+        '$ lf-cli auth:token >| access-token.json',
+    ];
 
     static flags = {
         ...BaseCommand.flags,
