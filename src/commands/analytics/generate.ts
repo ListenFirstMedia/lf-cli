@@ -7,6 +7,11 @@ export default class AnalyticsGenerate extends BaseCommand {
         ...BaseCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli analytics:generate',
+        '$ lf-cli analytics:generate > analytics-requets.json',
+    ];
+
     async run() {
         const data = {
             dataset_id: 'dataset_content_listenfirst',

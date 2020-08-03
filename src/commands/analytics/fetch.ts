@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import ApiCommand from '../../api-command';
 import * as fs from 'fs';
 import { parseStdin } from '../../utils';
@@ -16,11 +15,6 @@ Fields and their capabilities.
                    `;
 
     static flags = {
-        fields: flags.boolean({
-            description: 'list fields in output',
-            default: true,
-            allowNo: true,
-        }),
         ...pagingFlags,
         ...ApiCommand.flags,
     };
@@ -32,6 +26,18 @@ Fields and their capabilities.
             required: true,
             default: '-',
         },
+    ];
+
+    static examples = [
+        '$ lf-cli analytics:fetch my-request.json',
+        '$ cat my-request.json | lf-cli analytics:fetch',
+        '$ lf-cli analytics:fetch --pretty my-request.json',
+        '$ cat my-request.json | lf-cli analytics:fetch --max-page -1 --format doc --silent',
+        '$ lf-cli analytics:fetch --max-page 2 --per-page 5 --format table my-request.json ',
+        '$ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format table --csv my-request.json >| my-response.csv',
+        '$ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json',
+        '$ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json',
+        '$ lf-cli analytics:fetch --format table --csv --no-header my-request.json >| my-response-data.csv',
     ];
 
     async run() {

@@ -11,7 +11,7 @@ export default class ConfigShow extends BaseCommand {
 
     async run() {
         const fn = await this.lfapiConfgFn();
-        let editor = process.env['EDITOR'];
+        let editor = process.env.EDITOR;
         if (editor === undefined) {
             if (process.platform === 'win32') {
                 editor = 'edit';
@@ -19,11 +19,11 @@ export default class ConfigShow extends BaseCommand {
                 editor = 'vi';
             }
         }
-        let cmd = _split(editor, /\s+/).concat(fn);
+        const cmd = _split(editor, /\s+/).concat(fn);
 
         await new Promise((resolve) => {
             const child = child_process.spawn(cmd[0], cmd.slice(1), {
-                //detached: true,
+                // detached: true,
                 stdio: 'inherit',
             });
             child.on('close', (code) => {

@@ -32,14 +32,15 @@ USAGE
 * [`lf-cli analytics:generate`](#lf-cli-analyticsgenerate)
 * [`lf-cli auth:me`](#lf-cli-authme)
 * [`lf-cli auth:token`](#lf-cli-authtoken)
-* [`lf-cli brand_view_sets:get ID`](#lf-cli-brand_view_setsget-id)
-* [`lf-cli brand_view_sets:list`](#lf-cli-brand_view_setslist)
-* [`lf-cli brand_views:by-brand-set-name BRAND_SET_NAME`](#lf-cli-brand_viewsby-brand-set-name-brand_set_name)
-* [`lf-cli brand_views:generate`](#lf-cli-brand_viewsgenerate)
-* [`lf-cli brand_views:get ID`](#lf-cli-brand_viewsget-id)
-* [`lf-cli brand_views:list [PARAMS_FILE]`](#lf-cli-brand_viewslist-params_file)
-* [`lf-cli brand_views:my-brands`](#lf-cli-brand_viewsmy-brands)
+* [`lf-cli brand-view-sets:get ID`](#lf-cli-brand-view-setsget-id)
+* [`lf-cli brand-view-sets:list`](#lf-cli-brand-view-setslist)
+* [`lf-cli brand-views:by-brand-set-name BRAND_SET_NAME`](#lf-cli-brand-viewsby-brand-set-name-brand_set_name)
+* [`lf-cli brand-views:generate`](#lf-cli-brand-viewsgenerate)
+* [`lf-cli brand-views:get ID`](#lf-cli-brand-viewsget-id)
+* [`lf-cli brand-views:list [PARAMS_FILE]`](#lf-cli-brand-viewslist-params_file)
+* [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
 * [`lf-cli config:create`](#lf-cli-configcreate)
+* [`lf-cli config:edit`](#lf-cli-configedit)
 * [`lf-cli config:list`](#lf-cli-configlist)
 * [`lf-cli config:show`](#lf-cli-configshow)
 * [`lf-cli config:verify`](#lf-cli-configverify)
@@ -60,18 +61,19 @@ ARGUMENTS
   QUERY_FILE  [default: -] a file containing the query json document
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --[no-]fields           list fields in output
-  --format=raw|table|doc  [default: raw] output format of the results
-  --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --page=page             [default: 1] starting page number
-  --per-page=per-page     number of results per page
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --max-page=max-page          [default: 1] the max page number to fetch (-1 for all pages)
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --page=page                  [default: 1] starting page number
+  --per-page=per-page          number of results per page
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Submit a multi-dimensional, aggregate, time series analytical query. 
@@ -80,6 +82,17 @@ DESCRIPTION
   metrics available in the query for selection, filtering, grouping, 
   and sorting. Consult the Data Dictionary for available Datasets, 
   Fields and their capabilities.
+
+EXAMPLES
+  $ lf-cli analytics:fetch my-request.json
+  $ cat my-request.json | lf-cli analytics:fetch
+  $ lf-cli analytics:fetch --pretty my-request.json
+  $ cat my-request.json | lf-cli analytics:fetch --max-page -1 --format doc --silent
+  $ lf-cli analytics:fetch --max-page 2 --per-page 5 --format table my-request.json 
+  $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format table --csv my-request.json >| my-response.csv
+  $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json
+  $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json
+  $ lf-cli analytics:fetch --format table --csv --no-header my-request.json >| my-response-data.csv
 ```
 
 _See code: [src/commands/analytics/fetch.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/analytics/fetch.ts)_
@@ -93,8 +106,14 @@ USAGE
   $ lf-cli analytics:generate
 
 OPTIONS
-  -h, --help             show CLI help
-  -p, --profile=profile  the name of the configuration profile
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
+
+EXAMPLES
+  $ lf-cli analytics:generate
+  $ lf-cli analytics:generate > analytics-requets.json
 ```
 
 _See code: [src/commands/analytics/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/analytics/generate.ts)_
@@ -108,18 +127,26 @@ USAGE
   $ lf-cli auth:me
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --format=raw|table|doc  [default: raw] output format of the results
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieve metadata for the currently authenticated ListenFirst
   platform user and associated, active ListenFirst Account
+
+EXAMPLES
+  $ lf-cli auth:me
+  $ lf-cli auth:me --pretty
+  $ lf-cli auth:me --pretty --format doc
+  $ lf-cli auth:me --pretty --account-id <ACCOUNT_ID>
 ```
 
 _See code: [src/commands/auth/me.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/auth/me.ts)_
@@ -133,8 +160,10 @@ USAGE
   $ lf-cli auth:token
 
 OPTIONS
-  -h, --help             show CLI help
-  -p, --profile=profile  the name of the configuration profile
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   This command provides the ability to obtain an access
@@ -144,88 +173,94 @@ DESCRIPTION
   The access token will be written to stdout.
 
 EXAMPLES
-  $ lf-cli auth
-  $ lf-cli auth > access-token.json
+  $ lf-cli auth:token
+  $ lf-cli auth:token >| access-token.json
 ```
 
 _See code: [src/commands/auth/token.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/auth/token.ts)_
 
-## `lf-cli brand_view_sets:get ID`
+## `lf-cli brand-view-sets:get ID`
 
 Get a Brand View Aet
 
 ```
 USAGE
-  $ lf-cli brand_view_sets:get ID
+  $ lf-cli brand-view-sets:get ID
 
 ARGUMENTS
   ID  the ID of the Brand View Set to retrieve
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --format=raw|table|doc  [default: raw] output format of the results
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieve a Brand View Set by id.
 ```
 
-_See code: [src/commands/brand_view_sets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_view_sets/get.ts)_
+_See code: [src/commands/brand-view-sets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-view-sets/get.ts)_
 
-## `lf-cli brand_view_sets:list`
+## `lf-cli brand-view-sets:list`
 
 List Brand View Sets
 
 ```
 USAGE
-  $ lf-cli brand_view_sets:list
+  $ lf-cli brand-view-sets:list
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --format=raw|table|doc  [default: raw] output format of the results
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieve the list of a Brand View Sets available to the ListenFirst 
   Account associated with the access token.
 ```
 
-_See code: [src/commands/brand_view_sets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_view_sets/list.ts)_
+_See code: [src/commands/brand-view-sets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-view-sets/list.ts)_
 
-## `lf-cli brand_views:by-brand-set-name BRAND_SET_NAME`
+## `lf-cli brand-views:by-brand-set-name BRAND_SET_NAME`
 
 List Brands from the specified Brand View Set
 
 ```
 USAGE
-  $ lf-cli brand_views:by-brand-set-name BRAND_SET_NAME
+  $ lf-cli brand-views:by-brand-set-name BRAND_SET_NAME
 
 ARGUMENTS
   BRAND_SET_NAME  a brand set to fetch
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --fields=fields         Comma seperated list of fields to include
-  --format=raw|table|doc  [default: raw] output format of the results
-  --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --page=page             [default: 1] starting page number
-  --per-page=per-page     number of results per page
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --fields=fields              Comma seperated list of fields to include
+  --format=raw|table|doc       [default: raw] output format of the results
+  --max-page=max-page          [default: 1] the max page number to fetch (-1 for all pages)
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --page=page                  [default: 1] starting page number
+  --per-page=per-page          number of results per page
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Convenience command to fetch the Brand Views associated with the specified (by name)
@@ -237,19 +272,21 @@ EXAMPLES
   $ lf-cli brand_views:by-brand-set-name --max-page -1 --format table LF // TV Universe
 ```
 
-_See code: [src/commands/brand_views/by-brand-set-name.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/by-brand-set-name.ts)_
+_See code: [src/commands/brand-views/by-brand-set-name.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/by-brand-set-name.ts)_
 
-## `lf-cli brand_views:generate`
+## `lf-cli brand-views:generate`
 
 Generate a list parameters object example
 
 ```
 USAGE
-  $ lf-cli brand_views:generate
+  $ lf-cli brand-views:generate
 
 OPTIONS
-  -h, --help             show CLI help
-  -p, --profile=profile  the name of the configuration profile
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   The /brand_views endpoint allows filters, fields, and sort options
@@ -262,60 +299,64 @@ DESCRIPTION
   a complex example that can be used as a template.
 ```
 
-_See code: [src/commands/brand_views/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/generate.ts)_
+_See code: [src/commands/brand-views/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/generate.ts)_
 
-## `lf-cli brand_views:get ID`
+## `lf-cli brand-views:get ID`
 
 Get a Brand View
 
 ```
 USAGE
-  $ lf-cli brand_views:get ID
+  $ lf-cli brand-views:get ID
 
 ARGUMENTS
   ID  the ID of the Brand View to retrieve
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --fields=fields         Comma seperated list of fields to include
-  --format=raw|table|doc  [default: raw] output format of the results
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --fields=fields              Comma seperated list of fields to include
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieve a Brand View by id.
 ```
 
-_See code: [src/commands/brand_views/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/get.ts)_
+_See code: [src/commands/brand-views/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/get.ts)_
 
-## `lf-cli brand_views:list [PARAMS_FILE]`
+## `lf-cli brand-views:list [PARAMS_FILE]`
 
 List Brand Views
 
 ```
 USAGE
-  $ lf-cli brand_views:list [PARAMS_FILE]
+  $ lf-cli brand-views:list [PARAMS_FILE]
 
 ARGUMENTS
   PARAMS_FILE  [default: -] a file containing optional filter, field, and sort parameters
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --fields=fields         Comma seperated list of fields to include
-  --format=raw|table|doc  [default: raw] output format of the results
-  --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --page=page             [default: 1] starting page number
-  --per-page=per-page     number of results per page
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --fields=fields              Comma seperated list of fields to include
+  --format=raw|table|doc       [default: raw] output format of the results
+  --max-page=max-page          [default: 1] the max page number to fetch (-1 for all pages)
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --page=page                  [default: 1] starting page number
+  --per-page=per-page          number of results per page
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Returns an array of all Brand Views available to the ListenFirst 
@@ -323,36 +364,38 @@ DESCRIPTION
   and sorted by Brand Metadata Dimensions.
 ```
 
-_See code: [src/commands/brand_views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/list.ts)_
+_See code: [src/commands/brand-views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/list.ts)_
 
-## `lf-cli brand_views:my-brands`
+## `lf-cli brand-views:my-brands`
 
 List My Brands
 
 ```
 USAGE
-  $ lf-cli brand_views:my-brands
+  $ lf-cli brand-views:my-brands
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --fields=fields         Comma seperated list of fields to include
-  --format=raw|table|doc  [default: raw] output format of the results
-  --max-page=max-page     [default: 1] the max page number to fetch (-1 for all pages)
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --page=page             [default: 1] starting page number
-  --per-page=per-page     number of results per page
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --fields=fields              Comma seperated list of fields to include
+  --format=raw|table|doc       [default: raw] output format of the results
+  --max-page=max-page          [default: 1] the max page number to fetch (-1 for all pages)
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --page=page                  [default: 1] starting page number
+  --per-page=per-page          number of results per page
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Convenience command to fetch the Brand Views associated with the "My Brands"
   Brand View Set
 ```
 
-_See code: [src/commands/brand_views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand_views/my-brands.ts)_
+_See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/my-brands.ts)_
 
 ## `lf-cli config:create`
 
@@ -363,11 +406,30 @@ USAGE
   $ lf-cli config:create
 
 OPTIONS
-  -h, --help             show CLI help
-  -p, --profile=profile  the name of the configuration profile
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
 ```
 
 _See code: [src/commands/config/create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/create.ts)_
+
+## `lf-cli config:edit`
+
+Open the configuration profiles with system editor
+
+```
+USAGE
+  $ lf-cli config:edit
+
+OPTIONS
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
+```
+
+_See code: [src/commands/config/edit.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/edit.ts)_
 
 ## `lf-cli config:list`
 
@@ -378,8 +440,10 @@ USAGE
   $ lf-cli config:list
 
 OPTIONS
-  -h, --help             show CLI help
-  -p, --profile=profile  the name of the configuration profile
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
 ```
 
 _See code: [src/commands/config/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/list.ts)_
@@ -393,8 +457,10 @@ USAGE
   $ lf-cli config:show
 
 OPTIONS
-  -h, --help             show CLI help
-  -p, --profile=profile  the name of the configuration profile
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
 ```
 
 _See code: [src/commands/config/show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/show.ts)_
@@ -408,8 +474,10 @@ USAGE
   $ lf-cli config:verify
 
 OPTIONS
-  -h, --help             show CLI help
-  -p, --profile=profile  the name of the configuration profile
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
 ```
 
 _See code: [src/commands/config/verify.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/verify.ts)_
@@ -426,14 +494,16 @@ ARGUMENTS
   FIELD  the ID of the Field to retrieve
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --format=raw|table|doc  [default: raw] output format of the results
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 ```
 
 _See code: [src/commands/datasets/field-values.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/field-values.ts)_
@@ -450,15 +520,17 @@ ARGUMENTS
   ID  the Dataset ID to retrieve
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --[no-]fields           list fields in output
-  --format=raw|table|doc  [default: raw] output format of the results
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --[no-]fields                list fields in output
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieve a single Dataset by its unique identifier. All the 
@@ -476,14 +548,16 @@ USAGE
   $ lf-cli datasets:list
 
 OPTIONS
-  -h, --help              show CLI help
-  -p, --profile=profile   the name of the configuration profile
-  --columns=columns       only show provided columns (comma-separated)
-  --csv                   output is csv format [alias: --output=csv]
-  --format=raw|table|doc  [default: raw] output format of the results
-  --no-header             hide table header from output
-  --no-truncate           do not truncate output to fit screen
-  --pretty                pretty print json responses (applies to raw or doc formats)
+  -A, --account-id=account-id  swith accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieves all Datasets available. See the Data Dictionary 
