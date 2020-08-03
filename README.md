@@ -204,6 +204,10 @@ OPTIONS
 
 DESCRIPTION
   Retrieve a Brand View Set by id.
+
+EXAMPLES
+  $ lf-cli brand-view-sets:get 4626
+  $ lf-cli brand-view-sets:get 4626 --pretty
 ```
 
 _See code: [src/commands/brand-view-sets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-view-sets/get.ts)_
@@ -223,14 +227,23 @@ OPTIONS
   --columns=columns            only show provided columns (comma-separated)
   --csv                        output is csv format [alias: --output=csv]
   --format=raw|table|doc       [default: raw] output format of the results
+  --max-page=max-page          [default: 1] the max page number to fetch (-1 for all pages)
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
+  --page=page                  [default: 1] starting page number
+  --per-page=per-page          number of results per page
   --pretty                     pretty print json responses (applies to raw or doc formats)
   --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieve the list of a Brand View Sets available to the ListenFirst 
   Account associated with the access token.
+
+EXAMPLES
+  $ lf-cli brand-view-sets:list --per-page 1000 --pretty
+  $ lf-cli brand-view-sets:list --format table --max-page -1 --silent
+  $ lf-cli brand-view-sets:list --max-page -1 --silent --format table --csv > all-brand-sets.csv
+  $ lf-cli brand-view-sets:list --max-page -1 --format doc > all-brand-sets.jsonl
 ```
 
 _See code: [src/commands/brand-view-sets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-view-sets/list.ts)_

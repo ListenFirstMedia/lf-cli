@@ -17,6 +17,11 @@ Retrieve a Brand View Set by id.`;
         },
     ];
 
+    static examples = [
+        '$ lf-cli brand-view-sets:get 4626',
+        '$ lf-cli brand-view-sets:get 4626 --pretty',
+    ];
+
     async run() {
         const opts = this.parse(BrandViewSetGet);
 
