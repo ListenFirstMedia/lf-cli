@@ -556,6 +556,12 @@ OPTIONS
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
   --silent                     hide spinners and other log output
+
+EXAMPLES
+  $ lf-cli datasets:field-values lfm.brand.genres
+  $ lf-cli datasets:field-values --pretty lfm.brand.genres
+  $ lf-cli datasets:field-values --format table --no-header lfm.brand.genres
+  $ lf-cli datasets:field-values --format table --no-header --silent lfm.brand.genres | sort
 ```
 
 _See code: [src/commands/datasets/field-values.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/field-values.ts)_
@@ -577,16 +583,22 @@ OPTIONS
   -p, --profile=profile        the name of the configuration profile
   --columns=columns            only show provided columns (comma-separated)
   --csv                        output is csv format [alias: --output=csv]
-  --[no-]fields                list fields in output
   --format=raw|table|doc       [default: raw] output format of the results
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --[no-]show-fields           list fields in output
   --silent                     hide spinners and other log output
 
 DESCRIPTION
   Retrieve a single Dataset by its unique identifier. All the 
   dataset's attributes and fields will be returned.
+
+EXAMPLES
+  $ lf-cli datasets:get dataset_brand_metadata --pretty
+  $ lf-cli datasets:get dataset_brand_metadata --format table
+  $ lf-cli datasets:get dataset_brand_metadata --pretty --no-show-fields
+  $ lf-cli datasets:get dataset_brand_facebook --format table --show-fields
 ```
 
 _See code: [src/commands/datasets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/get.ts)_
@@ -618,6 +630,12 @@ DESCRIPTION
 
 ALIASES
   $ lf-cli datasets:list
+
+EXAMPLES
+  $ lf-cli datasets:list --pretty
+  $ lf-cli datasets:list --format table
+  $ lf-cli datasets:list --format table --csv > datasets.csv
+  $ lf-cli datasets:list --format doc > datasets.jsonl
 ```
 
 _See code: [src/commands/datasets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/datasets/list.ts)_

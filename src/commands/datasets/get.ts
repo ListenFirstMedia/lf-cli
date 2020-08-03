@@ -10,7 +10,7 @@ Retrieve a single Dataset by its unique identifier. All the
 dataset's attributes and fields will be returned.`;
 
     static flags = {
-        fields: flags.boolean({
+        'show-fields': flags.boolean({
             description: 'list fields in output',
             default: true,
             allowNo: true,
@@ -24,6 +24,13 @@ dataset's attributes and fields will be returned.`;
             description: 'the Dataset ID to retrieve',
             required: true,
         },
+    ];
+
+    static examples = [
+        '$ lf-cli datasets:get dataset_brand_metadata --pretty',
+        '$ lf-cli datasets:get dataset_brand_metadata --format table',
+        '$ lf-cli datasets:get dataset_brand_metadata --pretty --no-show-fields',
+        '$ lf-cli datasets:get dataset_brand_facebook --format table --show-fields',
     ];
 
     async run() {
@@ -52,7 +59,7 @@ dataset's attributes and fields will be returned.`;
             });
         }
 
-        if (opts.flags.fields === false) {
+        if (opts.flags['show-fields'] === false) {
             delete res.record.fields;
         } else if (opts.flags.format === 'table') {
             res.records = res.record.fields;

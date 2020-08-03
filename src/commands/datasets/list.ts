@@ -13,6 +13,13 @@ will be returned in the response.`;
         ...ApiCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli datasets:list --pretty',
+        '$ lf-cli datasets:list --format table',
+        '$ lf-cli datasets:list --format table --csv > datasets.csv',
+        '$ lf-cli datasets:list --format doc > datasets.jsonl',
+    ];
+
     async run() {
         const res = await this.fetch(
             '/v20200626/dictionary/datasets',

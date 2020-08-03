@@ -17,6 +17,13 @@ export default class DatasetsFieldValues extends ApiCommand {
         },
     ];
 
+    static examples = [
+        '$ lf-cli datasets:field-values lfm.brand.genres',
+        '$ lf-cli datasets:field-values --pretty lfm.brand.genres',
+        '$ lf-cli datasets:field-values --format table --no-header lfm.brand.genres',
+        '$ lf-cli datasets:field-values --format table --no-header --silent lfm.brand.genres | sort',
+    ];
+
     async run() {
         const opts = this.parse(DatasetsFieldValues);
 
