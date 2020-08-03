@@ -280,9 +280,9 @@ DESCRIPTION
   Brand View Set
 
 EXAMPLES
-  $ lf-cli brand_views:by-brand-set-name --pretty --fields lfm.brand.primary_genre My Brands
-  $ lf-cli brand_views:by-brand-set-name --max-page -1 --format table LF // TV Universe
-  $ lf-cli brand_views:by-brand-set-name --max-page -1 --format table LF // TV Universe
+  $ lf-cli brand-views:by-brand-set-name --pretty --fields lfm.brand.primary_genre My Brands
+  $ lf-cli brand-views:by-brand-set-name --max-page -1 --format table LF // TV Universe
+  $ lf-cli brand-views:by-brand-set-name --max-page -1 --format table LF // TV Universe
 ```
 
 _See code: [src/commands/brand-views/by-brand-set-name.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/by-brand-set-name.ts)_
@@ -310,6 +310,10 @@ DESCRIPTION
   The command will prepare the request query for you making it
   easier to use for complex queries.   This command produces
   a complex example that can be used as a template.
+
+EXAMPLES
+  $ lf-cli brand-views:generate
+  $ lf-cli brand-views:generate >| my-params.json
 ```
 
 _See code: [src/commands/brand-views/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/generate.ts)_
@@ -340,6 +344,12 @@ OPTIONS
 
 DESCRIPTION
   Retrieve a Brand View by id.
+
+EXAMPLES
+  $ lf-cli brand-views:get 31711
+  $ lf-cli brand-views:get 31711 --pretty
+  $ lf-cli brand-views:get 31711 --format table --fields lfm.brand.primary_genre,lfm.brand.programmers
+  $ lf-cli brand-views:get --format doc --fields lfm.brand.primary_genre --pretty 31711
 ```
 
 _See code: [src/commands/brand-views/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/get.ts)_
@@ -375,6 +385,13 @@ DESCRIPTION
   Returns an array of all Brand Views available to the ListenFirst 
   Account associated with the access token. Results may be filtered 
   and sorted by Brand Metadata Dimensions.
+
+EXAMPLES
+  $ lf-cli brand-views:list --pretty my-params.json
+  $ lf-cli brand-views:generate | lf-cli brand-views:list --format table --max-page -1 --per-page 1000
+  $ cat my-params.json | lf-cli brand-views:list --format table --max-page -1 --no-header --csv
+  $ cat my-params.json | lf-cli brand-views:list --format doc --max-page -1 --per-page 1000 > results.jsonl
+  $ lf-cli brand-views:list --pretty --fields lfm.brand.primary_genre,lfm.brand.programmers my-other-params.json
 ```
 
 _See code: [src/commands/brand-views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/list.ts)_
@@ -406,6 +423,10 @@ OPTIONS
 DESCRIPTION
   Convenience command to fetch the Brand Views associated with the "My Brands"
   Brand View Set
+
+EXAMPLES
+  $ lf-cli brand-views:my-brands --pretty --fields lfm.brand.primary_genre
+  $ lf-cli brand-views:my-brands --max-page -1 --format table
 ```
 
 _See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/brand-views/my-brands.ts)_

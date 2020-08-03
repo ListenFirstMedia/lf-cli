@@ -10,6 +10,11 @@ Brand View Set`;
         ...BrandViewsByBrandSetNameCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli brand-views:my-brands --pretty --fields lfm.brand.primary_genre',
+        '$ lf-cli brand-views:my-brands --max-page -1 --format table',
+    ];
+
     async run() {
         const opts = this.parse(BrandViewsMyBrands);
         await this.process(opts.flags, 'My Brands');

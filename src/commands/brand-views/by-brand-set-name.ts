@@ -73,9 +73,9 @@ Brand View Set`;
     static strict = false;
 
     static examples = [
-        '$ lf-cli brand_views:by-brand-set-name --pretty --fields lfm.brand.primary_genre My Brands',
-        '$ lf-cli brand_views:by-brand-set-name --max-page -1 --format table LF // TV Universe',
-        '$ lf-cli brand_views:by-brand-set-name --max-page -1 --format table LF // TV Universe',
+        '$ lf-cli brand-views:by-brand-set-name --pretty --fields lfm.brand.primary_genre My Brands',
+        '$ lf-cli brand-views:by-brand-set-name --max-page -1 --format table LF // TV Universe',
+        '$ lf-cli brand-views:by-brand-set-name --max-page -1 --format table LF // TV Universe',
     ];
 
     async run() {

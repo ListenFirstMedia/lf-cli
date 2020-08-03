@@ -16,7 +16,14 @@ a complex example that can be used as a template.`;
         ...BaseCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli brand-views:generate',
+        '$ lf-cli brand-views:generate >| my-params.json',
+    ];
+
     async run() {
+        this.parse(BrandViewsGenerate);
+
         const fields = [
             'lfm.brand.broadcast_dayparts',
             'lfm.brand.primary_genre',

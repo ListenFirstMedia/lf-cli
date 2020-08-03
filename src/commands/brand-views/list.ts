@@ -39,6 +39,14 @@ and sorted by Brand Metadata Dimensions.`;
         },
     ];
 
+    static examples = [
+        '$ lf-cli brand-views:list --pretty my-params.json',
+        '$ lf-cli brand-views:generate | lf-cli brand-views:list --format table --max-page -1 --per-page 1000',
+        '$ cat my-params.json | lf-cli brand-views:list --format table --max-page -1 --no-header --csv',
+        '$ cat my-params.json | lf-cli brand-views:list --format doc --max-page -1 --per-page 1000 > results.jsonl',
+        '$ lf-cli brand-views:list --pretty --fields lfm.brand.primary_genre,lfm.brand.programmers my-other-params.json',
+    ];
+
     async run() {
         const opts = this.parse(BrandViewsList);
         const queryArgs: { [index: string]: any } = {

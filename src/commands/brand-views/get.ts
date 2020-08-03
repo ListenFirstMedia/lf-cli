@@ -22,6 +22,13 @@ Retrieve a Brand View by id.`;
         },
     ];
 
+    static examples = [
+        '$ lf-cli brand-views:get 31711',
+        '$ lf-cli brand-views:get 31711 --pretty',
+        '$ lf-cli brand-views:get 31711 --format table --fields lfm.brand.primary_genre,lfm.brand.programmers',
+        '$ lf-cli brand-views:get --format doc --fields lfm.brand.primary_genre --pretty 31711',
+    ];
+
     async run() {
         const opts = this.parse(BrandViewGet);
 
