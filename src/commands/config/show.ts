@@ -7,7 +7,13 @@ export default class ConfigShow extends BaseCommand {
         ...BaseCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli config:show',
+        '$ lf-cli config:show -p my-other-profile',
+    ];
+
     async run() {
+        this.parse(ConfigShow);
         const profile = await this.lfapiConfigProfile();
         this.log(JSON.stringify(profile, null, 2));
     }

@@ -10,7 +10,14 @@ export default class ConfigVerify extends BaseCommand {
         ...BaseCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli config:verify',
+        '$ lf-cli config:verify -p my-other-profile',
+    ];
+
     async run() {
+        this.parse(ConfigVerify);
+
         this.log(`Verifying configuration profile`);
 
         const tasks = new Listr([

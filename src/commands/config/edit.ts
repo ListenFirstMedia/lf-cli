@@ -2,14 +2,21 @@ import BaseCommand from '../../base-command';
 import * as child_process from 'child_process';
 import { split as _split } from 'lodash';
 
-export default class ConfigShow extends BaseCommand {
+export default class ConfigEdit extends BaseCommand {
     static description = 'Open the configuration profiles with system editor';
 
     static flags = {
         ...BaseCommand.flags,
     };
 
+    static examples = [
+        '$ lf-cli config:edit',
+        '$ EDITOR=emacs lf-cli config:edit',
+    ];
+
     async run() {
+        this.parse(ConfigEdit);
+
         const fn = await this.lfapiConfgFn();
         let editor = process.env.EDITOR;
         if (editor === undefined) {

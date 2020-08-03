@@ -8,6 +8,8 @@ export default class ConfigCreate extends BaseCommand {
         ...BaseCommand.flags,
     };
 
+    static examples = ['$ lf-cli config:create'];
+
     async run() {
         const opts = this.parse(ConfigCreate);
         const config = await this.lfapiConfig();

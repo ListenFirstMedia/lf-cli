@@ -444,6 +444,9 @@ OPTIONS
   -h, --help                   show CLI help
   -p, --profile=profile        the name of the configuration profile
   --silent                     hide spinners and other log output
+
+EXAMPLE
+  $ lf-cli config:create
 ```
 
 _See code: [src/commands/config/create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/create.ts)_
@@ -461,6 +464,10 @@ OPTIONS
   -h, --help                   show CLI help
   -p, --profile=profile        the name of the configuration profile
   --silent                     hide spinners and other log output
+
+EXAMPLES
+  $ lf-cli config:edit
+  $ EDITOR=emacs lf-cli config:edit
 ```
 
 _See code: [src/commands/config/edit.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/edit.ts)_
@@ -478,6 +485,9 @@ OPTIONS
   -h, --help                   show CLI help
   -p, --profile=profile        the name of the configuration profile
   --silent                     hide spinners and other log output
+
+EXAMPLE
+  $ lf-cli config:list
 ```
 
 _See code: [src/commands/config/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/list.ts)_
@@ -495,6 +505,10 @@ OPTIONS
   -h, --help                   show CLI help
   -p, --profile=profile        the name of the configuration profile
   --silent                     hide spinners and other log output
+
+EXAMPLES
+  $ lf-cli config:show
+  $ lf-cli config:show -p my-other-profile
 ```
 
 _See code: [src/commands/config/show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/show.ts)_
@@ -512,6 +526,10 @@ OPTIONS
   -h, --help                   show CLI help
   -p, --profile=profile        the name of the configuration profile
   --silent                     hide spinners and other log output
+
+EXAMPLES
+  $ lf-cli config:verify
+  $ lf-cli config:verify -p my-other-profile
 ```
 
 _See code: [src/commands/config/verify.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v0.0.0/src/commands/config/verify.ts)_

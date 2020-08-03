@@ -7,7 +7,10 @@ export default class ConfigList extends BaseCommand {
         ...BaseCommand.flags,
     };
 
+    static examples = ['$ lf-cli config:list'];
+
     async run() {
+        this.parse(ConfigList);
         const config = await this.lfapiConfig();
         if (config.hasProfiles()) {
             config.eachProfile((p) => {
