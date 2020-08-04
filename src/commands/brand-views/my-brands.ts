@@ -13,6 +13,8 @@ Brand View Set`;
     static examples = [
         '$ lf-cli brand-views:my-brands --pretty --fields lfm.brand.primary_genre',
         '$ lf-cli brand-views:my-brands --max-page -1 --format table',
+        '$ lf-cli brand-views:my-brands --fields lfm.brand.primary_genre --show-curl',
+        '$ lf-cli brand-views:my-brands --show-curl | sh',
     ];
 
     async run() {

@@ -48,6 +48,9 @@
         "node": ">=12.0.0"
     },
     "files": [
+	"LICENSE.md",
+	"README.md",
+	"listenfirst-logo-small.png",
         "/bin",
         "/lib",
         "/npm-shrinkwrap.json",

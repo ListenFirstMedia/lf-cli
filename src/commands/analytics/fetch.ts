@@ -38,6 +38,8 @@ Fields and their capabilities.
         '$ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json',
         '$ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json',
         '$ lf-cli analytics:fetch --format table --csv --no-header my-request.json >| my-response-data.csv',
+        '$ cat my-request.json | lf-cli analytics:fetch --show-curl',
+        '$ cat my-request.json | lf-cli analytics:fetch --show-curl | sh',
     ];
 
     async run() {

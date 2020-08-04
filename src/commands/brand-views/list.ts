@@ -45,6 +45,8 @@ and sorted by Brand Metadata Dimensions.`;
         '$ cat my-params.json | lf-cli brand-views:list --format table --max-page -1 --no-header --csv',
         '$ cat my-params.json | lf-cli brand-views:list --format doc --max-page -1 --per-page 1000 > results.jsonl',
         '$ lf-cli brand-views:list --pretty --fields lfm.brand.primary_genre,lfm.brand.programmers my-other-params.json',
+        '$ cat my-params.json | lf-cli brand-views:list --show-curl',
+        '$ cat my-params.json | lf-cli brand-views:list --show-curl | sh',
     ];
 
     async run() {

@@ -1,18 +1,44 @@
-lf-cli
-==
+# ![](listenfirst-logo-small.png) lf-cli
 
-The ListenFirst API Command Line Interface
+The ListenFirst API Command Line Interface (lf-cli) is a cross-platform tool, allowing users to access ListenFirst’s
+comprehensive social analysis and insights through interactive terminal shells and scripts. With one
+tool to download and configure, you can start leveraging the ListenFirst API without the need to write
+any client code.
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/ls.svg)](https://npmjs.org/package/ls)
-[![Downloads/week](https://img.shields.io/npm/dw/ls.svg)](https://npmjs.org/package/ls)
-[![License](https://img.shields.io/npm/l/ls.svg)](https://github.com/ListenFirstMedia/lf-cli/blob/master/package.json)
+# Features
 
-<!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+The lf-cli is a full features, multi-command CLI, providing a number of features to working with the ListenFirst
+Platform API. Key features include:
+
+-   interactively configure, manage and verify multiple profiles
+-   access all available service endpoints via parameterized [Commands](#commands)
+-   generators for creating complex analyitcal queries and other filters
+-   response formatters (including user friendly tables, csv tables, json line/document streams, and pretty printed json)
+-   paging support
+-   utilities to produce curl requests for examples
+-   graceful handling of rate limit errors
+-   many convenience commands and utilities for working with the API
+
+See [Usage](#usage) for more details on how to get started.
+
+# About ListenFirst
+
+ListenFirst is the social analytics solution trusted by the largest companies in the world. We unite billions of consumer signals from every social platform to give brands a complete picture of their performance and the analytics to drive successful strategies. Founded in 2012, ListenFirst has been honored with multiple accolades including a 2019 Stevie Awards for exceptional client service, a 2019 High Performer recognition from G2 Crowd, and named one of Inc. 500’s fastest growing companies. ListenFirst clients include NBCUniversal, Amazon, A&E Networks, Condé Nast, and AT&T, and is regularly featured in Variety, Ad Age, The New York Times, and more. For additional information, visit [www.listenfirstmedia.com](https://www.listenfirstmedia.com).
+
+## About The ListenFirst Platform API
+
+The ListenFirst API is a set of web services providing developers with programmatic access to the vast datasets
+and broad analysis capabilities offered by the [ListenFirst Platform](https://www.listenfirstmedia.com). The API is built on top of our powerful
+analytics platform. It provides an interface to query ListenFirst Brand data, retrieve time series metrics, and
+perform multi-dimensional time series analytics.
+
+-   Learn more about the [ListenFirst Platform API](https://www.listenfirstmedia.com/api-integration/)
+-   Reference the [ListenFirst Developer's Portal](https://developers.listenfirstmedia.com) to learn how to make the most of the ListenFirst API.
+
 # Usage
+
+## Quick Start
+
 <!-- usage -->
 ```sh-session
 $ npm install -g lf-cli
@@ -26,7 +52,21 @@ USAGE
 ...
 ```
 <!-- usagestop -->
+
+## Up and Running
+
+1. Configure a profile: [`lf-cli config:create`](#lf-cli-configcreate)
+2. Verify the profile [`lf-cli config:veirfy`](#lf-cli-configverify)
+
+### Things to Try
+
+-   List your Brands [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
+-   Obtain an Access Token [`lf-cli auth:token`](#lf-cli-authtoken)
+-   List available datasets (#lf-cli-datasetslist)
+-   Describe a dataset and list it's available fields [`lf-cli datasets:list`][`lf-cli datasets:get id`](#lf-cli-datasetsget-id)
+
 # Commands
+
 <!-- commands -->
 * [`lf-cli analytics:fetch QUERY_FILE`](#lf-cli-analyticsfetch-query_file)
 * [`lf-cli analytics:generate`](#lf-cli-analyticsgenerate)
@@ -73,6 +113,7 @@ OPTIONS
   --page=page                  [default: 1] starting page number
   --per-page=per-page          number of results per page
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -93,6 +134,8 @@ EXAMPLES
   $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json
   $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json
   $ lf-cli analytics:fetch --format table --csv --no-header my-request.json >| my-response-data.csv
+  $ cat my-request.json | lf-cli analytics:fetch --show-curl
+  $ cat my-request.json | lf-cli analytics:fetch --show-curl | sh
 ```
 
 _See code: [src/commands/analytics/fetch.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.0/src/commands/analytics/fetch.ts)_
@@ -136,6 +179,7 @@ OPTIONS
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -200,6 +244,7 @@ OPTIONS
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -233,6 +278,7 @@ OPTIONS
   --page=page                  [default: 1] starting page number
   --per-page=per-page          number of results per page
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -273,6 +319,7 @@ OPTIONS
   --page=page                  [default: 1] starting page number
   --per-page=per-page          number of results per page
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -340,6 +387,7 @@ OPTIONS
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -379,6 +427,7 @@ OPTIONS
   --page=page                  [default: 1] starting page number
   --per-page=per-page          number of results per page
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -392,6 +441,8 @@ EXAMPLES
   $ cat my-params.json | lf-cli brand-views:list --format table --max-page -1 --no-header --csv
   $ cat my-params.json | lf-cli brand-views:list --format doc --max-page -1 --per-page 1000 > results.jsonl
   $ lf-cli brand-views:list --pretty --fields lfm.brand.primary_genre,lfm.brand.programmers my-other-params.json
+  $ cat my-params.json | lf-cli brand-views:list --show-curl
+  $ cat my-params.json | lf-cli brand-views:list --show-curl | sh
 ```
 
 _See code: [src/commands/brand-views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.0/src/commands/brand-views/list.ts)_
@@ -418,6 +469,7 @@ OPTIONS
   --page=page                  [default: 1] starting page number
   --per-page=per-page          number of results per page
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
@@ -427,6 +479,8 @@ DESCRIPTION
 EXAMPLES
   $ lf-cli brand-views:my-brands --pretty --fields lfm.brand.primary_genre
   $ lf-cli brand-views:my-brands --max-page -1 --format table
+  $ lf-cli brand-views:my-brands --fields lfm.brand.primary_genre --show-curl
+  $ lf-cli brand-views:my-brands --show-curl | sh
 ```
 
 _See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.0/src/commands/brand-views/my-brands.ts)_
@@ -555,6 +609,7 @@ OPTIONS
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 EXAMPLES
@@ -587,6 +642,7 @@ OPTIONS
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --[no-]show-fields           list fields in output
   --silent                     hide spinners and other log output
 
@@ -621,6 +677,7 @@ OPTIONS
   --no-header                  hide table header from output
   --no-truncate                do not truncate output to fit screen
   --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
   --silent                     hide spinners and other log output
 
 DESCRIPTION
