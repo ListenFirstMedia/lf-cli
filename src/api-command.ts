@@ -83,47 +83,19 @@ export default abstract class ApiCommand extends BaseCommand {
         return client;
     }
 
-    async asCurl(fetchParams: FetchParams): Promise<string> {
-        const { relPath, fetchOpts } = fetchParams;
-        const profile = await this.lfapiConfigProfile();
-        const token = await obtainAccessToken(profile);
-
-        const method = fetchOpts?.method || 'GET';
-        const fqUrl = new URL(relPath, `https://${profile.api_host}`);
-        const cmd = [
-            'curl',
-            '--http1.1',
-            '-H "Content-Type: application/json"',
-            `-H "X-API-KEY: ${profile.api_key}"`,
-            `-H "Authorization: Bearer ${token.access_token}"`,
-            `-X ${method.toUpperCase()}`,
-        ];
-
-        if (profile.account_id) {
-            cmd.push(`-H "LF-ACTING-ACCOUNT: ${profile.account_id}"`);
-        }
-
-        if (fetchOpts?.body) {
-            cmd.push(`-d '${fetchOpts.body}'`);
-        }
-
-        cmd.push(fqUrl.toString());
-
-        return _.join(cmd, ' ');
-    }
-
     async fetch(
         relPath: string,
         fetchOpts?: any,
         actionMsg?: string
     ): Promise<any> {
+        const client = await this.lfmapClient();
+
         if (this.parsedApiFlags()['show-curl']) {
-            const curl = await this.asCurl({ relPath, fetchOpts });
+            const curl = await client.asCurl(relPath, fetchOpts);
             this.log(curl);
             this.exit(0);
         }
 
-        const client = await this.lfmapClient();
         if (!this.silent()) {
             cli.action.start(actionMsg || 'fetching');
         }

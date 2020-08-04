@@ -1,7 +1,7 @@
 import { AccessToken } from './auth';
 import { ProfileSettings } from './config';
 import _fetch from 'node-fetch';
-import * as _ from 'lodash';
+import { merge as _merge, join as _join } from 'lodash';
 
 export class ClientError extends Error {}
 
@@ -27,7 +27,32 @@ export default class Client {
         this.#profile = profile;
     }
 
-    async fetch(relPath: string, opts = {}): Promise<any> {
+    async asCurl(relPath: string, opts: RequestInit = {}): Promise<string> {
+        const method = opts?.method || 'GET';
+        const fqUrl = new URL(relPath, `https://${this.#profile.api_host}`);
+        const cmd = [
+            'curl',
+            '--http1.1',
+            '-H "Content-Type: application/json"',
+            `-H "X-API-KEY: ${this.#profile.api_key}"`,
+            `-H "Authorization: Bearer ${this.access_token.access_token}"`,
+            `-X ${method.toUpperCase()}`,
+        ];
+
+        if (this.#profile.account_id) {
+            cmd.push(`-H "LF-ACTING-ACCOUNT: ${this.#profile.account_id}"`);
+        }
+
+        if (opts?.body) {
+            cmd.push(`-d '${opts.body}'`);
+        }
+
+        cmd.push(fqUrl.toString());
+
+        return _join(cmd, ' ');
+    }
+
+    async fetch(relPath: string, opts: RequestInit = {}): Promise<any> {
         const defaultOpts = {
             headers: {
                 'content-type': 'application/json',
@@ -45,7 +70,7 @@ export default class Client {
             delete defaultOpts.headers['lfm-acting-account'];
         }
 
-        const fetchOpts = _.merge({}, opts, defaultOpts);
+        const fetchOpts = _merge({}, opts, defaultOpts);
 
         const fqUrl = new URL(relPath, `https://${this.#profile.api_host}`);
         const res = await _fetch(fqUrl.toString(), fetchOpts);
