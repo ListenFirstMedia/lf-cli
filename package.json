@@ -34,6 +34,7 @@
         "@types/jest": "^26.0.5",
         "@types/node": "^10.17.27",
         "@types/prettier": "^2.0.2",
+        "aws-sdk": "^2.726.0",
         "eslint": "^5.16.0",
         "eslint-config-oclif": "^3.1.0",
         "eslint-config-oclif-typescript": "^0.1.0",
