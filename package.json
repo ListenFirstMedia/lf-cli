@@ -96,9 +96,11 @@
                 "description": "Query avaible Brand View Sets"
             }
         },
-        "s3": {
-            "bucket": "dist.lfm",
-            "host": "https://dist.listenfirstmedia.com"
+        "update": {
+            "s3": {
+                "bucket": "dist.lfm",
+                "host": "https://dist.listenfirstmedia.com"
+            }
         }
     },
     "repository": "ListenFirstMedia/lf-cli",
