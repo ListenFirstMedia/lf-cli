@@ -53,27 +53,24 @@ export default class Client {
     }
 
     async fetch(relPath: string, opts: RequestInit = {}): Promise<any> {
+        let actAsAccount = '';
+        if (this.#profile.account_id) {
+            actAsAccount = this.#profile.account_id.toString();
+        }
+
         const defaultOpts = {
             headers: {
                 'content-type': 'application/json',
                 authorization: `Bearer ${this.access_token.access_token}`,
                 'x-api-key': this.#profile.api_key,
-                'lfm-acting-account': '',
+                'lfm-acting-account': actAsAccount,
             },
         };
-
-        if (this.#profile.account_id) {
-            defaultOpts.headers[
-                'lfm-acting-account'
-            ] = this.#profile.account_id.toString();
-        } else {
-            delete defaultOpts.headers['lfm-acting-account'];
-        }
 
         const fetchOpts = _merge({}, opts, defaultOpts);
 
         const fqUrl = new URL(relPath, `https://${this.#profile.api_host}`);
-        const res = await _fetch(fqUrl.toString(), fetchOpts);
+        const res = await _fetch(fqUrl.toString(), fetchOpts as any);
         const data = await res.json();
         if (res.ok) {
             return data;

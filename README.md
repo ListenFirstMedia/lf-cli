@@ -41,11 +41,11 @@ perform multi-dimensional time series analytics.
 
 <!-- usage -->
 ```sh-session
-$ npm install -g lf-cli
+$ npm install -g @listenfirst/lf-cli
 $ lf-cli COMMAND
 running command...
 $ lf-cli (-v|--version|version)
-lf-cli/1.0.0 darwin-x64 node-v12.16.3
+@listenfirst/lf-cli/1.0.0 darwin-x64 node-v12.16.3
 $ lf-cli --help [COMMAND]
 USAGE
   $ lf-cli COMMAND
@@ -72,6 +72,7 @@ USAGE
 * [`lf-cli analytics:generate`](#lf-cli-analyticsgenerate)
 * [`lf-cli auth:me`](#lf-cli-authme)
 * [`lf-cli auth:token`](#lf-cli-authtoken)
+* [`lf-cli autocomplete [SHELL]`](#lf-cli-autocomplete-shell)
 * [`lf-cli brand-view-sets:get ID`](#lf-cli-brand-view-setsget-id)
 * [`lf-cli brand-view-sets:list`](#lf-cli-brand-view-setslist)
 * [`lf-cli brand-views:by-brand-set-name BRAND_SET_NAME`](#lf-cli-brand-viewsby-brand-set-name-brand_set_name)
@@ -79,6 +80,7 @@ USAGE
 * [`lf-cli brand-views:get ID`](#lf-cli-brand-viewsget-id)
 * [`lf-cli brand-views:list [PARAMS_FILE]`](#lf-cli-brand-viewslist-params_file)
 * [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
+* [`lf-cli commands`](#lf-cli-commands)
 * [`lf-cli config:create`](#lf-cli-configcreate)
 * [`lf-cli config:edit`](#lf-cli-configedit)
 * [`lf-cli config:list`](#lf-cli-configlist)
@@ -88,6 +90,7 @@ USAGE
 * [`lf-cli datasets:get ID`](#lf-cli-datasetsget-id)
 * [`lf-cli datasets:list`](#lf-cli-datasetslist)
 * [`lf-cli help [COMMAND]`](#lf-cli-help-command)
+* [`lf-cli update [CHANNEL]`](#lf-cli-update-channel)
 
 ## `lf-cli analytics:fetch QUERY_FILE`
 
@@ -222,6 +225,29 @@ EXAMPLES
 ```
 
 _See code: [src/commands/auth/token.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.0/src/commands/auth/token.ts)_
+
+## `lf-cli autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ lf-cli autocomplete [SHELL]
+
+ARGUMENTS
+  SHELL  shell type
+
+OPTIONS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+EXAMPLES
+  $ lf-cli autocomplete
+  $ lf-cli autocomplete bash
+  $ lf-cli autocomplete zsh
+  $ lf-cli autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.2.0/src/commands/autocomplete/index.ts)_
 
 ## `lf-cli brand-view-sets:get ID`
 
@@ -485,6 +511,30 @@ EXAMPLES
 
 _See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.0/src/commands/brand-views/my-brands.ts)_
 
+## `lf-cli commands`
+
+list all the commands
+
+```
+USAGE
+  $ lf-cli commands
+
+OPTIONS
+  -h, --help              show CLI help
+  -j, --json              display unfiltered api data in json format
+  -x, --extended          show extra columns
+  --columns=columns       only show provided columns (comma-separated)
+  --csv                   output is csv format [alias: --output=csv]
+  --filter=filter         filter property by partial string matching, ex: name=foo
+  --hidden                show hidden commands
+  --no-header             hide table header from output
+  --no-truncate           do not truncate output to fit screen
+  --output=csv|json|yaml  output in a more machine friendly format
+  --sort=sort             property to sort by (prepend '-' for descending)
+```
+
+_See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/v1.3.0/src/commands/commands.ts)_
+
 ## `lf-cli config:create`
 
 Create or update a configuration profile
@@ -713,4 +763,15 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
+
+## `lf-cli update [CHANNEL]`
+
+update the lf-cli CLI
+
+```
+USAGE
+  $ lf-cli update [CHANNEL]
+```
+
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.10/src/commands/update.ts)_
 <!-- commandsstop -->
