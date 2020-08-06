@@ -102,6 +102,6 @@ export default class ConfigCreate extends BaseCommand {
         }
         config.addProfile(answers.profile, answers.make_default, answers);
         await config.save();
-        this.log(`wrote ${answers.profile} profile to: ${this.lfapiConfgFn}`);
+        this.log(`wrote ${answers.profile} profile to: ${this.lfapiConfgFn()}`);
     }
 }
