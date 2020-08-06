@@ -63,7 +63,7 @@ USAGE
 -   List your Brands [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
 -   Obtain an Access Token [`lf-cli auth:token`](#lf-cli-authtoken)
 -   List available datasets [`lf-cli datasets:list`](#lf-cli-datasetslist)
--   Describe a dataset and list it's available fields [`lf-cli datasets:list`][`lf-cli datasets:get id`](#lf-cli-datasetsget-id)
+-   Describe a dataset and list it's available fields [`lf-cli datasets:get id`](#lf-cli-datasetsget-id)
 
 # Commands
 
