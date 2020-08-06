@@ -102,6 +102,10 @@
                 "bucket": "dist.lfm",
                 "host": "https://dist.listenfirstmedia.com"
             }
+        },
+        "macos": {
+            "identifier": "io.listenfirst.cli",
+            "sign": "Developer ID Installer: ListenFirst Media LLC."
         }
     },
     "repository": "ListenFirstMedia/lf-cli",
