@@ -17,6 +17,8 @@ Platform API. Key features include:
 -   paging support
 -   utilities to produce curl requests for examples
 -   graceful handling of rate limit errors
+-   autocomplete support for zsh and bash shells
+-   automatic updating
 -   many convenience commands and utilities for working with the API
 
 See [Usage](#usage) for more details on how to get started.
