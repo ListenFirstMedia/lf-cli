@@ -1,6 +1,6 @@
 import ApiCommand from '../../api-command';
 import * as fs from 'fs';
-import { parseStdin } from '../../utils';
+import { parseStdin, parseTemplate } from '../../utils';
 import { pagingFlags } from '../../support/paging';
 
 export default class AnalyticsFetch extends ApiCommand {
@@ -62,7 +62,11 @@ Fields and their capabilities.
 
             query = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
-            query = JSON.parse(fs.readFileSync(opts.args.query_file, 'utf-8'));
+            const queryTemplate = fs.readFileSync(
+                opts.args.query_file,
+                'utf-8'
+            );
+            query = JSON.parse(parseTemplate(queryTemplate));
         } else {
             this.error(`query file ${opts.args.query_file} does not exist`, {
                 exit: 2,
