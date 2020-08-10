@@ -12,7 +12,7 @@ export default abstract class BaseCommand extends Command {
         }),
         'account-id': flags.string({
             char: 'A',
-            description: 'swith accounts (overrides profile setting)',
+            description: 'switch accounts (overrides profile setting)',
             env: 'LF_CLI_ACCOUNT_ID',
         }),
         silent: flags.boolean({
