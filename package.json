@@ -112,9 +112,9 @@
     "repository": "ListenFirstMedia/lf-cli",
     "scripts": {
         "postpack": "rm -f oclif.manifest.json",
-        "posttest": "eslint . --ext .ts --config .eslintrc",
+        "posttest": "eslint --ext ts src/",
         "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-        "test": "jest",
+        "test": "jest src/",
         "version": "oclif-dev readme && git add README.md",
         "format": "prettier --write src/",
         "lint": "eslint --fix --ext ts src/"
