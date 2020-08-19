@@ -76,7 +76,7 @@ export default abstract class ApiCommand extends BaseCommand {
         return flags;
     }
 
-    async lfmapClient(): Promise<Client> {
+    async lfapiClient(): Promise<Client> {
         const profile = await this.lfapiConfigProfile();
         const token = await obtainAccessToken(profile);
         const client = new Client(token, profile);
@@ -88,7 +88,7 @@ export default abstract class ApiCommand extends BaseCommand {
         fetchOpts?: any,
         actionMsg?: string
     ): Promise<any> {
-        const client = await this.lfmapClient();
+        const client = await this.lfapiClient();
 
         if (this.parsedApiFlags()['show-curl']) {
             const curl = await client.asCurl(relPath, fetchOpts);
