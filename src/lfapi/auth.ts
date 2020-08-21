@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 
 import * as querystring from 'querystring';
 import { ProfileSettings } from './config';
+import { AccessToken } from './types';
 
 export class AuthError extends Error {
     public readonly statusCode: number;
@@ -13,12 +14,6 @@ export class AuthError extends Error {
         this.statusCode = statusCode;
         this.details = details;
     }
-}
-
-export interface AccessToken {
-    access_token: string;
-    expires_in: number;
-    token_type: string;
 }
 
 export async function obtainAccessToken(

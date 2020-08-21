@@ -1,4 +1,4 @@
-import { AccessToken } from './auth';
+import { AccessToken } from './types';
 import { ProfileSettings } from './config';
 import _fetch from 'node-fetch';
 import { merge as _merge, join as _join } from 'lodash';
