@@ -14,6 +14,7 @@ interface ParamsObject {
     fields?: string[];
     filters?: Array<any>;
     sort?: Array<any>;
+    per_page?: number;
 }
 
 export default class BrandViewsList extends ApiCommand {
@@ -91,6 +92,10 @@ and sorted by Brand Metadata Dimensions.`;
 
         if (optionalParams.sort) {
             queryArgs.sort = JSON.stringify(optionalParams.sort);
+        }
+
+        if (optionalParams.per_page) {
+            queryArgs.per_page = optionalParams.per_page;
         }
 
         const queryStr = querystring.stringify(queryArgs);

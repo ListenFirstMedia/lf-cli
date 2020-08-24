@@ -2,11 +2,11 @@ import BaseCommand from '../../base-command';
 
 import { flags } from '@oclif/command';
 import * as fs from 'fs';
-import { analyticsQueryBuilder } from '../../query-builders';
+import { brandViewsQueryBuilder } from '../../query-builders';
 
 export default class QueryBuilder extends BaseCommand {
     static description =
-        'Build an analytics query through an interactive dialogue';
+        'Build an Brand Views request through an interactive dialogue';
 
     static flags = {
         output: flags.string({
@@ -18,15 +18,15 @@ export default class QueryBuilder extends BaseCommand {
     };
 
     static examples = [
-        '$ lf-cli analytics:query-builder',
-        '$ lf-cli analytics:query-builder -o my-query.json',
+        '$ lf-cli brand-views:query-builder',
+        '$ lf-cli brand-views:query-builder -o my-query.json',
     ];
 
     async run() {
         const opts = this.parse(QueryBuilder);
         const client = await this.lfapiClient();
 
-        const query = await analyticsQueryBuilder(client);
+        const query = await brandViewsQueryBuilder(client);
 
         if (opts.flags.output) {
             fs.writeFileSync(opts.flags.output, JSON.stringify(query, null, 2));
