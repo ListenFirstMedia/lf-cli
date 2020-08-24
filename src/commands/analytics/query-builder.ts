@@ -43,6 +43,18 @@ async function fetchFieldValues(
     return res.records;
 }
 
+async function fetchDataset(
+    client: Client,
+    datasetID: string
+): Promise<Array<any>> {
+    cli.action.start('Fetching dataset fields');
+    const res = await client.fetch(
+        `/v20200626/dictionary/datasets/${datasetID}`
+    );
+    cli.action.stop();
+    return res.record;
+}
+
 function promptAnalysisType(): inquirer.ListQuestion {
     return {
         type: 'list',
@@ -216,13 +228,7 @@ function promptMetrics(client: Client): inquirer.CheckboxQuestion {
         name: 'metrics',
         message: 'Select metrics to query',
         choices: async (ses: any) => {
-            cli.action.start('Fetching dataset fields');
-            const res = await client.fetch(
-                `/v20200626/dictionary/datasets/${ses.dataset_id}`
-            );
-            cli.action.stop();
-
-            ses.dataset_record = res.record;
+            ses.dataset_record = await fetchDataset(client, ses.dataset_id);
 
             const metricFields = _filter(
                 ses.dataset_record.fields,
@@ -317,7 +323,7 @@ function promptPerPage(): inquirer.InputQuestion {
     return {
         type: 'input',
         name: 'per_page',
-        default: 100,
+        default: '100',
         message: 'Enter page size limit',
         validate: async (str: string) => {
             if (str.match(/^(\d+)$/i)) {
