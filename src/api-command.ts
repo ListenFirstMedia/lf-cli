@@ -2,8 +2,7 @@ import { flags } from '@oclif/command';
 import BaseCommand from './base-command';
 import cli, { Table } from 'cli-ux';
 import * as _ from 'lodash';
-import Client, { ClientFetchError } from './lfapi/client';
-import { obtainAccessToken } from './lfapi/auth';
+import { ClientFetchError } from './lfapi/client';
 import * as querystring from 'querystring';
 
 export interface RecordsResponse {
@@ -74,13 +73,6 @@ export default abstract class ApiCommand extends BaseCommand {
         );
         const flags = opts.flags as flags.Output;
         return flags;
-    }
-
-    async lfapiClient(): Promise<Client> {
-        const profile = await this.lfapiConfigProfile();
-        const token = await obtainAccessToken(profile);
-        const client = new Client(token, profile);
-        return client;
     }
 
     async fetch(

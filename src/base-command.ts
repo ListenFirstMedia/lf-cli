@@ -1,5 +1,8 @@
 import { Command, flags } from '@oclif/command';
 import { Config, Profile } from './lfapi/config';
+import { obtainAccessToken } from './lfapi/auth';
+import Client from './lfapi/client';
+
 import * as path from 'path';
 
 export default abstract class BaseCommand extends Command {
@@ -21,7 +24,7 @@ export default abstract class BaseCommand extends Command {
     };
 
     parsedGlobalFlags(): flags.Output {
-        // a bit of typescript gynmnastics with static flags
+        // a bit of typescript gymnastics with static flags
         const opts = this.parse(
             (this.constructor as unknown) as flags.Input<any>
         );
@@ -58,6 +61,13 @@ export default abstract class BaseCommand extends Command {
         }
 
         return profile;
+    }
+
+    async lfapiClient(): Promise<Client> {
+        const profile = await this.lfapiConfigProfile();
+        const token = await obtainAccessToken(profile);
+        const client = new Client(token, profile);
+        return client;
     }
 
     silent(): boolean {

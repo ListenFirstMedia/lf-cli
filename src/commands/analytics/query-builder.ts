@@ -1,5 +1,5 @@
 import * as inquirer from 'inquirer';
-import ApiCommand from '../../api-command';
+import BaseCommand from '../../base-command';
 import {
     partition as _partition,
     map as _map,
@@ -14,6 +14,8 @@ import {
 import { cli } from 'cli-ux';
 import { dateUtils, verifyDateRange } from '../../utils';
 import Client from '../../lfapi/client';
+import { flags } from '@oclif/command';
+import * as fs from 'fs';
 
 async function fetchDatasets(client: Client): Promise<Array<any>> {
     cli.action.start('Fetching datasets');
@@ -307,6 +309,24 @@ function promptGroupBy(): inquirer.CheckboxQuestion {
                 return true;
             }
             return 'At least one group by field is required';
+        },
+    };
+}
+
+function promptPerPage(): inquirer.InputQuestion {
+    return {
+        type: 'input',
+        name: 'per_page',
+        default: 100,
+        message: 'Enter page size limit',
+        validate: async (str: string) => {
+            if (str.match(/^(\d+)$/i)) {
+                if (Number(str) > 0 && Number(str) <= 1000) {
+                    return true;
+                }
+                return 'Page size must be a positive number less than or equal to 1000';
+            }
+            return 'Invalid size';
         },
     };
 }
@@ -659,8 +679,8 @@ async function filtersBuilder(
                 if (filterAnswers.operator === 'BETWEEN') {
                     values.push(filterAnswers.between_value_lhs);
                     values.push(filterAnswers.between_value_rhs);
-                } else if (filterAnswers.filter_list_values) {
-                    values = filterAnswers.filter_list_values;
+                } else if (filterAnswers.field_list_values) {
+                    values = filterAnswers.field_list_values;
                 } else if (filterAnswers.brand_set_values) {
                     values = filterAnswers.brand_set_values;
                 } else {
@@ -691,7 +711,7 @@ function buildQuery(answers: any): any {
         metrics: answers.metrics,
         group_by: answers.group_by,
         page: 1,
-        per_page: 100,
+        per_page: Number(answers.per_page),
     };
     if (answers.meta_dims !== undefined && answers.meta_dims.length > 0) {
         query.meta_dimensions = answers.meta_dims;
@@ -699,18 +719,26 @@ function buildQuery(answers: any): any {
     return query;
 }
 
-export default class QueryBuilder extends ApiCommand {
+export default class QueryBuilder extends BaseCommand {
     static description =
         'Build an analytics query through an interactive dialogue';
 
     static flags = {
-        ...ApiCommand.flags,
+        output: flags.string({
+            char: 'o',
+            description: 'save query to file',
+            required: false,
+        }),
+        ...BaseCommand.flags,
     };
 
-    static examples = ['$ lf-cli analytics:query-builder'];
+    static examples = [
+        '$ lf-cli analytics:query-builder',
+        '$ lf-cli analytics:query-builder -o my-query.json',
+    ];
 
     async run() {
-        // const opts = this.parse(QueryBuilder);
+        const opts = this.parse(QueryBuilder);
         const client = await this.lfapiClient();
 
         const datasets = await fetchDatasets(client);
@@ -726,6 +754,7 @@ export default class QueryBuilder extends ApiCommand {
         questions.push(promptMetrics(client));
         questions.push(promptGroupBy());
         questions.push(promptMetaDims());
+        questions.push(promptPerPage());
 
         const answers = await inquirer.prompt(questions);
         const query = buildQuery(answers);
@@ -741,6 +770,11 @@ export default class QueryBuilder extends ApiCommand {
             query.sort = sortRules;
         }
 
-        this.pp(query);
+        if (opts.flags.output) {
+            fs.writeFileSync(opts.flags.output, JSON.stringify(query, null, 2));
+            this.log(`Query written to: ${opts.flags.output}`);
+        } else {
+            this.pp(query);
+        }
     }
 }
