@@ -1,7 +1,7 @@
 {
     "name": "@listenfirst/lf-cli",
     "description": "The ListenFirst API Command Line Interface",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "author": "Mike Stanley",
     "bin": {
         "lf-cli": "./bin/run"
