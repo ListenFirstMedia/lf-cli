@@ -2,6 +2,11 @@ import ApiCommand from '../../api-command';
 import * as fs from 'fs';
 import { parseStdin, parseTemplate } from '../../utils';
 import { pagingFlags } from '../../support/paging';
+import {
+    AnalyticalQuery,
+    TableObjectResponse,
+    FieldBasic,
+} from '../../lfapi/types';
 
 export default class AnalyticsFetch extends ApiCommand {
     static description = `Perform an analytical query
@@ -45,7 +50,7 @@ Fields and their capabilities.
     async run() {
         const opts = this.parse(AnalyticsFetch);
 
-        let query: any;
+        let query: AnalyticalQuery;
 
         if (opts.args.query_file === 'help') {
             await AnalyticsFetch.run(['-h']);
@@ -92,9 +97,9 @@ Fields and their capabilities.
                 fetchOpts: reqOpts,
             },
             opts.flags['max-page'],
-            (res) => {
+            (res: TableObjectResponse) => {
                 const cols: { [index: string]: any } = {};
-                res.columns.forEach((col: any, idx: number) => {
+                res.columns.forEach((col: FieldBasic, idx: number) => {
                     cols[col.id as string] = {
                         header: col.name as string,
                         get: (row: any) => row[idx],

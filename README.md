@@ -112,6 +112,7 @@ USAGE
 <!-- commands -->
 * [`lf-cli analytics:fetch QUERY_FILE`](#lf-cli-analyticsfetch-query_file)
 * [`lf-cli analytics:generate`](#lf-cli-analyticsgenerate)
+* [`lf-cli analytics:query-builder`](#lf-cli-analyticsquery-builder)
 * [`lf-cli auth:me`](#lf-cli-authme)
 * [`lf-cli auth:token`](#lf-cli-authtoken)
 * [`lf-cli autocomplete [SHELL]`](#lf-cli-autocomplete-shell)
@@ -122,6 +123,7 @@ USAGE
 * [`lf-cli brand-views:get ID`](#lf-cli-brand-viewsget-id)
 * [`lf-cli brand-views:list [PARAMS_FILE]`](#lf-cli-brand-viewslist-params_file)
 * [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
+* [`lf-cli brand-views:query-builder`](#lf-cli-brand-viewsquery-builder)
 * [`lf-cli commands`](#lf-cli-commands)
 * [`lf-cli config:create`](#lf-cli-configcreate)
 * [`lf-cli config:edit`](#lf-cli-configedit)
@@ -205,6 +207,28 @@ EXAMPLES
 ```
 
 _See code: [src/commands/analytics/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.2/src/commands/analytics/generate.ts)_
+
+## `lf-cli analytics:query-builder`
+
+Build an analytics query through an interactive dialogue
+
+```
+USAGE
+  $ lf-cli analytics:query-builder
+
+OPTIONS
+  -A, --account-id=account-id  switch accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -o, --output=output          save query to file
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
+
+EXAMPLES
+  $ lf-cli analytics:query-builder
+  $ lf-cli analytics:query-builder -o my-query.json
+```
+
+_See code: [src/commands/analytics/query-builder.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.2/src/commands/analytics/query-builder.ts)_
 
 ## `lf-cli auth:me`
 
@@ -552,6 +576,28 @@ EXAMPLES
 ```
 
 _See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.2/src/commands/brand-views/my-brands.ts)_
+
+## `lf-cli brand-views:query-builder`
+
+Build an Brand Views request through an interactive dialogue
+
+```
+USAGE
+  $ lf-cli brand-views:query-builder
+
+OPTIONS
+  -A, --account-id=account-id  switch accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -o, --output=output          save query to file
+  -p, --profile=profile        the name of the configuration profile
+  --silent                     hide spinners and other log output
+
+EXAMPLES
+  $ lf-cli brand-views:query-builder
+  $ lf-cli brand-views:query-builder -o my-query.json
+```
+
+_See code: [src/commands/brand-views/query-builder.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.0.2/src/commands/brand-views/query-builder.ts)_
 
 ## `lf-cli commands`
 

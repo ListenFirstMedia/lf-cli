@@ -13,15 +13,31 @@ import {
 import { cli } from 'cli-ux';
 import { dateUtils, verifyDateRange } from './utils';
 import Client from './lfapi/client';
+import {
+    Dataset,
+    AnalysisType,
+    DatasetType,
+    FieldClass,
+    FieldCapabilities,
+    FieldExtended,
+    FieldDataType,
+    BrandViewSet,
+    FilterOperator,
+    SortDirection,
+    Sort,
+    BrandViewQuery,
+    AnalyticalQuery,
+    Filter,
+} from './lfapi/types';
 
-async function fetchDatasets(client: Client): Promise<Array<any>> {
+async function fetchDatasets(client: Client): Promise<Array<Dataset>> {
     cli.action.start('Fetching datasets');
     const res = await client.fetch('/v20200626/dictionary/datasets');
     cli.action.stop();
     return res.records;
 }
 
-async function fetchBrandSets(client: Client): Promise<Array<any>> {
+async function fetchBrandSets(client: Client): Promise<Array<BrandViewSet>> {
     cli.action.start('Fetching Brand Sets');
     const res = await client.fetch('/v20200626/brand_view_sets?per_page=1000');
     cli.action.stop();
@@ -43,7 +59,7 @@ async function fetchFieldValues(
 async function fetchDataset(
     client: Client,
     datasetID: string
-): Promise<Array<any>> {
+): Promise<Dataset> {
     cli.action.start('Fetching dataset fields');
     const res = await client.fetch(
         `/v20200626/dictionary/datasets/${datasetID}`
@@ -58,21 +74,21 @@ function promptAnalysisType(): inquirer.ListQuestion {
         name: 'analysis_type',
         message: 'Select the scope of the query',
         choices: [
-            { value: 'BRAND', name: 'Brand Level' },
-            { value: 'CONTENT', name: 'Content Level' },
+            { value: AnalysisType.BRAND, name: 'Brand Level' },
+            { value: AnalysisType.CONTENT, name: 'Content Level' },
         ],
     };
 }
 
-function prompDataset(datasets: Array<any>): inquirer.ListQuestion {
+function prompDataset(datasets: Array<Dataset>): inquirer.ListQuestion {
     const analysisDatasets = _filter(
         datasets,
-        (ds) => ds.dataset_type === 'ANALYTIC'
+        (ds) => ds.dataset_type === DatasetType.ANALYTIC
     );
 
     const [brandDatasets, contentDatasets] = _partition(
         analysisDatasets,
-        (ds) => ds.analysis_type === 'BRAND'
+        (ds) => ds.analysis_type === AnalysisType.BRAND
     );
 
     return {
@@ -81,10 +97,10 @@ function prompDataset(datasets: Array<any>): inquirer.ListQuestion {
         message: 'Select the Dataset for the query',
         choices: (ses: any) => {
             const datasets =
-                ses.analysis_type === 'CONTENT'
+                ses.analysis_type === AnalysisType.CONTENT
                     ? contentDatasets
                     : brandDatasets;
-            const dsOptions = _map(datasets, (ds: any) => {
+            const dsOptions = _map(datasets, (ds: Dataset) => {
                 return { name: ds.name, value: ds.id };
             });
             return _sortBy(dsOptions, (ds) => ds.name);
@@ -97,7 +113,7 @@ function promptStartDate(): inquirer.ListQuestion {
         type: 'list',
         name: 'start_date',
         message: (ses: any) => {
-            return ses.analysis_type === 'CONTENT'
+            return ses.analysis_type === AnalysisType.CONTENT
                 ? 'Select the window start date (filters on lfm.content.published_on_date_str)'
                 : 'Select the window start date (filters on lfm_fact_date_str)';
         },
@@ -164,7 +180,7 @@ function promptEndDate(): inquirer.ListQuestion {
         type: 'list',
         name: 'end_date',
         message: (ses: any) => {
-            return ses.analysis_type === 'CONTENT'
+            return ses.analysis_type === AnalysisType.CONTENT
                 ? 'Select the window end date (filters on lfm.content.published_on_date_str)'
                 : 'Select the window end date (filters on lfm_fact_date_str)';
         },
@@ -229,7 +245,7 @@ function promptMetrics(client: Client): inquirer.CheckboxQuestion {
 
             const metricFields = _filter(
                 ses.dataset_record.fields,
-                (field) => field.class === 'METRIC'
+                (field) => field.class === FieldClass.METRIC
             );
 
             return _map(metricFields, (field) => {
@@ -269,9 +285,9 @@ function promptMetaDims(): inquirer.CheckboxQuestion {
                 }
 
                 return (
-                    field.class === 'DIMENSION' &&
+                    field.class === FieldClass.DIMENSION &&
                     !ses.group_by.includes(field.id)
-                    // && field.capabilities.includes('SELECTABLE')
+                    // && field.capabilities.includes(FieldCapabilities.SELECTABLE)
                 );
             });
             ses.possibleMetaDims = dimFields;
@@ -295,8 +311,8 @@ function promptGroupBy(): inquirer.CheckboxQuestion {
         choices: async (ses: any) => {
             const dimFields = _filter(ses.dataset_record.fields, (field) => {
                 return (
-                    field.class === 'DIMENSION' &&
-                    field.capabilities.includes('GROUPABLE')
+                    field.class === FieldClass.DIMENSION &&
+                    field.capabilities.includes(FieldCapabilities.GROUPABLE)
                 );
             });
 
@@ -316,14 +332,14 @@ function promptGroupBy(): inquirer.CheckboxQuestion {
     };
 }
 
-function promptBrandDims(dataset: any): inquirer.CheckboxQuestion {
+function promptBrandDims(dataset: Dataset): inquirer.CheckboxQuestion {
     return {
         type: 'checkbox',
         name: 'fields',
         when: async (ses: any) => {
             const dimFields = _filter(dataset.fields, (field) => {
                 return (
-                    field.class === 'DIMENSION' &&
+                    field.class === FieldClass.DIMENSION &&
                     /^lfm\.brand/.test(field.id) &&
                     field.id !== 'lfm.brand_view.name'
                 );
@@ -357,7 +373,7 @@ function promptPerPage(): inquirer.InputQuestion {
     };
 }
 
-function promptSortField(sortableFields: Array<any>) {
+function promptSortField(sortableFields: Array<FieldExtended>) {
     return {
         type: 'list',
         name: 'sort_field',
@@ -366,7 +382,7 @@ function promptSortField(sortableFields: Array<any>) {
         },
         message: 'Select a field to sort by',
         choices: async () => {
-            return _map(sortableFields, (field: any) => {
+            return _map(sortableFields, (field: FieldExtended) => {
                 return {
                     value: field.id,
                     name: field.name,
@@ -393,48 +409,40 @@ function promptSortDirection(): inquirer.ListQuestion {
         },
         choices: [
             {
-                value: 'ASC',
+                value: SortDirection.ASC,
                 name: 'Ascending',
             },
             {
-                value: 'DESC',
+                value: SortDirection.DESC,
                 name: 'Descending',
             },
         ],
     };
 }
 
-async function sortRuleBuilder(dataset: any, query: any): Promise<Array<any>> {
+async function sortRuleBuilder(
+    dataset: Dataset,
+    possibleFields: Array<string>
+): Promise<Array<Sort>> {
     // handle sort loop
     let sortDone = false;
-    const sortRules: Array<any> = [];
+    const sortRules: Array<Sort> = [];
 
     while (!sortDone) {
         // identify possible fields (must be included in query to be in sort)
-        let sortables = _filter(
-            _uniq(
-                _concat(
-                    query.metrics,
-                    query.group_by,
-                    query.meta_dimensions,
-                    query.fields
-                )
-            ),
-            (f: any) => f
+        const sortables = _difference(
+            possibleFields,
+            _map(sortRules, (sr) => sr.field)
         );
-
-        // if already in sort rules, exclude from sortable list
-        if (sortRules.length > 0) {
-            sortables = _difference(
-                sortables,
-                _map(sortRules, (sr) => sr.field)
-            );
-        }
 
         if (sortables.length > 0) {
             // find field definitions for all sortables
-            const sortableFields = _map(sortables, (fieldID: string) => {
-                return _find(dataset.fields, (f) => f.id === fieldID);
+            const sortableFields: Array<FieldExtended> = [];
+            sortables.forEach((fieldID) => {
+                const field = _find(dataset.fields, (f) => f.id === fieldID);
+                if (field !== undefined) {
+                    sortableFields.push(field);
+                }
             });
 
             const sortQuestions: Array<inquirer.Question> = [
@@ -466,7 +474,9 @@ async function sortRuleBuilder(dataset: any, query: any): Promise<Array<any>> {
     return sortRules;
 }
 
-function promptFilterField(filterFields: Array<any>): inquirer.ListQuestion {
+function promptFilterField(
+    filterFields: Array<FieldExtended>
+): inquirer.ListQuestion {
     return {
         type: 'list',
         name: 'field',
@@ -491,7 +501,9 @@ function promptFilterField(filterFields: Array<any>): inquirer.ListQuestion {
     };
 }
 
-function promptFilterOperator(filterFields: Array<any>): inquirer.ListQuestion {
+function promptFilterOperator(
+    filterFields: Array<FieldExtended>
+): inquirer.ListQuestion {
     return {
         type: 'list',
         name: 'operator',
@@ -501,25 +513,40 @@ function promptFilterOperator(filterFields: Array<any>): inquirer.ListQuestion {
         },
         choices: (ses: any) => {
             const field = _find(filterFields, (f) => f.id === ses.field);
-            ses.field_record = field;
-            switch (field.data_type) {
-                case 'DATETIME':
-                    return ['=', 'BETWEEN'];
-                case 'FLOAT':
-                    return ['=', 'IN', 'BETWEEN'];
-                case 'INTEGER':
-                    return ['=', 'IN', 'BETWEEN'];
-                case 'STRING':
-                    return ['=', 'IN', 'ILIKE'];
-                case 'STRINGSET':
-                    return ['IN', 'ILIKE'];
-                case 'INTEGERSET':
-                    return ['IN', 'ILIKE'];
-                case 'BOOLEAN':
-                    return ['=', 'IN'];
-                default:
-                    return ['IN'];
+            if (field !== undefined) {
+                ses.field_record = field;
+                switch (field.data_type) {
+                    case FieldDataType.DATETIME:
+                        return [FilterOperator.EQ, FilterOperator.BETWEEN];
+                    case FieldDataType.FLOAT:
+                        return [
+                            FilterOperator.EQ,
+                            FilterOperator.IN,
+                            FilterOperator.BETWEEN,
+                        ];
+                    case FieldDataType.INTEGER:
+                        return [
+                            FilterOperator.EQ,
+                            FilterOperator.IN,
+                            FilterOperator.BETWEEN,
+                        ];
+                    case FieldDataType.STRING:
+                        return [
+                            FilterOperator.EQ,
+                            FilterOperator.IN,
+                            FilterOperator.ILIKE,
+                        ];
+                    case FieldDataType.STRINGSET:
+                        return [FilterOperator.IN, FilterOperator.ILIKE];
+                    case FieldDataType.INTEGERSET:
+                        return [FilterOperator.IN];
+                    case FieldDataType.BOOLEAN:
+                        return [FilterOperator.EQ, FilterOperator.IN];
+                    default:
+                        return [FilterOperator.IN];
+                }
             }
+            return [];
         },
         validate: (input: string) => {
             if (input.length > 0) {
@@ -537,7 +564,7 @@ function promptBrandSetFilter(client: Client): inquirer.CheckboxQuestion {
         when: (ses: any) => {
             return (
                 ses.add_filter_expr &&
-                ses.operator === 'IN' &&
+                ses.operator === FilterOperator.IN &&
                 (ses.field === 'lfm.brand_view.set_names' ||
                     ses.field === 'lfm.brand_view.set_ids')
             );
@@ -569,7 +596,8 @@ function promptFilterListValue(client: Client): inquirer.CheckboxQuestion {
         when: (ses: any) => {
             return (
                 ses.add_filter_expr &&
-                (ses.operator === 'IN' || ses.operator === '=') &&
+                (ses.operator === FilterOperator.IN ||
+                    ses.operator === FilterOperator.EQ) &&
                 ses.field_record &&
                 ses.field_record.listable
             );
@@ -603,7 +631,7 @@ function promptFilterValue(): inquirer.InputQuestion {
                     ses.brand_set_values.length === 0) &&
                 (ses.field_list_values === undefined ||
                     ses.field_list_values.length === 0) &&
-                ses.operator !== 'BETWEEN'
+                ses.operator !== FilterOperator.BETWEEN
             );
         },
         validate: (input: string) => {
@@ -627,7 +655,7 @@ function promptFilterBetweenLhs(): inquirer.InputQuestion {
                     ses.brand_set_values.length === 0) &&
                 (ses.field_list_values === undefined ||
                     ses.field_list_values.length === 0) &&
-                ses.operator === 'BETWEEN'
+                ses.operator === FilterOperator.BETWEEN
             );
         },
         validate: (input: string) => {
@@ -651,7 +679,7 @@ function promptFilterBetweenRhs(): inquirer.InputQuestion {
                     ses.brand_set_values.length === 0) &&
                 (ses.filter_list_values === undefined ||
                     ses.brand_list_values.length === 0) &&
-                ses.operator === 'BETWEEN'
+                ses.operator === FilterOperator.BETWEEN
             );
         },
         validate: (input: string) => {
@@ -665,14 +693,14 @@ function promptFilterBetweenRhs(): inquirer.InputQuestion {
 
 async function filtersBuilder(
     client: Client,
-    dataset: any
-): Promise<Array<any>> {
+    dataset: Dataset
+): Promise<Array<Filter>> {
     // handle sort loop
     let dialogueDone = false;
-    const filters: Array<any> = [];
+    const filters: Array<Filter> = [];
 
     let filterFields = _filter(dataset.fields, (field) => {
-        return field.capabilities.includes('FILTERABLE');
+        return field.capabilities.includes(FieldCapabilities.FILTERABLE);
     });
 
     while (!dialogueDone) {
@@ -707,7 +735,7 @@ async function filtersBuilder(
 
             if (filterAnswers.add_filter_expr) {
                 let values = [];
-                if (filterAnswers.operator === 'BETWEEN') {
+                if (filterAnswers.operator === FilterOperator.BETWEEN) {
                     values.push(filterAnswers.between_value_lhs);
                     values.push(filterAnswers.between_value_rhs);
                 } else if (filterAnswers.field_list_values) {
@@ -734,8 +762,8 @@ async function filtersBuilder(
     return filters;
 }
 
-function buildAnalyticsQuery(answers: any): any {
-    const query: any = {
+function buildAnalyticsQuery(answers: any): AnalyticalQuery {
+    const query: AnalyticalQuery = {
         dataset_id: answers.dataset_id,
         start_date: answers.custom_start_date || answers.start_date,
         end_date: answers.custom_end_date || answers.end_date,
@@ -743,6 +771,9 @@ function buildAnalyticsQuery(answers: any): any {
         group_by: answers.group_by,
         page: 1,
         per_page: Number(answers.per_page),
+        filters: [],
+        sort: [],
+        meta_dimensions: [],
     };
     if (answers.meta_dims !== undefined && answers.meta_dims.length > 0) {
         query.meta_dimensions = answers.meta_dims;
@@ -765,9 +796,14 @@ export async function analyticsQueryBuilder(client: Client) {
     questions.push(promptMetaDims());
     questions.push(promptPerPage());
     const answers = await inquirer.prompt(questions);
-    const query = buildAnalyticsQuery(answers);
+    const query: AnalyticalQuery = buildAnalyticsQuery(answers);
 
-    const sortRules = await sortRuleBuilder(answers.dataset_record, query);
+    // identify possible fields (must be included in query to be in sort)
+    const sortables = _filter(
+        _uniq(_concat(query.metrics, query.group_by, query.meta_dimensions)),
+        (f: string | undefined) => f !== undefined
+    );
+    const sortRules = await sortRuleBuilder(answers.dataset_record, sortables);
     const filters = await filtersBuilder(client, answers.dataset_record);
 
     if (filters.length > 0) {
@@ -788,14 +824,19 @@ export async function brandViewsQueryBuilder(client: Client) {
     questions.push(promptBrandDims(dataset));
     questions.push(promptPerPage());
     const answers = await inquirer.prompt(questions);
-    const query: any = {
+    const query: BrandViewQuery = {
         fields: answers.fields,
         per_page: Number(answers.per_page),
+        group_by: [],
+        filters: [],
+        sort: [],
     };
 
-    const sortRules = await sortRuleBuilder(dataset, {
-        fields: ['lfm.brand_view.name', 'lfm.brand.name', 'lfm.brand_view.id'],
-    });
+    const sortRules = await sortRuleBuilder(dataset, [
+        'lfm.brand_view.name',
+        'lfm.brand.name',
+        'lfm.brand_view.id',
+    ]);
     const filters = await filtersBuilder(client, dataset);
 
     if (filters.length > 0) {
