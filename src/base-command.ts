@@ -67,6 +67,7 @@ export default abstract class BaseCommand extends Command {
         const profile = await this.lfapiConfigProfile();
         const token = await obtainAccessToken(profile);
         const client = new Client(token, profile);
+        client.user_agent = this.config.userAgent;
         return client;
     }
 

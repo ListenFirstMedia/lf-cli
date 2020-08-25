@@ -20,6 +20,8 @@ export class ClientFetchError extends ClientError {
 export default class Client {
     public access_token: AccessToken;
 
+    public user_agent?: string;
+
     #profile: ProfileSettings;
 
     constructor(tok: AccessToken, profile: ProfileSettings) {
@@ -64,8 +66,25 @@ export default class Client {
                 authorization: `Bearer ${this.access_token.access_token}`,
                 'x-api-key': this.#profile.api_key,
                 'lfm-acting-account': actAsAccount,
+                'User-Agent': this.user_agent,
+                'lf-cli-version': '',
             },
         };
+
+        if (this.user_agent === undefined) {
+            delete defaultOpts.headers['User-Agent'];
+            delete defaultOpts.headers['lf-cli-version'];
+        } else {
+            // eslint-disable-next-line no-useless-escape
+            const rx = new RegExp(/^@listenfirst\/lf-cli\/([\d\.]+)/);
+            const rxRes = rx.exec(this.user_agent);
+            if (rxRes === null) {
+                delete defaultOpts.headers['lf-cli-version'];
+            } else {
+                const cli_version = rxRes[0].split('/')[2];
+                defaultOpts.headers['lf-cli-version'] = cli_version;
+            }
+        }
 
         const fetchOpts = _merge({}, opts, defaultOpts);
 
