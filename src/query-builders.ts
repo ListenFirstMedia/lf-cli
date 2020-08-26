@@ -440,29 +440,36 @@ async function sortRuleBuilder(
             const sortableFields: Array<FieldExtended> = [];
             sortables.forEach((fieldID) => {
                 const field = _find(dataset.fields, (f) => f.id === fieldID);
-                if (field !== undefined) {
+                if (
+                    field !== undefined &&
+                    field.capabilities.includes(FieldCapabilities.SORTABLE)
+                ) {
                     sortableFields.push(field);
                 }
             });
 
-            const sortQuestions: Array<inquirer.Question> = [
-                {
-                    type: 'confirm',
-                    name: 'add_sort_rule',
-                    message: 'Add a sort rule?',
-                },
-            ];
-            sortQuestions.push(promptSortField(sortableFields));
-            sortQuestions.push(promptSortDirection());
+            if (sortableFields.length > 0) {
+                const sortQuestions: Array<inquirer.Question> = [
+                    {
+                        type: 'confirm',
+                        name: 'add_sort_rule',
+                        message: 'Add a sort rule?',
+                    },
+                ];
+                sortQuestions.push(promptSortField(sortableFields));
+                sortQuestions.push(promptSortDirection());
 
-            // eslint-disable-next-line no-await-in-loop
-            const sortAnswers = await inquirer.prompt(sortQuestions);
+                // eslint-disable-next-line no-await-in-loop
+                const sortAnswers = await inquirer.prompt(sortQuestions);
 
-            if (sortAnswers.add_sort_rule) {
-                sortRules.push({
-                    field: sortAnswers.sort_field,
-                    dir: sortAnswers.sort_direction,
-                });
+                if (sortAnswers.add_sort_rule) {
+                    sortRules.push({
+                        field: sortAnswers.sort_field,
+                        dir: sortAnswers.sort_direction,
+                    });
+                } else {
+                    sortDone = true;
+                }
             } else {
                 sortDone = true;
             }
