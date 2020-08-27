@@ -26,6 +26,7 @@ export default class RequestBuilder extends BaseCommand {
     static examples = [
         '$ lf-cli brand-views:request-builder',
         '$ lf-cli brand-views:request-builder -o my-query.json',
+        '$ lf-cli brand-views:request-builder --show-curl',
     ];
 
     async run() {

@@ -20,6 +20,7 @@ Platform API. Key features include:
 -   autocomplete support for zsh and bash shells
 -   automatic updating
 -   [template support](#templates) with relative date helpers for analytical queries
+-   interactive dialogues for constructing analytical queries and brand view list requests
 -   many convenience commands and utilities for working with the API
 
 See [Usage](#usage) for more details on how to get started.
@@ -596,6 +597,7 @@ OPTIONS
 EXAMPLES
   $ lf-cli brand-views:request-builder
   $ lf-cli brand-views:request-builder -o my-query.json
+  $ lf-cli brand-views:request-builder --show-curl
 ```
 
 _See code: [src/commands/brand-views/request-builder.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.2.0/src/commands/brand-views/request-builder.ts)_
