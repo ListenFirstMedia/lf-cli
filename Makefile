@@ -26,7 +26,7 @@ release-win:
 release-macos:
 	rm -rf tmp/mac* dist/mac*
 	OSX_KEYCHAIN=$(OSX_KEYCHAIN) npx oclif-dev pack:macos
-	OSX_KEYCHAIN=$(OSX_KEYCHAIN) xcrun altool --notarize-app --primary-bundle-id "io.listenfirst.cli" --password "@keychain:altool" --file $(shell ls ./dist/macos/lf-cli-v*.pkg)
+	OSX_KEYCHAIN=$(OSX_KEYCHAIN) xcrun altool --notarize-app --primary-bundle-id "io.listenfirst.cli" --password "@keychain:altool" --file ./dist/macos/lf-cli-v*.pkg
 	AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) npx oclif-dev publish:macos
 
 invalidate-cdn:
