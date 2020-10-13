@@ -31,7 +31,7 @@ export default class ConfigCreate extends BaseCommand {
                 name: 'api_key',
                 message: 'API Key',
                 validate: async (str: string) => {
-                    if (str.match(/^[\w]+$/i) && str.length === 40) {
+                    if (str.match(/^[\w]+$/i) && str.length >= 40) {
                         return true;
                     }
                     return 'Invalid API Key';
@@ -42,7 +42,7 @@ export default class ConfigCreate extends BaseCommand {
                 name: 'client_id',
                 message: 'Client ID',
                 validate: async (str: string) => {
-                    if (str.match(/^[\w]+$/i) && str.length === 26) {
+                    if (str.match(/^[\w]+$/i) && str.length >= 25) {
                         return true;
                     }
                     return 'Invalid Client ID';
@@ -53,7 +53,7 @@ export default class ConfigCreate extends BaseCommand {
                 name: 'client_secret',
                 message: 'Client Secret',
                 validate: async (str: string) => {
-                    if (str.match(/^[\w]+$/i) && str.length > 50) {
+                    if (str.match(/^[\w]+$/i) && str.length >= 50) {
                         return true;
                     }
                     return 'Invalid Client Secret';
