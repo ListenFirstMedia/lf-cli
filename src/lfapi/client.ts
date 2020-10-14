@@ -55,21 +55,21 @@ export default class Client {
     }
 
     async fetch(relPath: string, opts: RequestInit = {}): Promise<any> {
-        let actAsAccount = '';
-        if (this.#profile.account_id) {
-            actAsAccount = this.#profile.account_id.toString();
-        }
-
         const defaultOpts = {
             headers: {
                 'content-type': 'application/json',
                 authorization: `Bearer ${this.access_token.access_token}`,
                 'x-api-key': this.#profile.api_key,
-                'lfm-acting-account': actAsAccount,
                 'User-Agent': this.user_agent,
                 'lf-cli-version': '',
             },
         };
+
+        if (this.#profile.account_id) {
+            let actAsAccount = '';
+            actAsAccount = this.#profile.account_id.toString();
+            defaultOpts.headers['lfm-acting-account'] = actAsAccount;
+        }
 
         if (this.user_agent === undefined) {
             delete defaultOpts.headers['User-Agent'];
