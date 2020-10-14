@@ -62,6 +62,7 @@ export default class Client {
                 'x-api-key': this.#profile.api_key,
                 'User-Agent': this.user_agent,
                 'lf-cli-version': '',
+                'lfm-acting-account': '',
             },
         };
 
@@ -69,6 +70,8 @@ export default class Client {
             let actAsAccount = '';
             actAsAccount = this.#profile.account_id.toString();
             defaultOpts.headers['lfm-acting-account'] = actAsAccount;
+        } else {
+            delete defaultOpts.headers['lfm-acting-account'];
         }
 
         if (this.user_agent === undefined) {
