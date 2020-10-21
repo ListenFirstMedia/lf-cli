@@ -29,9 +29,14 @@ export default class Client {
         this.#profile = profile;
     }
 
+    async getApiUrl(relPath: string, profileHost: string) {
+        const httpProtocol = 'https';
+        return new URL(relPath, `${httpProtocol}://${profileHost}`);
+    }
+
     async asCurl(relPath: string, opts: RequestInit = {}): Promise<string> {
         const method = opts?.method || 'GET';
-        const fqUrl = new URL(relPath, `https://${this.#profile.api_host}`);
+        const fqUrl = this.getApiUrl(relPath, this.#profile.api_host);
         const cmd = [
             'curl',
             '--http1.1',
@@ -91,7 +96,7 @@ export default class Client {
 
         const fetchOpts = _merge({}, opts, defaultOpts);
 
-        const fqUrl = new URL(relPath, `https://${this.#profile.api_host}`);
+        const fqUrl = this.getApiUrl(relPath, this.#profile.api_host);
         const res = await _fetch(fqUrl.toString(), fetchOpts as any);
         const data = await res.json();
         if (res.ok) {
