@@ -83,6 +83,7 @@ $ lf-cli update
 ## Quick Start
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @listenfirst/lf-cli
 $ lf-cli COMMAND
@@ -94,6 +95,7 @@ USAGE
   $ lf-cli COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 ## Up and Running
@@ -111,31 +113,32 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`lf-cli analytics:fetch QUERY_FILE`](#lf-cli-analyticsfetch-query_file)
-* [`lf-cli analytics:generate`](#lf-cli-analyticsgenerate)
-* [`lf-cli analytics:query-builder`](#lf-cli-analyticsquery-builder)
-* [`lf-cli auth:me`](#lf-cli-authme)
-* [`lf-cli auth:token`](#lf-cli-authtoken)
-* [`lf-cli autocomplete [SHELL]`](#lf-cli-autocomplete-shell)
-* [`lf-cli brand-view-sets:get ID`](#lf-cli-brand-view-setsget-id)
-* [`lf-cli brand-view-sets:list`](#lf-cli-brand-view-setslist)
-* [`lf-cli brand-views:by-brand-set-name BRAND_SET_NAME`](#lf-cli-brand-viewsby-brand-set-name-brand_set_name)
-* [`lf-cli brand-views:generate`](#lf-cli-brand-viewsgenerate)
-* [`lf-cli brand-views:get ID`](#lf-cli-brand-viewsget-id)
-* [`lf-cli brand-views:list [PARAMS_FILE]`](#lf-cli-brand-viewslist-params_file)
-* [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
-* [`lf-cli brand-views:request-builder`](#lf-cli-brand-viewsrequest-builder)
-* [`lf-cli commands`](#lf-cli-commands)
-* [`lf-cli config:create`](#lf-cli-configcreate)
-* [`lf-cli config:edit`](#lf-cli-configedit)
-* [`lf-cli config:list`](#lf-cli-configlist)
-* [`lf-cli config:show`](#lf-cli-configshow)
-* [`lf-cli config:verify`](#lf-cli-configverify)
-* [`lf-cli datasets:field-values FIELD`](#lf-cli-datasetsfield-values-field)
-* [`lf-cli datasets:get ID`](#lf-cli-datasetsget-id)
-* [`lf-cli datasets:list`](#lf-cli-datasetslist)
-* [`lf-cli help [COMMAND]`](#lf-cli-help-command)
-* [`lf-cli update [CHANNEL]`](#lf-cli-update-channel)
+
+-   [`lf-cli analytics:fetch QUERY_FILE`](#lf-cli-analyticsfetch-query_file)
+-   [`lf-cli analytics:generate`](#lf-cli-analyticsgenerate)
+-   [`lf-cli analytics:query-builder`](#lf-cli-analyticsquery-builder)
+-   [`lf-cli auth:me`](#lf-cli-authme)
+-   [`lf-cli auth:token`](#lf-cli-authtoken)
+-   [`lf-cli autocomplete [SHELL]`](#lf-cli-autocomplete-shell)
+-   [`lf-cli brand-view-sets:get ID`](#lf-cli-brand-view-setsget-id)
+-   [`lf-cli brand-view-sets:list`](#lf-cli-brand-view-setslist)
+-   [`lf-cli brand-views:by-brand-set-name BRAND_SET_NAME`](#lf-cli-brand-viewsby-brand-set-name-brand_set_name)
+-   [`lf-cli brand-views:generate`](#lf-cli-brand-viewsgenerate)
+-   [`lf-cli brand-views:get ID`](#lf-cli-brand-viewsget-id)
+-   [`lf-cli brand-views:list [PARAMS_FILE]`](#lf-cli-brand-viewslist-params_file)
+-   [`lf-cli brand-views:my-brands`](#lf-cli-brand-viewsmy-brands)
+-   [`lf-cli brand-views:request-builder`](#lf-cli-brand-viewsrequest-builder)
+-   [`lf-cli commands`](#lf-cli-commands)
+-   [`lf-cli config:create`](#lf-cli-configcreate)
+-   [`lf-cli config:edit`](#lf-cli-configedit)
+-   [`lf-cli config:list`](#lf-cli-configlist)
+-   [`lf-cli config:show`](#lf-cli-configshow)
+-   [`lf-cli config:verify`](#lf-cli-configverify)
+-   [`lf-cli datasets:field-values FIELD`](#lf-cli-datasetsfield-values-field)
+-   [`lf-cli datasets:get ID`](#lf-cli-datasetsget-id)
+-   [`lf-cli datasets:list`](#lf-cli-datasetslist)
+-   [`lf-cli help [COMMAND]`](#lf-cli-help-command)
+-   [`lf-cli update [CHANNEL]`](#lf-cli-update-channel)
 
 ## `lf-cli analytics:fetch QUERY_FILE`
 
@@ -165,11 +168,11 @@ OPTIONS
   --silent                     hide spinners and other log output
 
 DESCRIPTION
-  Submit a multi-dimensional, aggregate, time series analytical query. 
-  Start and End time parameters are used to specify the time window of 
-  the query. The Dataset ID determines the scope of dimensions and 
-  metrics available in the query for selection, filtering, grouping, 
-  and sorting. Consult the Data Dictionary for available Datasets, 
+  Submit a multi-dimensional, aggregate, time series analytical query.
+  Start and End time parameters are used to specify the time window of
+  the query. The Dataset ID determines the scope of dimensions and
+  metrics available in the query for selection, filtering, grouping,
+  and sorting. Consult the Data Dictionary for available Datasets,
   Fields and their capabilities.
 
 EXAMPLES
@@ -177,7 +180,7 @@ EXAMPLES
   $ cat my-request.json | lf-cli analytics:fetch
   $ lf-cli analytics:fetch --pretty my-request.json
   $ cat my-request.json | lf-cli analytics:fetch --max-page -1 --format doc --silent
-  $ lf-cli analytics:fetch --max-page 2 --per-page 5 --format table my-request.json 
+  $ lf-cli analytics:fetch --max-page 2 --per-page 5 --format table my-request.json
   $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format table --csv my-request.json >| my-response.csv
   $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json
   $ lf-cli analytics:fetch --per-page 1000 --max-page -1 --format doc my-request.json >| my-response-docs.json
@@ -281,8 +284,8 @@ OPTIONS
 
 DESCRIPTION
   This command provides the ability to obtain an access
-  token via the OAuth 2.0 client credentials workflow.  
-  The process authenticates using the Client ID and 
+  token via the OAuth 2.0 client credentials workflow.
+  The process authenticates using the Client ID and
   Client Secret found in the lf-cli configuration profile.
   The access token will be written to stdout.
 
@@ -375,7 +378,7 @@ OPTIONS
   --silent                     hide spinners and other log output
 
 DESCRIPTION
-  Retrieve the list of a Brand View Sets available to the ListenFirst 
+  Retrieve the list of a Brand View Sets available to the ListenFirst
   Account associated with the access token.
 
 EXAMPLES
@@ -446,7 +449,7 @@ DESCRIPTION
   passed in as parameters.  The endpoint can be a little tricky as
   parameter values are complex objects that need to be serialized
   as a JSON string.   The cli's brand_views:list command provides
-  a convenience option to pass in the options as a JSON document.  
+  a convenience option to pass in the options as a JSON document.
   The command will prepare the request query for you making it
   easier to use for complex queries.   This command produces
   a complex example that can be used as a template.
@@ -524,8 +527,8 @@ OPTIONS
   --silent                     hide spinners and other log output
 
 DESCRIPTION
-  Returns an array of all Brand Views available to the ListenFirst 
-  Account associated with the access token. Results may be filtered 
+  Returns an array of all Brand Views available to the ListenFirst
+  Account associated with the access token. Results may be filtered
   and sorted by Brand Metadata Dimensions.
 
 EXAMPLES
@@ -788,7 +791,7 @@ OPTIONS
   --silent                     hide spinners and other log output
 
 DESCRIPTION
-  Retrieve a single Dataset by its unique identifier. All the 
+  Retrieve a single Dataset by its unique identifier. All the
   dataset's attributes and fields will be returned.
 
 EXAMPLES
@@ -822,8 +825,8 @@ OPTIONS
   --silent                     hide spinners and other log output
 
 DESCRIPTION
-  Retrieves all Datasets available. See the Data Dictionary 
-  for available Datasets. A subset of the dataset attributes 
+  Retrieves all Datasets available. See the Data Dictionary
+  for available Datasets. A subset of the dataset attributes
   will be returned in the response.
 
 ALIASES
@@ -865,6 +868,7 @@ USAGE
 ```
 
 _See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.10/src/commands/update.ts)_
+
 <!-- commandsstop -->
 
 # Advanced Usage
@@ -877,7 +881,7 @@ number of date related helpers available to use in the template, which provide a
 windows using relative dates. At some point, this behavior may be available in the API. For now, this
 is a feature of the CLI.
 
-_Available Helpers:_
+_Functions Available as Helpers:_
 
 -   `yesterday`
 -   `startOfMonth`
@@ -895,12 +899,15 @@ _Available Helpers:_
 -   `startOfNMonthsAgo(n)`
 -   `endOfNMonthsAgo(n)`
 
+To call one of the functions that takes a parameter, exclude the parenthesis. e.g. `{{nDaysAgo n}}`. More information
+on helpers can be found [here](https://handlebarsjs.com/guide/expressions.html#helpers).
+
 _Example Usage:_
 
 ```
 {
   "dataset_id": "dataset_content_listenfirst",
-  "start_date": "{{yesterday}}",
+  "start_date": "{{nDaysAgo 7}}",
   "end_date": "{{yesterday}}",
   ...
 }
