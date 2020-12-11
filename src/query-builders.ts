@@ -784,7 +784,10 @@ function buildAnalyticsQuery(answers: any): AnalyticalQuery {
     };
     if (answers.meta_dims !== undefined && answers.meta_dims.length > 0) {
         query.meta_dimensions = answers.meta_dims;
+    } else {
+        delete query.meta_dimensions;
     }
+
     return query;
 }
 
@@ -815,10 +818,14 @@ export async function analyticsQueryBuilder(client: Client) {
 
     if (filters.length > 0) {
         query.filters = filters;
+    } else {
+        delete query.filters;
     }
 
     if (sortRules.length > 0) {
         query.sort = sortRules;
+    } else {
+        delete query.sort;
     }
 
     return query;
