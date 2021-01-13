@@ -135,6 +135,7 @@ USAGE
 * [`lf-cli datasets:get ID`](#lf-cli-datasetsget-id)
 * [`lf-cli datasets:list`](#lf-cli-datasetslist)
 * [`lf-cli help [COMMAND]`](#lf-cli-help-command)
+* [`lf-cli platform:data-status`](#lf-cli-platformdata-status)
 * [`lf-cli update [CHANNEL]`](#lf-cli-update-channel)
 
 ## `lf-cli analytics:fetch QUERY_FILE`
@@ -854,6 +855,33 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
+
+## `lf-cli platform:data-status`
+
+Get data status
+
+```
+USAGE
+  $ lf-cli platform:data-status
+
+OPTIONS
+  -A, --account-id=account-id  switch accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
+  --silent                     hide spinners and other log output
+
+EXAMPLE
+  $ lf-cli platform:data-status
+```
+
+_See code: [src/commands/platform/data-status.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.2.5/src/commands/platform/data-status.ts)_
 
 ## `lf-cli update [CHANNEL]`
 
