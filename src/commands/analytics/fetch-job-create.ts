@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { parseStdin, parseTemplate } from '../../utils';
 import { mapValues as _mapValues } from 'lodash';
 import {
-    AnalyticalQuery,
+    FetchJob,
 } from '../../lfapi/types';
 
 
@@ -28,8 +28,7 @@ export default class FetchJobCreate extends ApiCommand {
     async run() {
 
         const opts = this.parse(FetchJobCreate);
-        let query: AnalyticalQuery;
-	let query_req = {};
+	let query_req: FetchJob;
 
         if (opts.args.query_file === 'help') {
             await FetchJobCreate.run(['-h']);
@@ -50,8 +49,7 @@ export default class FetchJobCreate extends ApiCommand {
                 opts.args.query_file,
                 'utf-8'
             );
-            query = await JSON.parse(parseTemplate(queryTemplate));
-	    query_req['fetch_params'] = query;
+            query_req = await JSON.parse(parseTemplate(queryTemplate));
         } else {
             this.error(`query file ${opts.args.query_file} does not exist`, {
                 exit: 2,

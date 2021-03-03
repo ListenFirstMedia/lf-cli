@@ -113,6 +113,10 @@ export interface Sort {
     dir: SortDirection;
 }
 
+export interface FetchJob {
+    fetch_params: AnalyticalQuery;
+}
+
 export interface AnalyticalQuery {
     dataset_id: string;
     start_date: string;
