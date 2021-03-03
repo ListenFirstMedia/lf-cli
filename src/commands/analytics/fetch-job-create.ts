@@ -2,6 +2,10 @@ import ApiCommand from '../../api-command';
 import * as fs from 'fs';
 import { parseStdin, parseTemplate } from '../../utils';
 import { mapValues as _mapValues } from 'lodash';
+import {
+    AnalyticalQuery,
+} from '../../lfapi/types';
+
 
 export default class FetchJobCreate extends ApiCommand {
     static description = `Return a submitted fetch job.`;
