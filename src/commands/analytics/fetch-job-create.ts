@@ -43,7 +43,7 @@ export default class FetchJobCreate extends ApiCommand {
                 );
             }
 
-            query = await parseStdin();
+            query_req = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
             const queryTemplate = fs.readFileSync(
                 opts.args.query_file,
