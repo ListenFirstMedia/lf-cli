@@ -16,10 +16,9 @@ export default class FetchJobShow extends ApiCommand {
         },
     ];
 
-    static examples = ['$ lf-cli analytics:fetch-job-show'];
+    static examples = ['$ lf-cli analytics:fetch-job-show 32'];
 
     async run() {
-
         const opts = this.parse(FetchJobShow);
 
         if (opts.args.ID === 'help') {
@@ -32,7 +31,7 @@ export default class FetchJobShow extends ApiCommand {
         }
 
         let path = `/v20200626/analytics/fetch_job/${opts.args.ID}`;
-        
+
         const res = await this.fetch(
             path,
             undefined,
@@ -45,6 +44,5 @@ export default class FetchJobShow extends ApiCommand {
         });
 
         this.outputRecords(res, cols);
-
     }
 }

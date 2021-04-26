@@ -2,13 +2,18 @@ import ApiCommand from '../../api-command';
 import * as fs from 'fs';
 import { parseStdin, parseTemplate } from '../../utils';
 import { mapValues as _mapValues } from 'lodash';
-import {
-    FetchJob,
-} from '../../lfapi/types';
-
+import { FetchJob } from '../../lfapi/types';
 
 export default class FetchJobCreate extends ApiCommand {
-    static description = `Return a submitted fetch job.`;
+    static description = `Submit a new fetch job. 
+
+A fetch job is similar to a request submitted through the fetch endpoint. Infact, 
+it uses the same request syntax. It differs however, in that it
+follows an asynchronous workflow. The fetch job is submitted to our
+specialized backend systems that allow for larger and long running
+queries. Users can poll using the analytics:fetch-job-show <id> method
+to check for job completion. 
+`;
 
     static flags = {
         ...ApiCommand.flags,
@@ -26,9 +31,8 @@ export default class FetchJobCreate extends ApiCommand {
     static examples = ['$ lf-cli analytics:fetch-job-create my-request.json'];
 
     async run() {
-
         const opts = this.parse(FetchJobCreate);
-	let query_req: FetchJob;
+        let query_req: FetchJob;
 
         if (opts.args.query_file === 'help') {
             await FetchJobCreate.run(['-h']);
@@ -56,20 +60,19 @@ export default class FetchJobCreate extends ApiCommand {
             });
         }
 
-	const reqOpts = {
+        const reqOpts = {
             method: 'post',
             body: JSON.stringify(query_req),
         };
 
         const path = `/v20200626/analytics/fetch_job`;
-	const res = await this.fetch(path, reqOpts, `Creating fetch jobs.`);
+        const res = await this.fetch(path, reqOpts, `Creating fetch jobs.`);
 
         let cols = {};
         cols = _mapValues(res, () => {
             return {};
         });
 
-	this.outputRecords(res, cols);
-
+        this.outputRecords(res, cols);
     }
 }

@@ -1,8 +1,7 @@
 import ApiCommand from '../../api-command';
-import { mapValues as _mapValues } from 'lodash';
 
 export default class FetchJobList extends ApiCommand {
-    static description = `Return a submitted fetch job.`;
+    static description = `Return fetch jobs subitted by the user.`;
 
     static flags = {
         ...ApiCommand.flags,
@@ -13,17 +12,12 @@ export default class FetchJobList extends ApiCommand {
     async run() {
         const path = `/v20200626/analytics/fetch_job`;
         const res = await this.fetch(path, undefined, `fetching`);
-        const apiFlags = this.parsedApiFlags();
         let cols = {};
-        cols = _mapValues(res, () => {
-            return {};
-        });
+        cols = {
+            id: {},
+            state: {},
+        };
 
-        if (apiFlags.format && apiFlags.format !== 'raw') {
-            const wrappedRes = { record: res };
-            this.outputRecords(wrappedRes, cols);
-        } else {
-            this.outputRecords(res, cols);
-        }
+        this.outputRecords(res, cols);
     }
 }
