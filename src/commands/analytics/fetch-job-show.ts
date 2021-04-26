@@ -39,7 +39,7 @@ export default class FetchJobShow extends ApiCommand {
         );
 
         let cols = {};
-        cols = _mapValues(res, () => {
+        cols = _mapValues(res.record, () => {
             return {};
         });
 

@@ -69,7 +69,7 @@ to check for job completion.
         const res = await this.fetch(path, reqOpts, `Creating fetch jobs.`);
 
         let cols = {};
-        cols = _mapValues(res, () => {
+        cols = _mapValues(res.record, () => {
             return {};
         });
 
