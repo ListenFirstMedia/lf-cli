@@ -1,11 +1,16 @@
 import ApiCommand from '../../api-command';
 import { mapValues as _mapValues } from 'lodash';
+import { flags } from '@oclif/command';
+import _fetch from 'node-fetch';
 
 export default class FetchJobShow extends ApiCommand {
     static description = `Return a submitted fetch job.`;
 
     static flags = {
         ...ApiCommand.flags,
+	'download': flags.boolean({
+            description: 'Download the data and write to stdout. This flag will be ignored if the job is not in the completed state.'
+        })
     };
 
     static args = [
@@ -38,11 +43,28 @@ export default class FetchJobShow extends ApiCommand {
             `fetching Fetch Job ${opts.args.ID}'`
         );
 
-        let cols = {};
-        cols = _mapValues(res.record, () => {
-            return {};
-        });
+	if (opts.flags['download'] && res.record.state == 'completed') {
+	    for (let file of res.record.page_urls) {
+		const data = await _fetch(file);
+		const res = await data.json();
+		const cols: { [index: string]: any } = {};
+                res.columns.forEach((col: FieldBasic, idx: number) => {
+		    cols[col.id as string] = {
+                        header: col.name as string,
+                        get: (row: any) => row[idx],
+		    };
+                });
 
-        this.outputRecords(res, cols);
+		this.outputRecords(res, cols);
+	    }
+	} else {
+
+            let cols = {};
+            cols = _mapValues(res.record, () => {
+		return {};
+            });
+
+            this.outputRecords(res, cols);
+	} 
     }
 }
