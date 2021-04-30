@@ -22,7 +22,11 @@ export default class FetchJobShow extends ApiCommand {
         },
     ];
 
-    static examples = ['$ lf-cli analytics:fetch-job-show 32'];
+    static examples = [
+        '$ lf-cli analytics:fetch-job-show 32',
+        '$ lf-cli analytics:fetch-job-show 32 --download',
+        '$ lf-cli analytics:fetch-job-show 32 --download >| data.jsonl',
+    ];
 
     async fetchAndOutputFile(filePath: string) {
         const data = await _fetch(filePath);
