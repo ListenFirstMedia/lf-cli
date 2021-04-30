@@ -24,6 +24,13 @@ export default class FetchJobShow extends ApiCommand {
 
     static examples = ['$ lf-cli analytics:fetch-job-show 32'];
 
+    async fetchAndOutputFile(filePath: string) {
+        const data = await _fetch(filePath);
+        const res = await data.json();
+
+        return res;
+    }
+
     async run() {
         const opts = this.parse(FetchJobShow);
 
@@ -36,7 +43,7 @@ export default class FetchJobShow extends ApiCommand {
             this.error('Invalid Fetch Job ID', { exit: 1 });
         }
 
-        let path = `/v20200626/analytics/fetch_job/${opts.args.ID}`;
+        const path = `/v20200626/analytics/fetch_job/${opts.args.ID}`;
 
         const res = await this.fetch(
             path,
@@ -44,10 +51,11 @@ export default class FetchJobShow extends ApiCommand {
             `fetching Fetch Job ${opts.args.ID}'`
         );
 
-        if (opts.flags['download'] && res.record.state === 'completed') {
-            for (let file of res.record.page_urls) {
-                const data = await _fetch(file);
-                const res = await data.json();
+        if (opts.flags.download && res.record.state === 'completed') {
+            let objs = await Promise.all(
+                res.record.page_urls.map(this.fetchAndOutputFile)
+            );
+            for (let res of objs) {
                 const cols: { [index: string]: any } = {};
                 res.columns.forEach((col: FieldBasic, idx: number) => {
                     cols[col.id as string] = {
