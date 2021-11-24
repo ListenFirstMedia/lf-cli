@@ -36,8 +36,6 @@ export default class BulkTagIngestGet extends ApiCommand {
 
         const authData = JSON.stringify(jsonified);
 
-        console.log('authData json', authData);
-
         // prepare the POST request
         const reqOpts = {
             method: 'POST',
