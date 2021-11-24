@@ -1,4 +1,3 @@
-import * as querystring from 'querystring';
 import * as fs from 'fs';
 import ApiCommand from '../../api-command';
 import * as csv from "csvtojson";
