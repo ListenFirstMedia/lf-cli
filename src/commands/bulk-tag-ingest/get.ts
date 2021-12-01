@@ -42,7 +42,7 @@ export default class BulkTagIngestGet extends ApiCommand {
             body: data,
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
-                'content-length': Buffer.byteLength(authData).toString(),
+                'content-length': Buffer.byteLength(data).toString(),
             },
         };
 
