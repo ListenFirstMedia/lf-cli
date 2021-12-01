@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import ApiCommand from '../../api-command';
 import * as csv from "csvtojson";
 import * as querystring from 'querystring';
+import { stringify } from 'csv-stringify';
 
 export default class BulkTagGetJobResults extends ApiCommand {
     static description = `Get bulk tag job results`;
@@ -48,11 +49,47 @@ export default class BulkTagGetJobResults extends ApiCommand {
             //},
         };
 
+        const headers = [
+          'error',
+          'translated url',
+          'dcs_uid',
+          'channel',
+          'profile_type',
+          'original input...'
+        ];
+     
         const res = await this.fetch(
         `/v20200626/bulk_tag_results?${queryStr}`,
             reqOpts,
             `Fetching job results`
         );
+
+        const filename = "out.csv"
+
+        const rows = res.map(rec =>
+          headers.map(k => rec[k]));
+        console.log("ROWS", rows);
+
+        //const haha = stringify({ header: true }, [{ a: 1, b: 2 }]);
+        //console.log("HAHA", haha);
+        //const sss = stringify({header: true});
+        //sss.on('finish', function
+        //sss.write([1, 2]);
+        //sss.end();
+        stringify(rows, function (err, output) {
+          console.log("HAHA", output);
+          output = headers.join(",") + "\n" + output;
+
+          fs.writeFile(filename, output, err => {
+            if (err) {
+              console.error(err)
+              return
+            }
+            //file written successfully
+          })
+        });
+        console.log("HOHO", res.keys());
+        console.log("HOHO", res);
 
         this.outputRecords(res);
     }
