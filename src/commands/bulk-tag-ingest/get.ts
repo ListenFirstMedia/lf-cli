@@ -34,12 +34,12 @@ export default class BulkTagIngestGet extends ApiCommand {
           return result;
         });
 
-        const authData = JSON.stringify(jsonified);
+        const data = JSON.stringify(jsonified);
 
         // prepare the POST request
         const reqOpts = {
             method: 'POST',
-            body: authData,
+            body: data,
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
                 'content-length': Buffer.byteLength(authData).toString(),
