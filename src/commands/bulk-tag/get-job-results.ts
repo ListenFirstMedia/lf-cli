@@ -51,7 +51,7 @@ export default class BulkTagGetJobResults extends ApiCommand {
           'profile_type',
           'original input...'
         ];
-     
+
         const res = await this.fetch(
             `/v20200626/bulk_tag_results?${queryStr}`,
             reqOpts,
