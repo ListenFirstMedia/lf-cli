@@ -71,7 +71,7 @@ export default class BulkTagGetJobResults extends ApiCommand {
 
         const filename = opts.args.filename;
 
-        const rows = res.map(rec =>
+        const rows = res['jobs'].map(rec =>
           headers.map(k => rec[k]));
 
         stringify(rows, function (err, output) {
