@@ -23,16 +23,8 @@ export default class BulkTagListJobs extends ApiCommand {
             this.exit(0);
         }
 
-        //const authData = JSON.stringify(jsonified);
-
-        // prepare the POST request
         const reqOpts = {
             method: 'GET',
-            //body: authData,
-            //headers: {
-            //'content-type': 'application/x-www-form-urlencoded',
-            //'content-length': Buffer.byteLength(authData).toString(),
-            //},
         };
 
         const res = await this.fetch(
@@ -41,6 +33,15 @@ export default class BulkTagListJobs extends ApiCommand {
             `Listing jobs`
         );
 
-        this.outputRecords(res);
+        console.log('RES', res);
+        res.map(rec => {
+          console.log(`Job ${rec['job_id']} started ${rec['start_time']}`);
+          if (rec['finished']) {
+            console.log(`Finished ${rec['end_time']} duration ${rec['duration']}s`);
+          } else {
+            console.log('Not finished');
+          }
+          console.log('');
+        });
     }
 }
