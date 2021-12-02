@@ -17,7 +17,7 @@ export default class BulkTagIngestGet extends ApiCommand {
         },
     ];
 
-    static examples = ['$ lf-cli bulk-tag-ingest:get tags.csv'];
+    static examples = ['$ lf-cli bulk-tag-ingest:get [filename]'];
 
     async run() {
 
@@ -29,7 +29,7 @@ export default class BulkTagIngestGet extends ApiCommand {
         }
 
         const jsonified = await csv()
-        .fromFile('tags.csv')
+        .fromFile(opts.args.filename)
         .then(function(result){
           return result;
         });
