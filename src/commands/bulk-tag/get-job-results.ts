@@ -39,19 +39,8 @@ export default class BulkTagGetJobResults extends ApiCommand {
         const queryArgs = { job_id: job_id };
         const queryStr = querystring.stringify(queryArgs);
 
-        //const path = `/v20200626/brand_view_sets?${queryStr}`;
-        //const data = JSON.stringify({ job_id: job_id });
-        //const data = { job_id: job_id };
-
-        // prepare the POST request
         const reqOpts = {
           method: 'GET',
-          //job_id: job_id,
-            //body: data,
-            //headers: {
-            //'content-type': 'application/x-www-form-urlencoded',
-            //'content-length': Buffer.byteLength(authData).toString(),
-            //},
         };
 
         const headers = [
@@ -64,7 +53,7 @@ export default class BulkTagGetJobResults extends ApiCommand {
         ];
      
         const res = await this.fetch(
-        `/v20200626/bulk_tag_results?${queryStr}`,
+            `/v20200626/bulk_tag_results?${queryStr}`,
             reqOpts,
             `Fetching job results`
         );
@@ -84,7 +73,5 @@ export default class BulkTagGetJobResults extends ApiCommand {
             }
           })
         });
-
-        //this.outputRecords(res);
     }
 }
