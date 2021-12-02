@@ -17,9 +17,14 @@ export default class BulkTagGetJobResults extends ApiCommand {
             description: 'bulk tag job to get results of',
             required: true,
         },
+        {
+            name: 'filename',
+            description: 'file to write jobs results to',
+            required: true,
+        },
     ];
 
-    static examples = ['$ lf-cli bulk-tag-get-job-results:get [job_id]'];
+    static examples = ['$ lf-cli bulk-tag-get-job-results:get [job_id] [filename]'];
 
     async run() {
 
@@ -64,20 +69,12 @@ export default class BulkTagGetJobResults extends ApiCommand {
             `Fetching job results`
         );
 
-        const filename = "out.csv"
+        const filename = opts.args.filename;
 
         const rows = res.map(rec =>
           headers.map(k => rec[k]));
-        console.log("ROWS", rows);
 
-        //const haha = stringify({ header: true }, [{ a: 1, b: 2 }]);
-        //console.log("HAHA", haha);
-        //const sss = stringify({header: true});
-        //sss.on('finish', function
-        //sss.write([1, 2]);
-        //sss.end();
         stringify(rows, function (err, output) {
-          console.log("HAHA", output);
           output = headers.join(",") + "\n" + output;
 
           fs.writeFile(filename, output, err => {
@@ -85,12 +82,9 @@ export default class BulkTagGetJobResults extends ApiCommand {
               console.error(err)
               return
             }
-            //file written successfully
           })
         });
-        console.log("HOHO", res.keys());
-        console.log("HOHO", res);
 
-        this.outputRecords(res);
+        //this.outputRecords(res);
     }
 }
