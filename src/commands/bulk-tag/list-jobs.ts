@@ -28,7 +28,7 @@ export default class BulkTagListJobs extends ApiCommand {
         };
 
         const res = await this.fetch(
-            `/v20200626/bulk_tag_jobs`,
+            `/v20200626/bulk_tagging_job`,
             reqOpts,
             `Listing jobs`
         );

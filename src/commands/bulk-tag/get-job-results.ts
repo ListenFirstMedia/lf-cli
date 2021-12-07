@@ -36,8 +36,6 @@ export default class BulkTagGetJobResults extends ApiCommand {
         }
 
         const job_id = opts.args.job_id;
-        const queryArgs = { job_id: job_id };
-        const queryStr = querystring.stringify(queryArgs);
 
         const reqOpts = {
           method: 'GET',
@@ -53,7 +51,7 @@ export default class BulkTagGetJobResults extends ApiCommand {
         ];
 
         const res = await this.fetch(
-            `/v20200626/bulk_tag_results?${queryStr}`,
+            `/v20200626/bulk_tagging_job/${job_id}`,
             reqOpts,
             `Fetching job results`
         );

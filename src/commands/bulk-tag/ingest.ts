@@ -46,7 +46,7 @@ export default class BulkTagIngestGet extends ApiCommand {
         };
 
         const res = await this.fetch(
-            `/v20200626/bulk_tag`,
+            `/v20200626/bulk_tagging_job`,
             reqOpts,
             `Ingesting tags`
         );
