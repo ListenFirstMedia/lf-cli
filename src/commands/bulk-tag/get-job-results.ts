@@ -1,7 +1,5 @@
 import * as fs from 'fs';
 import ApiCommand from '../../api-command';
-import * as csv from "csvtojson";
-import * as querystring from 'querystring';
 import { stringify } from 'csv-stringify';
 
 export default class BulkTagGetJobResults extends ApiCommand {
@@ -24,10 +22,11 @@ export default class BulkTagGetJobResults extends ApiCommand {
         },
     ];
 
-    static examples = ['$ lf-cli bulk-tag-get-job-results:get [job_id] [filename]'];
+    static examples = [
+        '$ lf-cli bulk-tag-get-job-results:get [job_id] [filename]',
+    ];
 
     async run() {
-
         const opts = this.parse(BulkTagGetJobResults);
 
         if (opts.args.ID === 'help') {
@@ -38,16 +37,16 @@ export default class BulkTagGetJobResults extends ApiCommand {
         const job_id = opts.args.job_id;
 
         const reqOpts = {
-          method: 'GET',
+            method: 'GET',
         };
 
         const headers = [
-          'error',
-          'translated url',
-          'dcs_uid',
-          'channel',
-          'profile_type',
-          'original input...'
+            'error',
+            'translated url',
+            'dcs_uid',
+            'channel',
+            'profile_type',
+            'original input...',
         ];
 
         const res = await this.fetch(
@@ -58,18 +57,17 @@ export default class BulkTagGetJobResults extends ApiCommand {
 
         const filename = opts.args.filename;
 
-        const rows = res['jobs'].map(rec =>
-          headers.map(k => rec[k]));
+        const rows = res.jobs.map((rec: any) => headers.map((k) => rec[k]));
 
-        stringify(rows, function (err, output) {
-          output = headers.join(",") + "\n" + output;
+        const error = (e: any) => this.error(e);
+        stringify(rows, function (_err, output) {
+            output = headers.join(',') + '\n' + output;
 
-          fs.writeFile(filename, output, err => {
-            if (err) {
-              console.error(err)
-              return
-            }
-          })
+            fs.writeFile(filename, output, (err) => {
+                if (err) {
+                    error(err);
+                }
+            });
         });
     }
 }

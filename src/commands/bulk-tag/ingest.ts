@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import ApiCommand from '../../api-command';
-import * as csv from "csvtojson";
 
 export default class BulkTagIngestGet extends ApiCommand {
     static description = `Ingest tags`;
@@ -20,7 +19,6 @@ export default class BulkTagIngestGet extends ApiCommand {
     static examples = ['$ lf-cli bulk-tag-ingest:get [filename]'];
 
     async run() {
-
         const opts = this.parse(BulkTagIngestGet);
 
         if (opts.args.ID === 'help') {
@@ -28,21 +26,17 @@ export default class BulkTagIngestGet extends ApiCommand {
             this.exit(0);
         }
 
-        const jsonified = await csv()
-        .fromFile(opts.args.filename)
-        .then(function(result){
-          return result;
-        });
-
-        const data = JSON.stringify(jsonified);
+        const file_size = fs.statSync(opts.args.filename).size;
+        const file_stream = fs.createReadStream(opts.args.filename);
 
         const reqOpts = {
             method: 'POST',
-            body: data,
+            body: file_stream,
             headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                'content-length': Buffer.byteLength(data).toString(),
+                'content-type': 'text/csv',
+                'content-length': file_size,
             },
+            compress: true,
         };
 
         const res = await this.fetch(

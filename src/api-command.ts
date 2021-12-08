@@ -166,8 +166,10 @@ export default abstract class ApiCommand extends BaseCommand {
 
     outputRecords(
         res: RecordsResponse | RecordResponse | TableResponse,
-        cols: Table.table.Columns<any>
+        cols?: Table.table.Columns<any>
     ): void {
+        cols = cols || {};
+
         const apiFlags = this.parsedApiFlags();
 
         let unwrappedRecords: Array<any>;
