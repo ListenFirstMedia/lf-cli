@@ -59,13 +59,12 @@ export default class BulkTagGetJobResults extends ApiCommand {
 
         const rows = res.jobs.map((rec: any) => headers.map((k) => rec[k]));
 
-        const error = (e: any) => this.error(e);
-        stringify(rows, function (_err, output) {
+        stringify(rows, (_err, output) => {
             output = headers.join(',') + '\n' + output;
 
             fs.writeFile(filename, output, (err) => {
                 if (err) {
-                    error(err);
+                    this.error(err);
                 }
             });
         });

@@ -29,15 +29,14 @@ export default class BulkTagListJobs extends ApiCommand {
             `Listing jobs`
         );
 
-        const log = (s: any) => this.log(s);
         res.jobs.forEach((rec: any) => {
-            log(`Job ${rec.job_id} started ${rec.start_time}`);
+            this.log(`Job ${rec.job_id} started ${rec.start_time}`);
             if (rec.finished) {
-                log(`Finished ${rec.end_time} duration ${rec.duration}s`);
+                this.log(`Finished ${rec.end_time} duration ${rec.duration}s`);
             } else {
-                log('Not finished');
+                this.log('Not finished');
             }
-            log('');
+            this.log('');
         });
     }
 }
