@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import ApiCommand from '../../api-command';
-import { stringify } from 'csv-stringify';
+import _fetch from 'node-fetch';
 
 export default class BulkTagGetJobResults extends ApiCommand {
     static description = `Get bulk tag job results`;
@@ -40,33 +40,25 @@ export default class BulkTagGetJobResults extends ApiCommand {
             method: 'GET',
         };
 
-        const headers = [
-            'error',
-            'translated url',
-            'dcs_uid',
-            'channel',
-            'profile_type',
-            'original input...',
-        ];
-
         const res = await this.fetch(
             `/v20200626/bulk_tagging_job/${job_id}`,
             reqOpts,
             `Fetching job results`
         );
 
+        const { results_url } = res;
         const filename = opts.args.filename;
+        await this.download_file(results_url, filename);
+    }
 
-        const rows = res.jobs.map((rec: any) => headers.map((k) => rec[k]));
+    async download_file(url: string, path: string) {
+        const res = await _fetch(url);
+        const file_stream = fs.createWriteStream(path);
 
-        stringify(rows, (_err, output) => {
-            output = headers.join(',') + '\n' + output;
-
-            fs.writeFile(filename, output, (err) => {
-                if (err) {
-                    this.error(err);
-                }
-            });
+        await new Promise((resolve, reject) => {
+            res.body.pipe(file_stream);
+            res.body.on('error', reject);
+            file_stream.on('finish', resolve);
         });
     }
 }
