@@ -97,7 +97,7 @@ export default class Client {
             }
         }
 
-        const fetchOpts = _merge({}, opts, defaultOpts);
+        const fetchOpts = _merge({}, defaultOpts, opts);
 
         const fqUrl = await this.getApiUrl(relPath, this.#profile.api_host);
         const res = await _fetch(fqUrl.toString(), fetchOpts as any);

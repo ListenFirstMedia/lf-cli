@@ -1,6 +1,4 @@
-import * as fs from 'fs';
 import ApiCommand from '../../api-command';
-import * as csv from "csvtojson";
 
 export default class BulkTagListJobs extends ApiCommand {
     static description = `List tag ingest jobs`;
@@ -9,13 +7,11 @@ export default class BulkTagListJobs extends ApiCommand {
         ...ApiCommand.flags,
     };
 
-    static args = [
-    ];
+    static args = [];
 
     static examples = ['$ lf-cli bulk-tag-list-jobs:get'];
 
     async run() {
-
         const opts = this.parse(BulkTagListJobs);
 
         if (opts.args.ID === 'help') {
@@ -33,14 +29,14 @@ export default class BulkTagListJobs extends ApiCommand {
             `Listing jobs`
         );
 
-        res['jobs'].map(rec => {
-          console.log(`Job ${rec['job_id']} started ${rec['start_time']}`);
-          if (rec['finished']) {
-            console.log(`Finished ${rec['end_time']} duration ${rec['duration']}s`);
-          } else {
-            console.log('Not finished');
-          }
-          console.log('');
+        res.jobs.forEach((rec: any) => {
+            this.log(`Job ${rec.job_id} started ${rec.start_time}`);
+            if (rec.finished) {
+                this.log(`Finished ${rec.end_time} duration ${rec.duration}s`);
+            } else {
+                this.log('Not finished');
+            }
+            this.log('');
         });
     }
 }
