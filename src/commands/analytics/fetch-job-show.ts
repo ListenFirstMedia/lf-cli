@@ -56,10 +56,10 @@ export default class FetchJobShow extends ApiCommand {
         );
 
         if (opts.flags.download && res.record.state === 'completed') {
-            let objs = await Promise.all(
+            const objs = await Promise.all(
                 res.record.page_urls.map(this.fetchAndOutputFile)
             );
-            for (let res of objs) {
+            for (const res of objs) {
                 const cols: { [index: string]: any } = {};
                 res.columns.forEach((col: FieldBasic, idx: number) => {
                     cols[col.id as string] = {
