@@ -125,6 +125,8 @@
         "format-check": "prettier --check src/",
         "lint": "eslint --fix --ext ts src/",
         "lint-check": "eslint --ext ts src/"
+        "lint": "eslint --fix --ext ts src/",
+	"compile": "npx tsc -b"
     },
     "types": "lib/index.d.ts",
     "husky": {
@@ -135,7 +137,8 @@
     "lint-staged": {
         "*.{ts,js}": [
             "npx prettier --check",
-            "eslint --fix-dry-run --ext ts src"
+            "eslint --fix-dry-run --ext ts src",
+	    "npx tsc -b"
         ]
     },
     "publishConfig": {
