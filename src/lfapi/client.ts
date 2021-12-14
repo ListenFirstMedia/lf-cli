@@ -102,8 +102,6 @@ export default class Client {
         const fqUrl = await this.getApiUrl(relPath, this.#profile.api_host);
         const res = await _fetch(fqUrl.toString(), fetchOpts as any);
 
-        console.log(await res.text());
-
         const data = await res.json();
         if (res.ok) {
             return data;

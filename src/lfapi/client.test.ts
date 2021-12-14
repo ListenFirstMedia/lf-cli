@@ -8,8 +8,8 @@ const LFM_API_CONFIG = {
     api_key: process.env.LFM_API_KEY,
     client_id: process.env.LFM_API_CLIENT_ID,
     client_secret: process.env.LFM_API_CLIENT_SECRET,
-    auth_host: process.env.LFM_API_AUTH_HOST || 'auth.lfmdev.in',
-    api_host: process.env.LFM_API_HOST || 'api.lfmdev.in',
+    auth_host: 'auth.lfmdev.in',
+    api_host: 'api.lfmdev.in',
     account_id: 443,
 };
 
