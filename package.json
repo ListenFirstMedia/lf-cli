@@ -122,7 +122,7 @@
         "test": "jest src/",
         "version": "oclif-dev readme && git add README.md",
         "format": "prettier --write src/",
-        "format-check": "prettier src/",
+        "format-check": "prettier --check src/",
         "lint": "eslint --fix --ext ts src/",
         "lint-check": "eslint --ext ts src/"
     },
