@@ -1,5 +1,7 @@
 # ![](listenfirst-logo-small.png) lf-cli
 
+[![Build](https://github.com/listenfirstmedia/lf-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/listenfirstmedia/lf-cli/actions/workflows/ci.yml/badge.svg)
+
 The ListenFirst API Command Line Interface (lf-cli) is a cross-platform tool, allowing users to access ListenFirst’s
 comprehensive social analysis and insights through interactive terminal shells and scripts. With one
 tool to download and configure, you can start leveraging the ListenFirst API without the need to write
