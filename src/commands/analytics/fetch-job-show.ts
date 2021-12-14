@@ -2,6 +2,7 @@ import ApiCommand from '../../api-command';
 import { mapValues as _mapValues } from 'lodash';
 import { flags } from '@oclif/command';
 import _fetch from 'node-fetch';
+import { FieldBasic } from '../../lfapi/types';
 
 export default class FetchJobShow extends ApiCommand {
     static description = `Return a submitted fetch job.`;
@@ -61,6 +62,7 @@ export default class FetchJobShow extends ApiCommand {
             );
             for (const res of objs) {
                 const cols: { [index: string]: any } = {};
+
                 res.columns.forEach((col: FieldBasic, idx: number) => {
                     cols[col.id as string] = {
                         header: col.name as string,

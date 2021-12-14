@@ -32,7 +32,7 @@ A schedule configuration creates a series of fetch job based on the cron express
         let query_req: ScheduleConfig;
 
         if (opts.args.query_file === 'help') {
-            await ScheduleCreate.run(['-h']);
+            await ScheduleConfigCreate.run(['-h']);
             this.exit(0);
         }
 
