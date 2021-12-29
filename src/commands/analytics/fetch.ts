@@ -1,6 +1,6 @@
 import ApiCommand from '../../api-command';
 import * as fs from 'fs';
-import { parseStdin, parseTemplate } from '../../utils';
+import { parseStdin } from '../../utils';
 import { pagingFlags } from '../../support/paging';
 import {
     AnalyticalQuery,
@@ -71,7 +71,7 @@ Fields and their capabilities.
                 opts.args.query_file,
                 'utf-8'
             );
-            query = JSON.parse(parseTemplate(queryTemplate));
+            query = JSON.parse(queryTemplate);
         } else {
             this.error(`query file ${opts.args.query_file} does not exist`, {
                 exit: 2,

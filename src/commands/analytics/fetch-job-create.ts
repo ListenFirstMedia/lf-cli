@@ -1,6 +1,6 @@
 import ApiCommand from '../../api-command';
 import * as fs from 'fs';
-import { parseStdin, parseTemplate } from '../../utils';
+import { parseStdin } from '../../utils';
 import { mapValues as _mapValues } from 'lodash';
 import { FetchJob } from '../../lfapi/types';
 
@@ -53,7 +53,7 @@ to check for job completion.
                 opts.args.query_file,
                 'utf-8'
             );
-            query_req = await JSON.parse(parseTemplate(queryTemplate));
+            query_req = await JSON.parse(queryTemplate);
         } else {
             this.error(`query file ${opts.args.query_file} does not exist`, {
                 exit: 2,
