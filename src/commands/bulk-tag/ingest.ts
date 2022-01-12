@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import ApiCommand from '../../api-command';
+import { uploadFileViaSignedUrl } from '../../upload/signed-url';
 
 export default class BulkTagIngestGet extends ApiCommand {
     static description = `Ingest tags`;
@@ -19,6 +20,13 @@ export default class BulkTagIngestGet extends ApiCommand {
     static examples = ['$ lf-cli bulk-tag-ingest:get [filename]'];
 
     async run() {
+        //console.log('AAA');
+        /// hi
+        /*var foo =*/ await uploadFileViaSignedUrl();
+        //   console.log('AAA ' + foo);
+    }
+
+    async __run() {
         const opts = this.parse(BulkTagIngestGet);
 
         if (opts.args.ID === 'help') {
