@@ -20,10 +20,10 @@ export default class BulkTagIngestGet extends ApiCommand {
     static examples = ['$ lf-cli bulk-tag-ingest:get [filename]'];
 
     async run() {
-        //console.log('AAA');
-        /// hi
-        /*var foo =*/ await uploadFileViaSignedUrl();
-        //   console.log('AAA ' + foo);
+        const body = 'asdff';
+        await uploadFileViaSignedUrl(body, (relPath, fetchOpts, actionMsg) => {
+            return this.fetch(relPath, fetchOpts, actionMsg);
+        });
     }
 
     async __run() {
