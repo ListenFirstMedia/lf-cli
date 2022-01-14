@@ -1,7 +1,8 @@
+import * as fs from 'fs';
 import fetch from 'node-fetch';
 
 export const uploadFileViaSignedUrl = async (
-    body: string,
+    filename: string,
     fetcher: (
         relPath: string,
         fetchOpts?: any,
@@ -9,13 +10,19 @@ export const uploadFileViaSignedUrl = async (
     ) => Promise<any>
 ) => {
     try {
-        const res = await fetcher(
-            '/v20200626/bulk_tagging_upload_url',
+        const signed_url_res = await fetcher(
+            '/v20200626/get_upload_url',
             {},
             'Fetching signed url for upload'
         );
-        const signedUrl = res.url;
-        const response = await fetch(signedUrl, { method: 'PUT', body: body });
-        return response;
-    } catch (error) {}
+        const signedUrl = signed_url_res.url;
+        const contents = fs.readFileSync(filename);
+        /*const response =*/ await fetch(signedUrl, {
+            method: 'PUT',
+            body: contents,
+        });
+        return signed_url_res;
+    } catch (error) {
+        throw error;
+    }
 };
