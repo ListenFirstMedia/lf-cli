@@ -9,20 +9,16 @@ export const uploadFileViaSignedUrl = async (
         actionMsg?: string
     ) => Promise<any>
 ) => {
-    try {
-        const signed_url_res = await fetcher(
-            '/v20200626/get_upload_url',
-            {},
-            'Fetching signed url for upload'
-        );
-        const signedUrl = signed_url_res.url;
-        const contents = fs.readFileSync(filename);
-        /*const response =*/ await fetch(signedUrl, {
-            method: 'PUT',
-            body: contents,
-        });
-        return signed_url_res;
-    } catch (error) {
-        throw error;
-    }
+    const signed_url_res = await fetcher(
+        '/v20200626/get_upload_url',
+        {},
+        'Fetching signed url for upload'
+    );
+    const signedUrl = signed_url_res.url;
+    const contents = fs.readFileSync(filename);
+    await fetch(signedUrl, {
+        method: 'PUT',
+        body: contents,
+    });
+    return signed_url_res;
 };
