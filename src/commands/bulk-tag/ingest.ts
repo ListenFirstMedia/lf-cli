@@ -19,6 +19,8 @@ export default class BulkTagIngestGet extends ApiCommand {
 
     static examples = ['$ lf-cli bulk-tag-ingest:get [filename]'];
 
+    static runSynchronously = false;
+
     async run() {
         const opts = this.parse(BulkTagIngestGet);
 
@@ -36,6 +38,7 @@ export default class BulkTagIngestGet extends ApiCommand {
         const data = querystring.stringify({
             s3_bucket: signed_url_res.s3_bucket,
             s3_key: signed_url_res.s3_key,
+            run_synchronously: BulkTagIngestGet.runSynchronously,
         });
 
         const reqOpts = {
