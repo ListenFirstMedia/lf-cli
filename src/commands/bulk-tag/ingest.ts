@@ -1,5 +1,6 @@
-import * as fs from 'fs';
+import * as querystring from 'querystring';
 import ApiCommand from '../../api-command';
+import { uploadFileViaSignedUrl } from '../../upload/signed-url';
 
 export default class BulkTagIngestGet extends ApiCommand {
     static description = `Ingest tags`;
@@ -26,21 +27,28 @@ export default class BulkTagIngestGet extends ApiCommand {
             this.exit(0);
         }
 
-        const file_size = fs.statSync(opts.args.filename).size;
-        const file_stream = fs.createReadStream(opts.args.filename);
+        const signed_url_res = await uploadFileViaSignedUrl(
+            opts.args.filename,
+            (relPath, fetchOpts, actionMsg) => {
+                return this.fetch(relPath, fetchOpts, actionMsg);
+            }
+        );
+        const data = querystring.stringify({
+            s3_bucket: signed_url_res.s3_bucket,
+            s3_key: signed_url_res.s3_key,
+        });
 
         const reqOpts = {
             method: 'POST',
-            body: file_stream,
+            body: data,
             headers: {
-                'content-type': 'text/csv',
-                'content-length': file_size,
+                'content-type': 'application/x-www-form-urlencoded',
+                'content-length': Buffer.byteLength(data).toString(),
             },
-            compress: true,
         };
 
         const res = await this.fetch(
-            `/v20200626/bulk_tagging_job`,
+            `/v20200626/bulk_tagging_via_url_job`,
             reqOpts,
             `Ingesting tags`
         );
