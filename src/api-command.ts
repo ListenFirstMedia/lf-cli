@@ -69,7 +69,7 @@ export default abstract class ApiCommand extends BaseCommand {
     parsedApiFlags(): flags.Output {
         // a bit of typescript gynmnastics with static flags
         const opts = this.parse(
-            this.constructor as unknown as flags.Input<any>
+            (this.constructor as unknown) as flags.Input<any>
         );
         const flags = opts.flags as flags.Output;
         return flags;
