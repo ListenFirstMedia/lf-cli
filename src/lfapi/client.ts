@@ -50,7 +50,7 @@ export default class Client {
         ];
 
         if (this.#profile.account_id) {
-            cmd.push(`-H "LF-ACTING-ACCOUNT: ${this.#profile.account_id}"`);
+            cmd.push(`-H "LFM-ACTING-ACCOUNT: ${this.#profile.account_id}"`);
         }
 
         if (opts?.body) {
