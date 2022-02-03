@@ -71,6 +71,8 @@ export default class Client {
                 'User-Agent': this.user_agent,
                 'lf-cli-version': '',
                 'lfm-acting-account': '',
+                'lf-client-library': 'lf-cli',
+                'lf-client-version': '',
             },
         };
 
@@ -94,6 +96,7 @@ export default class Client {
             } else {
                 const cli_version = rxRes[0].split('/')[2];
                 defaultOpts.headers['lf-cli-version'] = cli_version;
+                defaultOpts.headers['lf-client-version'] = cli_version;
             }
         }
 
