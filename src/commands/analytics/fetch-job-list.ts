@@ -37,6 +37,8 @@ export default class FetchJobList extends ApiCommand {
         cols = {
             id: {},
             state: {},
+            created_at: {},
+            updated_at: {},
         };
 
         this.outputRecords(res, cols);
