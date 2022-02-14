@@ -90,7 +90,7 @@ $ npm install -g @listenfirst/lf-cli
 $ lf-cli COMMAND
 running command...
 $ lf-cli (-v|--version|version)
-@listenfirst/lf-cli/1.4.1 darwin-arm64 node-v12.22.6
+@listenfirst/lf-cli/1.4.2 darwin-x64 node-v14.16.1
 $ lf-cli --help [COMMAND]
 USAGE
   $ lf-cli COMMAND
@@ -121,6 +121,7 @@ USAGE
 * [`lf-cli analytics:query-builder`](#lf-cli-analyticsquery-builder)
 * [`lf-cli analytics:schedule-config-create QUERY_FILE`](#lf-cli-analyticsschedule-config-create-query_file)
 * [`lf-cli analytics:schedule-config-list`](#lf-cli-analyticsschedule-config-list)
+* [`lf-cli analytics:schedule-config-show ID`](#lf-cli-analyticsschedule-config-show-id)
 * [`lf-cli auth:me`](#lf-cli-authme)
 * [`lf-cli auth:token`](#lf-cli-authtoken)
 * [`lf-cli autocomplete [SHELL]`](#lf-cli-autocomplete-shell)
@@ -197,7 +198,7 @@ EXAMPLES
   $ cat my-request.json | lf-cli analytics:fetch --show-curl | sh
 ```
 
-_See code: [src/commands/analytics/fetch.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/fetch.ts)_
+_See code: [src/commands/analytics/fetch.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/fetch.ts)_
 
 ## `lf-cli analytics:fetch-job-create QUERY_FILE`
 
@@ -235,7 +236,7 @@ EXAMPLE
   $ lf-cli analytics:fetch-job-create my-request.json
 ```
 
-_See code: [src/commands/analytics/fetch-job-create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/fetch-job-create.ts)_
+_See code: [src/commands/analytics/fetch-job-create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/fetch-job-create.ts)_
 
 ## `lf-cli analytics:fetch-job-list`
 
@@ -246,23 +247,25 @@ USAGE
   $ lf-cli analytics:fetch-job-list
 
 OPTIONS
-  -A, --account-id=account-id  switch accounts (overrides profile setting)
-  -h, --help                   show CLI help
-  -p, --profile=profile        the name of the configuration profile
-  --columns=columns            only show provided columns (comma-separated)
-  --csv                        output is csv format [alias: --output=csv]
-  --format=raw|table|doc       [default: raw] output format of the results
-  --no-header                  hide table header from output
-  --no-truncate                do not truncate output to fit screen
-  --pretty                     pretty print json responses (applies to raw or doc formats)
-  --show-curl                  instead of making the request, print a curl command
-  --silent                     hide spinners and other log output
+  -A, --account-id=account-id              switch accounts (overrides profile setting)
+  -h, --help                               show CLI help
+  -p, --profile=profile                    the name of the configuration profile
+  --columns=columns                        only show provided columns (comma-separated)
+  --csv                                    output is csv format [alias: --output=csv]
+  --format=raw|table|doc                   [default: raw] output format of the results
+  --no-header                              hide table header from output
+  --no-truncate                            do not truncate output to fit screen
+  --pretty                                 pretty print json responses (applies to raw or doc formats)
+  --schedule-config-id=schedule-config-id  A filter used to select jobs created by the given schedule config identfier.
+  --show-curl                              instead of making the request, print a curl command
+  --silent                                 hide spinners and other log output
 
-EXAMPLE
+EXAMPLES
   $ lf-cli analytics:fetch-job-list
+  $ lf-cli analytics:fetch-job-list --schedule-config-id 45
 ```
 
-_See code: [src/commands/analytics/fetch-job-list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/fetch-job-list.ts)_
+_See code: [src/commands/analytics/fetch-job-list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/fetch-job-list.ts)_
 
 ## `lf-cli analytics:fetch-job-show ID`
 
@@ -303,7 +306,7 @@ EXAMPLES
   $ lf-cli analytics:fetch-job-show 32 --download >| data.jsonl
 ```
 
-_See code: [src/commands/analytics/fetch-job-show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/fetch-job-show.ts)_
+_See code: [src/commands/analytics/fetch-job-show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/fetch-job-show.ts)_
 
 ## `lf-cli analytics:generate`
 
@@ -324,7 +327,7 @@ EXAMPLES
   $ lf-cli analytics:generate > analytics-requets.json
 ```
 
-_See code: [src/commands/analytics/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/generate.ts)_
+_See code: [src/commands/analytics/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/generate.ts)_
 
 ## `lf-cli analytics:query-builder`
 
@@ -346,7 +349,7 @@ EXAMPLES
   $ lf-cli analytics:query-builder -o my-query.json
 ```
 
-_See code: [src/commands/analytics/query-builder.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/query-builder.ts)_
+_See code: [src/commands/analytics/query-builder.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/query-builder.ts)_
 
 ## `lf-cli analytics:schedule-config-create QUERY_FILE`
 
@@ -380,7 +383,7 @@ EXAMPLE
   $ lf-cli analytics:schedule-config-create my-request.json
 ```
 
-_See code: [src/commands/analytics/schedule-config-create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/schedule-config-create.ts)_
+_See code: [src/commands/analytics/schedule-config-create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/schedule-config-create.ts)_
 
 ## `lf-cli analytics:schedule-config-list`
 
@@ -407,7 +410,37 @@ EXAMPLE
   $ lf-cli analytics:schedule-config-list
 ```
 
-_See code: [src/commands/analytics/schedule-config-list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/analytics/schedule-config-list.ts)_
+_See code: [src/commands/analytics/schedule-config-list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/schedule-config-list.ts)_
+
+## `lf-cli analytics:schedule-config-show ID`
+
+Return a schedule config subitted by the user.
+
+```
+USAGE
+  $ lf-cli analytics:schedule-config-show ID
+
+ARGUMENTS
+  ID  the ID of the schedule config to retrieve
+
+OPTIONS
+  -A, --account-id=account-id  switch accounts (overrides profile setting)
+  -h, --help                   show CLI help
+  -p, --profile=profile        the name of the configuration profile
+  --columns=columns            only show provided columns (comma-separated)
+  --csv                        output is csv format [alias: --output=csv]
+  --format=raw|table|doc       [default: raw] output format of the results
+  --no-header                  hide table header from output
+  --no-truncate                do not truncate output to fit screen
+  --pretty                     pretty print json responses (applies to raw or doc formats)
+  --show-curl                  instead of making the request, print a curl command
+  --silent                     hide spinners and other log output
+
+EXAMPLE
+  $ lf-cli analytics:schedule-config-show 42
+```
+
+_See code: [src/commands/analytics/schedule-config-show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/analytics/schedule-config-show.ts)_
 
 ## `lf-cli auth:me`
 
@@ -441,7 +474,7 @@ EXAMPLES
   $ lf-cli auth:me --pretty --account-id <ACCOUNT_ID>
 ```
 
-_See code: [src/commands/auth/me.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/auth/me.ts)_
+_See code: [src/commands/auth/me.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/auth/me.ts)_
 
 ## `lf-cli auth:token`
 
@@ -469,7 +502,7 @@ EXAMPLES
   $ lf-cli auth:token >| access-token.json
 ```
 
-_See code: [src/commands/auth/token.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/auth/token.ts)_
+_See code: [src/commands/auth/token.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/auth/token.ts)_
 
 ## `lf-cli autocomplete [SHELL]`
 
@@ -526,7 +559,7 @@ EXAMPLES
   $ lf-cli brand-view-sets:get 4626 --pretty
 ```
 
-_See code: [src/commands/brand-view-sets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-view-sets/get.ts)_
+_See code: [src/commands/brand-view-sets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-view-sets/get.ts)_
 
 ## `lf-cli brand-view-sets:list`
 
@@ -563,7 +596,7 @@ EXAMPLES
   $ lf-cli brand-view-sets:list --max-page -1 --format doc > all-brand-sets.jsonl
 ```
 
-_See code: [src/commands/brand-view-sets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-view-sets/list.ts)_
+_See code: [src/commands/brand-view-sets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-view-sets/list.ts)_
 
 ## `lf-cli brand-views:by-brand-set-name BRAND_SET_NAME`
 
@@ -603,7 +636,7 @@ EXAMPLES
   $ lf-cli brand-views:by-brand-set-name --max-page -1 --format table LF // TV Universe
 ```
 
-_See code: [src/commands/brand-views/by-brand-set-name.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-views/by-brand-set-name.ts)_
+_See code: [src/commands/brand-views/by-brand-set-name.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-views/by-brand-set-name.ts)_
 
 ## `lf-cli brand-views:generate`
 
@@ -634,7 +667,7 @@ EXAMPLES
   $ lf-cli brand-views:generate >| my-params.json
 ```
 
-_See code: [src/commands/brand-views/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-views/generate.ts)_
+_See code: [src/commands/brand-views/generate.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-views/generate.ts)_
 
 ## `lf-cli brand-views:get ID`
 
@@ -671,7 +704,7 @@ EXAMPLES
   $ lf-cli brand-views:get --format doc --fields lfm.brand.primary_genre --pretty 31711
 ```
 
-_See code: [src/commands/brand-views/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-views/get.ts)_
+_See code: [src/commands/brand-views/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-views/get.ts)_
 
 ## `lf-cli brand-views:list [PARAMS_FILE]`
 
@@ -716,7 +749,7 @@ EXAMPLES
   $ cat my-params.json | lf-cli brand-views:list --show-curl | sh
 ```
 
-_See code: [src/commands/brand-views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-views/list.ts)_
+_See code: [src/commands/brand-views/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-views/list.ts)_
 
 ## `lf-cli brand-views:my-brands`
 
@@ -754,7 +787,7 @@ EXAMPLES
   $ lf-cli brand-views:my-brands --show-curl | sh
 ```
 
-_See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-views/my-brands.ts)_
+_See code: [src/commands/brand-views/my-brands.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-views/my-brands.ts)_
 
 ## `lf-cli brand-views:request-builder`
 
@@ -778,7 +811,7 @@ EXAMPLES
   $ lf-cli brand-views:request-builder --show-curl
 ```
 
-_See code: [src/commands/brand-views/request-builder.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/brand-views/request-builder.ts)_
+_See code: [src/commands/brand-views/request-builder.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/brand-views/request-builder.ts)_
 
 ## `lf-cli bulk-tag:get-job-results JOB_ID FILENAME`
 
@@ -809,7 +842,7 @@ EXAMPLE
   $ lf-cli bulk-tag-get-job-results:get [job_id] [filename]
 ```
 
-_See code: [src/commands/bulk-tag/get-job-results.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/bulk-tag/get-job-results.ts)_
+_See code: [src/commands/bulk-tag/get-job-results.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/bulk-tag/get-job-results.ts)_
 
 ## `lf-cli bulk-tag:ingest FILENAME`
 
@@ -839,7 +872,7 @@ EXAMPLE
   $ lf-cli bulk-tag-ingest:get [filename]
 ```
 
-_See code: [src/commands/bulk-tag/ingest.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/bulk-tag/ingest.ts)_
+_See code: [src/commands/bulk-tag/ingest.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/bulk-tag/ingest.ts)_
 
 ## `lf-cli bulk-tag:list-jobs`
 
@@ -866,7 +899,7 @@ EXAMPLE
   $ lf-cli bulk-tag-list-jobs:get
 ```
 
-_See code: [src/commands/bulk-tag/list-jobs.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/bulk-tag/list-jobs.ts)_
+_See code: [src/commands/bulk-tag/list-jobs.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/bulk-tag/list-jobs.ts)_
 
 ## `lf-cli commands`
 
@@ -910,7 +943,7 @@ EXAMPLE
   $ lf-cli config:create
 ```
 
-_See code: [src/commands/config/create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/config/create.ts)_
+_See code: [src/commands/config/create.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/config/create.ts)_
 
 ## `lf-cli config:edit`
 
@@ -931,7 +964,7 @@ EXAMPLES
   $ EDITOR=emacs lf-cli config:edit
 ```
 
-_See code: [src/commands/config/edit.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/config/edit.ts)_
+_See code: [src/commands/config/edit.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/config/edit.ts)_
 
 ## `lf-cli config:list`
 
@@ -951,7 +984,7 @@ EXAMPLE
   $ lf-cli config:list
 ```
 
-_See code: [src/commands/config/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/config/list.ts)_
+_See code: [src/commands/config/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/config/list.ts)_
 
 ## `lf-cli config:show`
 
@@ -972,7 +1005,7 @@ EXAMPLES
   $ lf-cli config:show -p my-other-profile
 ```
 
-_See code: [src/commands/config/show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/config/show.ts)_
+_See code: [src/commands/config/show.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/config/show.ts)_
 
 ## `lf-cli config:verify`
 
@@ -993,7 +1026,7 @@ EXAMPLES
   $ lf-cli config:verify -p my-other-profile
 ```
 
-_See code: [src/commands/config/verify.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/config/verify.ts)_
+_See code: [src/commands/config/verify.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/config/verify.ts)_
 
 ## `lf-cli datasets:field-values FIELD`
 
@@ -1026,7 +1059,7 @@ EXAMPLES
   $ lf-cli datasets:field-values --format table --no-header --silent lfm.brand.genres | sort
 ```
 
-_See code: [src/commands/datasets/field-values.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/datasets/field-values.ts)_
+_See code: [src/commands/datasets/field-values.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/datasets/field-values.ts)_
 
 ## `lf-cli datasets:get ID`
 
@@ -1064,7 +1097,7 @@ EXAMPLES
   $ lf-cli datasets:get dataset_brand_facebook --format table --show-fields
 ```
 
-_See code: [src/commands/datasets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/datasets/get.ts)_
+_See code: [src/commands/datasets/get.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/datasets/get.ts)_
 
 ## `lf-cli datasets:list`
 
@@ -1102,7 +1135,7 @@ EXAMPLES
   $ lf-cli datasets:list --format doc > datasets.jsonl
 ```
 
-_See code: [src/commands/datasets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/datasets/list.ts)_
+_See code: [src/commands/datasets/list.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/datasets/list.ts)_
 
 ## `lf-cli help [COMMAND]`
 
@@ -1146,7 +1179,7 @@ EXAMPLE
   $ lf-cli platform:data-status
 ```
 
-_See code: [src/commands/platform/data-status.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.1/src/commands/platform/data-status.ts)_
+_See code: [src/commands/platform/data-status.ts](https://github.com/ListenFirstMedia/lf-cli/blob/v1.4.2/src/commands/platform/data-status.ts)_
 
 ## `lf-cli update [CHANNEL]`
 
