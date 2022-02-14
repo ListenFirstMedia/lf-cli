@@ -3,6 +3,7 @@ NPMRC ?= listenfirst
 AWS_ACCESS_KEY_ID ?= $(shell aws configure get aws_access_key_id)
 AWS_SECRET_ACCESS_KEY ?= $(shell aws configure get aws_secret_access_key)
 OSX_KEYCHAIN ?= ~/Library/Keychains/ListenFirst.keychain-db
+OSX_KEYCHAIN_USER ?= mike.stanley@listenfirstmedia.com
 CDN_DISTRIBUTION_ID ?= E36SQ3NOD1A0TN
 
 release: release-npm release-tarball release-win release-macos
@@ -26,7 +27,7 @@ release-win:
 release-macos:
 	rm -rf tmp/mac* dist/mac*
 	OSX_KEYCHAIN=$(OSX_KEYCHAIN) npx oclif-dev pack:macos
-	OSX_KEYCHAIN=$(OSX_KEYCHAIN) xcrun altool --notarize-app --primary-bundle-id "io.listenfirst.cli" --password "@keychain:altool" --file ./dist/macos/lf-cli-v*.pkg
+	OSX_KEYCHAIN=$(OSX_KEYCHAIN) xcrun altool --notarize-app --primary-bundle-id "io.listenfirst.cli" -u $(OSX_KEYCHAIN_USER) --password "@keychain:altool" --file ./dist/macos/lf-cli-v*.pkg
 	AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) npx oclif-dev publish:macos
 
 invalidate-cdn:
