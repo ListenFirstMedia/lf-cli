@@ -1,6 +1,8 @@
+import * as fs from 'fs';
 import * as querystring from 'querystring';
 import ApiCommand from '../../api-command';
 import { uploadFileViaSignedUrl } from '../../upload/signed-url';
+var crypto = require('crypto');
 
 export default class BulkTagIngestGet extends ApiCommand {
     static description = `Ingest tags`;
@@ -21,6 +23,12 @@ export default class BulkTagIngestGet extends ApiCommand {
 
     static runSynchronously = false;
 
+    calc_md5_hash(filename: string) {
+        const data = fs.readFileSync(filename);
+        const hash = crypto.createHash('md5').update(data).digest('hex');
+        return hash;
+    }
+
     async run() {
         const opts = this.parse(BulkTagIngestGet);
 
@@ -35,10 +43,12 @@ export default class BulkTagIngestGet extends ApiCommand {
                 return this.fetch(relPath, fetchOpts, actionMsg);
             }
         );
+        const uri = `s3://${signed_url_res.s3_bucket}/${signed_url_res.s3_key}`;
+        const md5_hash = this.calc_md5_hash(opts.args.filename);
+
         const data = querystring.stringify({
-            s3_bucket: signed_url_res.s3_bucket,
-            s3_key: signed_url_res.s3_key,
-            run_synchronously: BulkTagIngestGet.runSynchronously,
+            uri: uri,
+            md5_hash: md5_hash,
         });
 
         const reqOpts = {
