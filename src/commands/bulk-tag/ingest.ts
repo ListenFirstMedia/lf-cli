@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as querystring from 'querystring';
 import ApiCommand from '../../api-command';
 import { uploadFileViaSignedUrl } from '../../upload/signed-url';
-var crypto = require('crypto');
+import * as crypto from 'crypto';
 
 export default class BulkTagIngestGet extends ApiCommand {
     static description = `Ingest tags`;
