@@ -46,10 +46,7 @@ export default class BulkTagIngestGet extends ApiCommand {
         const uri = `s3://${signed_url_res.s3_bucket}/${signed_url_res.s3_key}`;
         const md5_hash = this.calc_md5_hash(opts.args.filename);
 
-        const data = querystring.stringify({
-            uri: uri,
-            md5_hash: md5_hash,
-        });
+        const data = querystring.stringify({ uri, md5_hash });
 
         const reqOpts = {
             method: 'POST',
