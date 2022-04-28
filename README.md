@@ -240,7 +240,7 @@ _See code: [src/commands/analytics/fetch-job-create.ts](https://github.com/Liste
 
 ## `lf-cli analytics:fetch-job-list`
 
-Return fetch jobs subitted by the user.
+Return fetch jobs submitted by the user.
 
 ```
 USAGE
@@ -387,7 +387,7 @@ _See code: [src/commands/analytics/schedule-config-create.ts](https://github.com
 
 ## `lf-cli analytics:schedule-config-list`
 
-Return schedule configs subitted by the user.
+Return schedule configs submitted by the user.
 
 ```
 USAGE
@@ -414,7 +414,7 @@ _See code: [src/commands/analytics/schedule-config-list.ts](https://github.com/L
 
 ## `lf-cli analytics:schedule-config-show ID`
 
-Return a schedule config subitted by the user.
+Return a schedule config submitted by the user.
 
 ```
 USAGE

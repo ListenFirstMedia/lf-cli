@@ -3,7 +3,7 @@ import * as querystring from 'querystring';
 import { flags } from '@oclif/command';
 
 export default class FetchJobList extends ApiCommand {
-    static description = `Return fetch jobs subitted by the user.`;
+    static description = `Return fetch jobs submitted by the user.`;
 
     static flags = {
         ...ApiCommand.flags,

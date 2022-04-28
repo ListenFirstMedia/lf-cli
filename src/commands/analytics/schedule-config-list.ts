@@ -1,7 +1,7 @@
 import ApiCommand from '../../api-command';
 
 export default class ScheduleConfigList extends ApiCommand {
-    static description = `Return schedule configs subitted by the user.`;
+    static description = `Return schedule configs submitted by the user.`;
 
     static flags = {
         ...ApiCommand.flags,
