@@ -3,7 +3,6 @@ import { mapValues as _mapValues } from 'lodash';
 import { flags } from '@oclif/command';
 import _fetch from 'node-fetch';
 import { FieldBasic } from '../../lfapi/types';
-import { TableObjectResponse } from '../../lfapi/types';
 
 export default class FetchJobShow extends ApiCommand {
     static description = `Return a submitted fetch job.`;
@@ -58,21 +57,22 @@ export default class FetchJobShow extends ApiCommand {
         );
 
         if (opts.flags.download && res.record.state === 'completed') {
-            const objs: Array<TableObjectResponse> = await Promise.all(
-                res.record.page_urls.map(this.fetchAndOutputFile)
+            Promise.all(
+                res.record.page_urls.map((url) => {
+                    const obj = await this.fetchAndOutputFile(url);
+                    const cols: { [index: string]: any } = {};
+
+                    obj.columns.forEach((col: FieldBasic, idx: number) => {
+                        cols[col.id as string] = {
+                            header: col.name as string,
+                            get: (row: any) => row[idx],
+                        };
+                    });
+
+                    this.outputRecords(obj, cols);
+                    return null;
+                })
             );
-            for (const obj of objs) {
-                const cols: { [index: string]: any } = {};
-
-                obj.columns.forEach((col: FieldBasic, idx: number) => {
-                    cols[col.id as string] = {
-                        header: col.name as string,
-                        get: (row: any) => row[idx],
-                    };
-                });
-
-                this.outputRecords(obj, cols);
-            }
         } else {
             let cols = {};
             cols = _mapValues(res.record, () => {
