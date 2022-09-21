@@ -57,8 +57,14 @@ export default class FetchJobShow extends ApiCommand {
         );
 
         if (opts.flags.download && res.record.state === 'completed') {
+            /* eslint-disable no-await-in-loop */
             for (const url of res.record.page_urls) {
-                // eslint-disable-next-line no-await-in-loop
+                if (url.endsWith('.csv')) {
+                    const data = await _fetch(url);
+                    const res = await data.text();
+                    this.log(res);
+                    continue;
+                }
                 const obj = await this.fetchAndOutputFile(url);
                 const cols: { [index: string]: any } = {};
 
@@ -71,6 +77,7 @@ export default class FetchJobShow extends ApiCommand {
 
                 this.outputRecords(obj, cols);
             }
+            /* eslint-enable no-await-in-loop */
         } else {
             let cols = {};
             cols = _mapValues(res.record, () => {
