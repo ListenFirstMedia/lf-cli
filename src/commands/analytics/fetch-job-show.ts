@@ -57,22 +57,20 @@ export default class FetchJobShow extends ApiCommand {
         );
 
         if (opts.flags.download && res.record.state === 'completed') {
-            Promise.all(
-                res.record.page_urls.map((url) => {
-                    const obj = await this.fetchAndOutputFile(url);
-                    const cols: { [index: string]: any } = {};
+            for (const url of res.record.page_urls) {
+                // eslint-disable-next-line no-await-in-loop
+                const obj = await this.fetchAndOutputFile(url);
+                const cols: { [index: string]: any } = {};
 
-                    obj.columns.forEach((col: FieldBasic, idx: number) => {
-                        cols[col.id as string] = {
-                            header: col.name as string,
-                            get: (row: any) => row[idx],
-                        };
-                    });
+                obj.columns.forEach((col: FieldBasic, idx: number) => {
+                    cols[col.id as string] = {
+                        header: col.name as string,
+                        get: (row: any) => row[idx],
+                    };
+                });
 
-                    this.outputRecords(obj, cols);
-                    return null;
-                })
-            );
+                this.outputRecords(obj, cols);
+            }
         } else {
             let cols = {};
             cols = _mapValues(res.record, () => {
