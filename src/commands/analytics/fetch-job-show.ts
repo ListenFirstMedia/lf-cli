@@ -29,13 +29,6 @@ export default class FetchJobShow extends ApiCommand {
         '$ lf-cli analytics:fetch-job-show 32 --download >| data.jsonl',
     ];
 
-    async fetchAndOutputFile(filePath: string) {
-        const data = await _fetch(filePath);
-        const res = await data.json();
-
-        return res;
-    }
-
     async run() {
         const opts = this.parse(FetchJobShow);
 
@@ -57,25 +50,28 @@ export default class FetchJobShow extends ApiCommand {
         );
 
         if (opts.flags.download && res.record.state === 'completed') {
+            // disabling no-await-in-loop to ensure serial execution so that
+            // heap limit is not breached
+
             /* eslint-disable no-await-in-loop */
             for (const url of res.record.page_urls) {
+                const data = await _fetch(url);
                 if (url.endsWith('.csv')) {
-                    const data = await _fetch(url);
                     const res = await data.text();
                     this.log(res);
-                    continue;
+                } else {
+                    const obj = await data.json();
+                    const cols: { [index: string]: any } = {};
+
+                    obj.columns.forEach((col: FieldBasic, idx: number) => {
+                        cols[col.id as string] = {
+                            header: col.name as string,
+                            get: (row: any) => row[idx],
+                        };
+                    });
+
+                    this.outputRecords(obj, cols);
                 }
-                const obj = await this.fetchAndOutputFile(url);
-                const cols: { [index: string]: any } = {};
-
-                obj.columns.forEach((col: FieldBasic, idx: number) => {
-                    cols[col.id as string] = {
-                        header: col.name as string,
-                        get: (row: any) => row[idx],
-                    };
-                });
-
-                this.outputRecords(obj, cols);
             }
             /* eslint-enable no-await-in-loop */
         } else {
