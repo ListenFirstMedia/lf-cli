@@ -3,7 +3,6 @@ import { mapValues as _mapValues } from 'lodash';
 import { flags } from '@oclif/command';
 import _fetch from 'node-fetch';
 import { FieldBasic } from '../../lfapi/types';
-import { TableObjectResponse } from '../../lfapi/types';
 
 export default class FetchJobShow extends ApiCommand {
     static description = `Return a submitted fetch job.`;
@@ -30,13 +29,6 @@ export default class FetchJobShow extends ApiCommand {
         '$ lf-cli analytics:fetch-job-show 32 --download >| data.jsonl',
     ];
 
-    async fetchAndOutputFile(filePath: string) {
-        const data = await _fetch(filePath);
-        const res = await data.json();
-
-        return res;
-    }
-
     async run() {
         const opts = this.parse(FetchJobShow);
 
@@ -58,21 +50,30 @@ export default class FetchJobShow extends ApiCommand {
         );
 
         if (opts.flags.download && res.record.state === 'completed') {
-            const objs: Array<TableObjectResponse> = await Promise.all(
-                res.record.page_urls.map(this.fetchAndOutputFile)
-            );
-            for (const obj of objs) {
-                const cols: { [index: string]: any } = {};
+            // disabling no-await-in-loop to ensure serial execution so that
+            // heap limit is not breached
 
-                obj.columns.forEach((col: FieldBasic, idx: number) => {
-                    cols[col.id as string] = {
-                        header: col.name as string,
-                        get: (row: any) => row[idx],
-                    };
-                });
+            /* eslint-disable no-await-in-loop */
+            for (const url of res.record.page_urls) {
+                const data = await _fetch(url);
+                if (url.endsWith('.csv')) {
+                    const res = await data.text();
+                    this.log(res);
+                } else {
+                    const obj = await data.json();
+                    const cols: { [index: string]: any } = {};
 
-                this.outputRecords(obj, cols);
+                    obj.columns.forEach((col: FieldBasic, idx: number) => {
+                        cols[col.id as string] = {
+                            header: col.name as string,
+                            get: (row: any) => row[idx],
+                        };
+                    });
+
+                    this.outputRecords(obj, cols);
+                }
             }
+            /* eslint-enable no-await-in-loop */
         } else {
             let cols = {};
             cols = _mapValues(res.record, () => {
