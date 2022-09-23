@@ -3,6 +3,8 @@ import { mapValues as _mapValues } from 'lodash';
 import { flags } from '@oclif/command';
 import _fetch from 'node-fetch';
 import { FieldBasic } from '../../lfapi/types';
+import { cli } from 'cli-ux';
+import * as cliProgress from 'cli-progress';
 
 export default class FetchJobShow extends ApiCommand {
     static description = `Return a submitted fetch job.`;
@@ -53,8 +55,22 @@ export default class FetchJobShow extends ApiCommand {
             // disabling no-await-in-loop to ensure serial execution so that
             // heap limit is not breached
 
+            const total = res.record.page_urls.length;
+            let progress = 0;
+            process.stderr.write(`downloading ${total} pages...\n`);
+            //cli.action.start(`downloading ${total} pages`);
+
+            const progressBar = new cliProgress.SingleBar(
+                {},
+                cliProgress.Presets.shades_classic
+            );
+            progressBar.start(total, progress);
+
             /* eslint-disable no-await-in-loop */
             for (const url of res.record.page_urls) {
+                progress += 1;
+                progressBar.update(progress);
+                //cli.action.start(`downloading page ${progress} of ${total}`);
                 const data = await _fetch(url);
                 if (url.endsWith('.csv')) {
                     const res = await data.text();
@@ -73,6 +89,8 @@ export default class FetchJobShow extends ApiCommand {
                     this.outputRecords(obj, cols);
                 }
             }
+            progressBar.stop();
+            cli.action.stop();
             /* eslint-enable no-await-in-loop */
         } else {
             let cols = {};
