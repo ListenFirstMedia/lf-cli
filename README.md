@@ -90,7 +90,7 @@ $ npm install -g @listenfirst/lf-cli
 $ lf-cli COMMAND
 running command...
 $ lf-cli (-v|--version|version)
-@listenfirst/lf-cli/1.4.7 darwin-arm64 node-v16.17.0
+@listenfirst/lf-cli/1.4.7 darwin-arm64 node-v12.22.6
 $ lf-cli --help [COMMAND]
 USAGE
   $ lf-cli COMMAND
