@@ -4,6 +4,7 @@ import cli, { Table } from 'cli-ux';
 import * as _ from 'lodash';
 import { ClientFetchError } from './lfapi/client';
 import * as querystring from 'querystring';
+import { format, FormatterOptions } from '@fast-csv/format';
 
 export interface RecordsResponse {
     records: Array<any>;
@@ -49,7 +50,11 @@ export default abstract class ApiCommand extends BaseCommand {
         format: flags.string({
             description: 'output format of the results',
             default: 'raw',
-            options: ['raw', 'table', 'doc'],
+            options: ['raw', 'table', 'doc', 'csv', 'tsv'],
+        }),
+        csv: flags.boolean({
+            description: 'shorthand for --format csv',
+            default: false,
         }),
         pretty: flags.boolean({
             description:
@@ -62,7 +67,7 @@ export default abstract class ApiCommand extends BaseCommand {
         }),
         ...BaseCommand.flags,
         ...cli.table.flags({
-            except: ['extended', 'output', 'filter', 'sort'],
+            except: ['extended', 'output', 'filter', 'sort', 'csv'],
         }),
     };
 
@@ -72,6 +77,9 @@ export default abstract class ApiCommand extends BaseCommand {
             (this.constructor as unknown) as flags.Input<any>
         );
         const flags = opts.flags as flags.Output;
+        if (flags.csv === true) {
+            flags.format = 'csv';
+        }
         return flags;
     }
 
@@ -212,9 +220,63 @@ export default abstract class ApiCommand extends BaseCommand {
                     ...tableOpts,
                 });
                 break;
+            case 'csv':
+                this.outputCsv(res, cols, tableOpts, unwrappedRecords, ',');
+
+                break;
+
+            case 'tsv':
+                this.outputCsv(res, cols, tableOpts, unwrappedRecords, '\t');
+
+                break;
             default:
                 this.error('Unexpected output format');
                 this.exit(1);
         }
+    }
+
+    private outputCsv(
+        res: RecordsResponse | RecordResponse | TableResponse,
+        cols: Table.table.Columns<any>,
+        tableOpts: Pick<any, string>,
+        unwrappedRecords: any[],
+        delimiter: string
+    ) {
+        if ('page' in res && res.page && res.page > 1) {
+            tableOpts['no-header'] = true;
+        }
+
+        let csvOpts = new FormatterOptions({
+            headers: false,
+            includeEndRowDelimiter: true,
+            writeBOM: true,
+            delimiter,
+        });
+
+        if (tableOpts['no-header'] !== true && cols !== undefined) {
+            const headers = _.map(cols, (col, id) => {
+                return col.header || id;
+            });
+            csvOpts = new FormatterOptions({
+                headers: headers,
+                alwaysWriteHeaders: true,
+                includeEndRowDelimiter: true,
+                writeBOM: true,
+                delimiter,
+            });
+        }
+
+        const csvStream = format(csvOpts);
+        csvStream.pipe(process.stdout);
+        unwrappedRecords.forEach((row) => {
+            const cleanRow = _.map(row, (val) => {
+                if (typeof val === 'string' || val instanceof String) {
+                    return val.replace(/\n/gi, ' ');
+                }
+                return val;
+            });
+            csvStream.write(cleanRow);
+        });
+        csvStream.end();
     }
 }
