@@ -58,7 +58,7 @@ export default class FetchJobShow extends ApiCommand {
             const total = res.record.page_urls.length;
             let progress = 0;
             process.stderr.write(`downloading ${total} pages...\n`);
-            //cli.action.start(`downloading ${total} pages`);
+            // cli.action.start(`downloading ${total} pages`);
 
             const progressBar = new cliProgress.SingleBar(
                 {},
@@ -70,7 +70,7 @@ export default class FetchJobShow extends ApiCommand {
             for (const url of res.record.page_urls) {
                 progress += 1;
                 progressBar.update(progress);
-                //cli.action.start(`downloading page ${progress} of ${total}`);
+                // cli.action.start(`downloading page ${progress} of ${total}`);
                 const data = await _fetch(url);
                 if (url.endsWith('.csv')) {
                     const res = await data.text();
