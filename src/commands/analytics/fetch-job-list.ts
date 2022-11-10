@@ -11,11 +11,17 @@ export default class FetchJobList extends ApiCommand {
             description:
                 'A filter used to select jobs created by the given schedule config identfier.',
         }),
+        'client-context': flags.string({
+            description:
+                'A filter used to select jobs created with the given client context.',
+        }),
     };
 
     static examples = [
         '$ lf-cli analytics:fetch-job-list',
         '$ lf-cli analytics:fetch-job-list --schedule-config-id 45',
+        '$ lf-cli analytics:fetch-job-list --client-context test_context',
+        '$ lf-cli analytics:fetch-job-list --client-context "test context"',
     ];
 
     async run() {
@@ -29,6 +35,10 @@ export default class FetchJobList extends ApiCommand {
             );
         }
 
+        if (opts.flags['client-context']) {
+            queryArgs.client_context = opts.flags['client-context'];
+        }
+
         const queryStr = querystring.stringify(queryArgs);
         const path = `/v20200626/analytics/fetch_job?${queryStr}`;
 
@@ -39,6 +49,8 @@ export default class FetchJobList extends ApiCommand {
             state: {},
             created_at: {},
             updated_at: {},
+            client_context: {},
+            schedule_config_id: {},
         };
 
         this.outputRecords(res, cols);

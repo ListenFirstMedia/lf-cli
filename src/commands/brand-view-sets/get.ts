@@ -1,7 +1,7 @@
 import ApiCommand from '../../api-command';
 
 export default class BrandViewSetGet extends ApiCommand {
-    static description = `Get a Brand View Aet
+    static description = `Get a Brand View Set
 
 Retrieve a Brand View Set by id.`;
 
