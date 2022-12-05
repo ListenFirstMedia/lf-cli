@@ -221,12 +221,12 @@ export default abstract class ApiCommand extends BaseCommand {
                 });
                 break;
             case 'csv':
-                this.outputCsv(res, cols, tableOpts, unwrappedRecords, ',');
+                this.outputCsv(res, cols, unwrappedRecords, ',');
 
                 break;
 
             case 'tsv':
-                this.outputCsv(res, cols, tableOpts, unwrappedRecords, '\t');
+                this.outputCsv(res, cols, unwrappedRecords, '\t');
 
                 break;
             default:
@@ -238,10 +238,14 @@ export default abstract class ApiCommand extends BaseCommand {
     private outputCsv(
         res: RecordsResponse | RecordResponse | TableResponse,
         cols: Table.table.Columns<any>,
-        tableOpts: Pick<any, string>,
         unwrappedRecords: any[],
         delimiter: string
     ) {
+        const tableOpts = _.pick(
+            this.parsedApiFlags() as any,
+            _.keys(cli.table.flags())
+        );
+
         if ('page' in res && res.page && res.page > 1) {
             tableOpts['no-header'] = true;
         }
