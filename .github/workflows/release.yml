@@ -72,28 +72,28 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    invalidate-cdn:
-      name: Invalidate the CDN
-      runs-on: ubuntu-latest
-      needs:
-        - release-macos
-        - release-win
-        - release-tarball
-      steps:
-        - run: >
-            aws --profile lfmprod cloudfront create-invalidation
-        		    --distribution-id ${{ settings.CDN_DISTRIBUTION_ID }}
-  		          --paths
-              	"/lf-cli-darwin-x64.tar.gz"
-                "/lf-cli-linux-arm.tar.gz"
-                "/lf-cli-linux-x64.tar.gz"
-                "/lf-cli-win32-x64.tar.gz"
-                "/lf-cli-win32-x86.tar.gz"
-                "/lf-cli-x64.exe"
-                "/lf-cli-x86.exe"
-                "/lf-cli.pkg"
-                "/lf-cli.tar.gz"
-                "/version"
-          env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  invalidate-cdn:
+    name: Invalidate the CDN
+    runs-on: ubuntu-latest
+    needs:
+      - release-macos
+      - release-win
+      - release-tarball
+    steps:
+      - run: >
+          aws --profile lfmprod cloudfront create-invalidation
+              --distribution-id ${{ settings.CDN_DISTRIBUTION_ID }}
+              --paths
+              "/lf-cli-darwin-x64.tar.gz"
+              "/lf-cli-linux-arm.tar.gz"
+              "/lf-cli-linux-x64.tar.gz"
+              "/lf-cli-win32-x64.tar.gz"
+              "/lf-cli-win32-x86.tar.gz"
+              "/lf-cli-x64.exe"
+              "/lf-cli-x86.exe"
+              "/lf-cli.pkg"
+              "/lf-cli.tar.gz"
+              "/version"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
