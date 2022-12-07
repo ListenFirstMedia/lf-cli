@@ -66,7 +66,14 @@ jobs:
           xcode-version: latest-stable
       - run: npm ci
       - run: npx oclif-dev pack:macos
-      - run: xcrun notarytool submit --team-id ${{ settings.OSX_NOTARY_TEAM_ID }} --apple-id=${{ settings.OSX_NOTARY_APPLE_ID }} --password=${{ settings.OSX_NOTARY_APPLE_PASSWORD }} --progress --wait ./dist/macos/lf-cli-v*.pkg
+      - run: >
+          xcrun notarytool submit
+                --team-id ${{ secrets.OSX_NOTARY_TEAM_ID }}
+                --apple-id=${{ secrets.OSX_NOTARY_APPLE_ID }}
+                --password=${{ secrets.OSX_NOTARY_APPLE_PASSWORD }}
+                --progress
+                --wait
+                ./dist/macos/lf-cli-v*.pkg
       - run: npx oclif-dev publish:macos
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -82,7 +89,7 @@ jobs:
     steps:
       - run: >
           aws --profile lfmprod cloudfront create-invalidation
-              --distribution-id ${{ settings.CDN_DISTRIBUTION_ID }}
+              --distribution-id ${{ secrets.CDN_DISTRIBUTION_ID }}
               --paths
               "/lf-cli-darwin-x64.tar.gz"
               "/lf-cli-linux-arm.tar.gz"
