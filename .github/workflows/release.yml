@@ -47,8 +47,53 @@ jobs:
       - run: sudo apt-get install p7zip
       - run: sudo apt-get install nsis
       - run: npm ci
-      - run: sudo bash -ic 'npx oclif-dev pack:win'
+      - run: npx oclif-dev pack:win
       - run: npx oclif-dev publish:win
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  release-macos:
+    name: Build and release macos package
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - run: npm ci
+      - run: npx oclif-dev pack:macos
+      - run: xcrun notarytool submit --team-id ${{ settings.OSX_NOTARY_TEAM_ID }} --apple-id=${{ settings.OSX_NOTARY_APPLE_ID }} --password=${{ settings.OSX_NOTARY_APPLE_PASSWORD }} --progress --wait ./dist/macos/lf-cli-v*.pkg
+      - run: npx oclif-dev publish:macos
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    invalidate-cdn:
+      name: Invalidate the CDN
+      runs-on: ubuntu-latest
+      needs:
+        - release-macos
+        - release-win
+        - release-tarball
+      steps:
+        - run: >
+            aws --profile lfmprod cloudfront create-invalidation
+        		    --distribution-id ${{ settings.CDN_DISTRIBUTION_ID }}
+  		          --paths
+              	"/lf-cli-darwin-x64.tar.gz"
+                "/lf-cli-linux-arm.tar.gz"
+                "/lf-cli-linux-x64.tar.gz"
+                "/lf-cli-win32-x64.tar.gz"
+                "/lf-cli-win32-x86.tar.gz"
+                "/lf-cli-x64.exe"
+                "/lf-cli-x86.exe"
+                "/lf-cli.pkg"
+                "/lf-cli.tar.gz"
+                "/version"
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
