@@ -93,14 +93,15 @@ jobs:
         env:
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
           KEYCHAIN_PASSWORD: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
-      - run: >
-          xcrun notarytool submit
-                --team-id ${{ secrets.OSX_NOTARY_TEAM_ID }}
-                --apple-id=${{ secrets.OSX_NOTARY_APPLE_ID }}
-                --password=${{ secrets.OSX_NOTARY_APPLE_PASSWORD }}
-                --progress
-                --wait
-                ./dist/macos/lf-cli-v*.pkg
+      - run: |
+          PACKAGE_PATH=`ls ./dist/macos/lf-cli-v*.pkg`
+          xcrun notarytool submit \
+                --team-id ${{ secrets.OSX_NOTARY_TEAM_ID }} \
+                --apple-id=${{ secrets.OSX_NOTARY_APPLE_ID }} \
+                --password=${{ secrets.OSX_NOTARY_APPLE_PASSWORD }} \
+                --progress \
+                --wait \
+                $PACKAGE_PATH
       - run: npx oclif-dev publish:macos
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
