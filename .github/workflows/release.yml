@@ -71,8 +71,8 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
         run: |
           # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          CERTIFICATE_PATH=${{ runner.temp }}/build_certificate.p12
+          KEYCHAIN_PATH=${{ runner.temp }}/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
@@ -87,12 +87,12 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
       - run: npm ci
       - run: |
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          security list-keychain -d user -s $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          npx oclif-dev pack:macos
+          OSX_KEYCHAIN=$KEYCHAIN_PATH npx oclif-dev pack:macos
         env:
+          KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
           KEYCHAIN_PASSWORD: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
-          OSX_KEYCHAIN: $RUNNER_TEMP/app-signing.keychain-db
       - run: >
           xcrun notarytool submit
                 --team-id ${{ secrets.OSX_NOTARY_TEAM_ID }}
