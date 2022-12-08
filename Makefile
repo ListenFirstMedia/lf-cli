@@ -7,14 +7,19 @@ OSX_KEYCHAIN ?= ~/Library/Keychains/ListenFirst.keychain-db
 OSX_NOTARY_TEAM_ID ?= GX2F4ZZFBZ
 OSX_NOTARY_APPLE_ID ?= mike.stanley@listenfirstmedia.com
 
-
-release: release-npm release-tarball release-win release-macos
-
-release-npm:
+# This is the primary way to release the lf-cli.  Pushing the v* tags to the master branch
+# will trigger the Release process Github Action (./github/workflow/release.yml)
+release:
 	npm version $(VERSION)
 	git push origin master --tags
-	npmrc $(NPMRC) 
-	npm publish 
+
+# This was retained for prosperity.  This process has been automated in Github Actions and
+# these manual steps are deprecated
+manual-release: release-npm release-tarball release-win release-macos
+
+release-npm:
+	npmrc $(NPMRC)
+	npm publish
 
 release-tarball:
 	rm -rf tmp/lf-cli dist/lf-cli
