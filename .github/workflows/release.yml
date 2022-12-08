@@ -122,6 +122,10 @@ jobs:
   invalidate-cdn:
     name: Invalidate the CDN
     runs-on: ubuntu-latest
+    needs:
+      - release-macos
+      - release-win
+      - release-tarball
     steps:
       - run: |
           aws cloudfront create-invalidation \
