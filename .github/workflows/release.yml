@@ -9,7 +9,7 @@ on:
 jobs:
   verity-build:
     name: Run the continuous integration workflow
-    uses: ./github/workflows/ci.yml@master
+    uses: ./.github/workflows/ci.yml@master
     secrets: inherit
 
   publish-npm:
