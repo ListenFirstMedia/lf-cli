@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  verity-build:
+  verify-build:
     name: Run the continuous integration workflow
     uses: ./.github/workflows/ci.yml
     secrets: inherit
