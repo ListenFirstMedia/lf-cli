@@ -7,8 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
+  verity-build:
+    name: Run the continuous integration workflow
+    uses: ./github/workflows/ci.yml@master
+    secrets: inherit
+
   publish-npm:
     name: Publish NPM
+    needs: [verify-build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +29,7 @@ jobs:
 
   release-tarball:
     name: Build and release standalone tarball
+    needs: [verify-build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -38,6 +45,7 @@ jobs:
 
   release-win:
     name: Build and release windows installer
+    needs: [verify-build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,6 +63,7 @@ jobs:
 
   release-macos:
     name: Build and release macos package
+    needs: [verify-build]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -64,7 +73,7 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
-      - name: Install the Apple certificate and provisioning profile
+      - name: Install the Apple developer certificate
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE }}
           P12_PASSWORD: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
@@ -74,7 +83,7 @@ jobs:
           CERTIFICATE_PATH=${{ runner.temp }}/build_certificate.p12
           KEYCHAIN_PATH=${{ runner.temp }}/app-signing.keychain-db
 
-          # import certificate and provisioning profile from secrets
+          # import developers certificate from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
 
           # create temporary keychain
@@ -119,7 +128,7 @@ jobs:
       - release-tarball
     steps:
       - run: |
-          aws --profile lfmprod cloudfront create-invalidation \
+          aws cloudfront create-invalidation \
               --distribution-id ${{ secrets.CDN_DISTRIBUTION_ID }} \
               --paths \
               "/lf-cli-darwin-x64.tar.gz" \
