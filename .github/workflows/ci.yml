@@ -6,8 +6,13 @@ on:
   pull_request:
     branches: [master]
   workflow_call:
-    secrets: inherit
-
+    secrets:
+      LFM_API_KEY:
+        required: true
+      LFM_API_CLIENT_ID:
+        required: true
+      LFM_API_CLIENT_SECRET:
+        required: true
 jobs:
   lint:
     name: Lint
