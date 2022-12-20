@@ -6,7 +6,6 @@ export const pagingFlags = {
     }),
     page: flags.integer({
         description: 'starting page number',
-        default: 1,
     }),
     'max-page': flags.integer({
         description: 'the max page number to fetch (-1 for all pages)',
