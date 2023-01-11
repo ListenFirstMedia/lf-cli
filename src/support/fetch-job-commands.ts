@@ -2,7 +2,7 @@ import ApiCommand from '../api-command';
 import { mapValues as _mapValues } from 'lodash';
 import * as querystring from 'querystring';
 import { flags } from '@oclif/command';
-import * as Parser from '@oclif/parser';
+import { Output as optsType } from '@oclif/parser';
 import _fetch from 'node-fetch';
 import { FieldBasic } from '../lfapi/types';
 import { cli } from 'cli-ux';
@@ -29,7 +29,7 @@ export const filterFlags = {
 export async function displayJob(
     this: ApiCommand,
     path: string,
-    opts: Parser.Output<any, any>,
+    opts: optsType<any, any>,
     msg: string
 ) {
     // fields: string[]): Table.table.Columns<any> {
@@ -86,10 +86,7 @@ export async function displayJob(
     }
 }
 
-export function processFilters(
-    endpoint: string,
-    opts: Parser.Output<any, any>
-) {
+export function processFilters(endpoint: string, opts: optsType<any, any>) {
     const queryArgs: { [index: string]: any } = {};
 
     if (opts.flags['schedule-config-id']) {
