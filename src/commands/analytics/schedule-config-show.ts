@@ -25,7 +25,11 @@ export default class ScheduleConfigShow extends ApiCommand {
         }
 
         const path = `/v20200626/analytics/schedule_config/${opts.args.ID}`;
-        const res = await this.fetch(path, undefined, `fetching`);
+        const res = await this.fetch(
+            path,
+            undefined,
+            `Fetching schedule config ${opts.args.ID}.`
+        );
         let cols = {};
         cols = {
             id: {},

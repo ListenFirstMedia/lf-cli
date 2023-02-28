@@ -66,7 +66,7 @@ to check for job completion.
         };
 
         const path = `/v20200626/analytics/fetch_job`;
-        const res = await this.fetch(path, reqOpts, `Creating fetch jobs.`);
+        const res = await this.fetch(path, reqOpts, `Creating fetch job.`);
 
         let cols = {};
         cols = _mapValues(res.record, () => {

@@ -42,7 +42,7 @@ export default class FetchJobShow extends ApiCommand {
         await this.displayJob(
             path,
             opts,
-            `fetching Fetch Job ${opts.args.ID}'`
+            `Fetching fetch job ${opts.args.ID}.`
         );
     }
 }

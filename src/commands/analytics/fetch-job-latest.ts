@@ -24,10 +24,6 @@ export default class FetchJobLatest extends ApiCommand {
         const opts = this.parse(FetchJobLatest);
         const path = fetchJobCommand.processFilters(endpoint, opts);
 
-        await this.displayJob(
-            path,
-            opts,
-            `fetching Fetch Job ${opts.args.ID}'`
-        );
+        await this.displayJob(path, opts, `Fetching latest fetch job.`);
     }
 }
