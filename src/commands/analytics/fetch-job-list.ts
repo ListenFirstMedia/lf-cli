@@ -21,7 +21,7 @@ export default class FetchJobList extends ApiCommand {
         const opts = this.parse(FetchJobList);
         const path = fetchJobCommand.processFilters(endpoint, opts);
 
-        const res = await this.fetch(path, undefined, `fetching`);
+        const res = await this.fetch(path, undefined, `Fetching fetch jobs.`);
         let cols = {};
         cols = {
             id: {},

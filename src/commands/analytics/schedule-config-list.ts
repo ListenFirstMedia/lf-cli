@@ -31,7 +31,11 @@ export default class ScheduleConfigList extends ApiCommand {
         const queryStr = querystring.stringify(queryArgs);
         const path = `/v20200626/analytics/schedule_config?${queryStr}`;
 
-        const res = await this.fetch(path, undefined, `fetching`);
+        const res = await this.fetch(
+            path,
+            undefined,
+            `Fetching schedule configs.`
+        );
         let cols = {};
         cols = {
             id: {},
