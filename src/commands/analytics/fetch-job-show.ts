@@ -33,7 +33,7 @@ export default class FetchJobShow extends ApiCommand {
             this.exit(0);
         }
 
-        if (!opts.args.ID.match(/^[\d]+$/i)) {
+        if (!/^\d+$/i.test(opts.args.ID)) {
             this.error('Invalid Fetch Job ID', { exit: 1 });
         }
 

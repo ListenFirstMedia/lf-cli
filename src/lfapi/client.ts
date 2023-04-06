@@ -31,9 +31,10 @@ export default class Client {
 
     async getApiUrl(relPath: string, profileHost: string) {
         let httpProtocol = 'https';
-        if (profileHost.match(/localhost/)) {
+        if (/localhost/.test(profileHost)) {
             httpProtocol = 'http';
         }
+
         return new URL(relPath, `${httpProtocol}://${this.#profile.api_host}`);
     }
 
@@ -63,7 +64,18 @@ export default class Client {
     }
 
     async fetch(relPath: string, opts: RequestInit = {}): Promise<any> {
-        const defaultOpts = {
+        const defaultOpts: {
+            headers: {
+                'content-type': string;
+                authorization: string;
+                'x-api-key': string;
+                'User-Agent'?: string;
+                'lf-cli-version'?: string;
+                'lfm-acting-account'?: string;
+                'lf-client-library'?: string;
+                'lf-client-version': string;
+            };
+        } = {
             headers: {
                 'content-type': 'application/json',
                 authorization: `Bearer ${this.access_token.access_token}`,
@@ -89,7 +101,7 @@ export default class Client {
             delete defaultOpts.headers['lf-cli-version'];
         } else {
             // eslint-disable-next-line no-useless-escape
-            const rx = new RegExp(/^@listenfirst\/lf-cli\/([\d\.]+)/);
+            const rx = new RegExp(/^@listenfirst\/lf-cli\/([\d.]+)/);
             const rxRes = rx.exec(this.user_agent);
             if (rxRes === null) {
                 delete defaultOpts.headers['lf-cli-version'];
@@ -108,9 +120,12 @@ export default class Client {
         if (res.ok) {
             return data;
         }
+
         if (res.status === 429) {
             // sleep and retry
-            await new Promise((resolve) => setTimeout(resolve, 60000));
+            await new Promise((resolve) => {
+                setTimeout(resolve, 60_000);
+            });
             return this.fetch(relPath, opts);
         }
 

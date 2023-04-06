@@ -1,10 +1,9 @@
 import ApiCommand from '../api-command';
 import { mapValues as _mapValues } from 'lodash';
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 import { flags } from '@oclif/command';
 import { Output as optsType } from '@oclif/parser';
 import _fetch from 'node-fetch';
-import { FieldBasic } from '../lfapi/types';
 import { cli } from 'cli-ux';
 import * as cliProgress from 'cli-progress';
 
@@ -63,16 +62,17 @@ export async function displayJob(
                 const obj = await data.json();
                 const cols: { [index: string]: any } = {};
 
-                obj.columns.forEach((col: FieldBasic, idx: number) => {
+                for (const [idx, col] of obj.columns.entries()) {
                     cols[col.id as string] = {
                         header: col.name as string,
                         get: (row: any) => row[idx],
                     };
-                });
+                }
 
                 this.outputRecords(obj, cols);
             }
         }
+
         progressBar.stop();
         cli.action.stop();
         /* eslint-enable no-await-in-loop */

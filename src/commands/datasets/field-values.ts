@@ -34,7 +34,7 @@ export default class DatasetsFieldValues extends ApiCommand {
 
         // eslint doesn't like the \. escape in the regexp but it's required
         // eslint-disable-next-line no-useless-escape
-        if (!opts.args.field.match(/^[\w\._]+$/i)) {
+        if (!/^[\w.]+$/i.test(opts.args.field)) {
             this.error('Invalid dataset field ID');
             this.exit(1);
         }

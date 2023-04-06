@@ -1,7 +1,7 @@
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import * as TOML from '@iarna/toml';
 import * as _ from 'lodash';
-import * as path from 'path';
+import * as path from 'node:path';
 
 export interface ProfileSettings {
     api_key: string;
@@ -48,6 +48,7 @@ export class Config {
                 }
             });
         }
+
         return true;
     }
 
@@ -69,6 +70,7 @@ export class Config {
             if (p.account_id) {
                 cfg[p.name].account_id = p.account_id;
             }
+
             if (p.is_default) {
                 cfg.default = p.name;
             }
@@ -115,6 +117,8 @@ export class Config {
     }
 
     eachProfile(cb: (p: Profile, idx: number) => void): void {
-        this.#profiles.forEach(cb);
+        for (const [idx, p] of this.#profiles.entries()) {
+            cb(p, idx);
+        }
     }
 }

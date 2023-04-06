@@ -20,7 +20,7 @@ export default class ScheduleConfigShow extends ApiCommand {
     async run() {
         const opts = this.parse(ScheduleConfigShow);
 
-        if (!opts.args.ID.match(/^[\d]+$/i)) {
+        if (!/^\d+$/i.test(opts.args.ID)) {
             this.error('Invalid Schedule Config ID', { exit: 1 });
         }
 

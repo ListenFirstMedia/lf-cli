@@ -1,5 +1,5 @@
 import ApiCommand from '../../api-command';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import { parseStdin } from '../../utils';
 import { mapValues as _mapValues } from 'lodash';
 import { ScheduleConfig } from '../../lfapi/types';

@@ -30,12 +30,13 @@ export function brandViewColumns(fields: string[]): Table.table.Columns<any> {
         },
         type: {},
     };
-    fields.forEach((field: string) => {
+    for (const field of fields) {
         cols[field] = {
             header: normTitlecase(_split(field, '.').pop()),
             get: (row) => row.dimensions[field],
         };
-    });
+    }
+
     return cols;
 }
 

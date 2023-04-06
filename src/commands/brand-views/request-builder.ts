@@ -1,10 +1,10 @@
 import BaseCommand from '../../base-command';
 
 import { flags } from '@oclif/command';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import { brandViewsQueryBuilder } from '../../query-builders';
 import { join as _join } from 'lodash';
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 
 export default class RequestBuilder extends BaseCommand {
     static description =

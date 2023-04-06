@@ -128,9 +128,9 @@ export interface AnalyticalQuery {
     end_date: string;
     metrics: Array<string>;
     group_by: Array<string>;
-    filters: Array<Filter>;
-    sort: Array<Sort>;
-    meta_dimensions: Array<string>;
+    filters?: Array<Filter>;
+    sort?: Array<Sort>;
+    meta_dimensions?: Array<string>;
     page?: number;
     per_page?: number;
 }

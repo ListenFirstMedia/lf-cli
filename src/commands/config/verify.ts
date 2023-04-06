@@ -47,6 +47,7 @@ export default class ConfigVerify extends BaseCommand {
                     if (res && res.records && res.records.length > 0) {
                         return true;
                     }
+
                     throw new Error('Failed to make a secure request');
                 },
             },

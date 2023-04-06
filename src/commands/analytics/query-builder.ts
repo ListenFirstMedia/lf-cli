@@ -1,7 +1,7 @@
 import BaseCommand from '../../base-command';
 
 import { flags } from '@oclif/command';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import { analyticsQueryBuilder } from '../../query-builders';
 
 export default class QueryBuilder extends BaseCommand {

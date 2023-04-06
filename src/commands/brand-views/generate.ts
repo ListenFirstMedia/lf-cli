@@ -33,31 +33,33 @@ a complex example that can be used as a template.`;
         ];
 
         const filters = [];
-        filters.push({
-            field: 'lfm.brand.genres',
-            operator: 'IN',
-            values: ['Comedy'],
-        });
-        filters.push({
-            field: 'lfm.brand.primary_genre',
-            operator: '=',
-            values: ['Comedy'],
-        });
-        filters.push({
-            field: 'lfm.brand.broadcast_dayparts',
-            operator: 'IN',
-            values: ['Prime Time'],
-        });
-        filters.push({
-            field: 'lfm.brand.programmer_types',
-            operator: 'IN',
-            values: ['Premium Cable'],
-        });
-        filters.push({
-            field: 'lfm.brand.programmers',
-            operator: 'IN',
-            values: ['HBO', 'Showtime', 'Epix'],
-        });
+        filters.push(
+            {
+                field: 'lfm.brand.genres',
+                operator: 'IN',
+                values: ['Comedy'],
+            },
+            {
+                field: 'lfm.brand.primary_genre',
+                operator: '=',
+                values: ['Comedy'],
+            },
+            {
+                field: 'lfm.brand.broadcast_dayparts',
+                operator: 'IN',
+                values: ['Prime Time'],
+            },
+            {
+                field: 'lfm.brand.programmer_types',
+                operator: 'IN',
+                values: ['Premium Cable'],
+            },
+            {
+                field: 'lfm.brand.programmers',
+                operator: 'IN',
+                values: ['HBO', 'Showtime', 'Epix'],
+            }
+        );
 
         const sort = [];
         sort.push({ field: 'lfm.brand.name', dir: 'DESC' });

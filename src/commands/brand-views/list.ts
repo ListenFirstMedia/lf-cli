@@ -1,5 +1,5 @@
 import ApiCommand from '../../api-command';
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 import {
     parseBrandViewFieldsFlag,
     brandViewFlags,
@@ -8,7 +8,7 @@ import {
 import { pagingFlags } from '../../support/paging';
 import { parseStdin } from '../../utils';
 import { join as _join, concat as _concat } from 'lodash';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 
 interface ParamsObject {
     fields?: string[];

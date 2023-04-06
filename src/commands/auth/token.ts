@@ -25,6 +25,7 @@ The access token will be written to stdout.`;
         if (!this.silent()) {
             cli.action.start('obtaining access token');
         }
+
         const token = await obtainAccessToken(profile);
         cli.action.stop();
         this.log(JSON.stringify(token, null, 2));

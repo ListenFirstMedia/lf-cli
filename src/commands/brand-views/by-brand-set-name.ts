@@ -1,5 +1,5 @@
 import ApiCommand from '../../api-command';
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 import {
     parseBrandViewFieldsFlag,
     brandViewFlags,

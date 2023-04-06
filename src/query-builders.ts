@@ -163,13 +163,15 @@ function promptCustomStartDate(): inquirer.InputQuestion {
         when: (ses: any) => ses.start_date === 'CUSTOM',
         message: 'Enter custom start date (YYYY-MM-DD)',
         validate: async (str: string) => {
-            if (str.match(/^(\d{4})-(\d{2})-(\d{2})$/i)) {
+            if (/^(\d{4})-(\d{2})-(\d{2})$/i.test(str)) {
                 const yesterday = dateUtils.yesterday();
                 if (verifyDateRange(str, yesterday)) {
                     return true;
                 }
+
                 return 'Start date must be less than or equal to yesterday';
             }
+
             return 'Invalid Date';
         },
     };
@@ -223,13 +225,15 @@ function promptCustomEndDate(): inquirer.InputQuestion {
         when: (ses: any) => ses.end_date === 'CUSTOM',
         message: 'Enter custom end date (YYYY-MM-DD)',
         validate: async (str: string, ses: any) => {
-            if (str.match(/^(\d{4})-(\d{2})-(\d{2})$/i)) {
+            if (/^(\d{4})-(\d{2})-(\d{2})$/i.test(str)) {
                 const startDate = ses.custom_start_date || ses.start_date;
                 if (verifyDateRange(startDate, str)) {
                     return true;
                 }
+
                 return 'End date must be greater than or equal to start date';
             }
+
             return 'Invalid Date';
         },
     };
@@ -259,6 +263,7 @@ function promptMetrics(client: Client): inquirer.CheckboxQuestion {
             if (data.length > 0) {
                 return true;
             }
+
             return 'At least one metric is required';
         },
     };
@@ -327,6 +332,7 @@ function promptGroupBy(): inquirer.CheckboxQuestion {
             if (data.length > 0) {
                 return true;
             }
+
             return 'At least one group by field is required';
         },
     };
@@ -355,6 +361,7 @@ function promptBrandDims(dataset: Dataset): inquirer.CheckboxQuestion {
         },
     };
 }
+
 function promptPerPage(): inquirer.InputQuestion {
     return {
         type: 'input',
@@ -362,12 +369,14 @@ function promptPerPage(): inquirer.InputQuestion {
         default: '100',
         message: 'Enter page size limit',
         validate: async (str: string) => {
-            if (str.match(/^(\d+)$/i)) {
+            if (/^(\d+)$/i.test(str)) {
                 if (Number(str) > 0 && Number(str) <= 1000) {
                     return true;
                 }
+
                 return 'Page size must be a positive number less than or equal to 1000';
             }
+
             return 'Invalid size';
         },
     };
@@ -393,6 +402,7 @@ function promptSortField(sortableFields: Array<FieldExtended>) {
             if (data.length > 0) {
                 return true;
             }
+
             return 'Select a field to sort by';
         },
     };
@@ -438,7 +448,7 @@ async function sortRuleBuilder(
         if (sortables.length > 0) {
             // find field definitions for all sortables
             const sortableFields: Array<FieldExtended> = [];
-            sortables.forEach((fieldID) => {
+            for (const fieldID of sortables) {
                 const field = _find(dataset.fields, (f) => f.id === fieldID);
                 if (
                     field !== undefined &&
@@ -446,7 +456,7 @@ async function sortRuleBuilder(
                 ) {
                     sortableFields.push(field);
                 }
-            });
+            }
 
             if (sortableFields.length > 0) {
                 const sortQuestions: Array<inquirer.Question> = [
@@ -456,8 +466,10 @@ async function sortRuleBuilder(
                         message: 'Add a sort rule?',
                     },
                 ];
-                sortQuestions.push(promptSortField(sortableFields));
-                sortQuestions.push(promptSortDirection());
+                sortQuestions.push(
+                    promptSortField(sortableFields),
+                    promptSortDirection()
+                );
 
                 // eslint-disable-next-line no-await-in-loop
                 const sortAnswers = await inquirer.prompt(sortQuestions);
@@ -503,6 +515,7 @@ function promptFilterField(
             if (input.length > 0) {
                 return true;
             }
+
             return 'A field selection is required';
         },
     };
@@ -553,12 +566,14 @@ function promptFilterOperator(
                         return [FilterOperator.IN];
                 }
             }
+
             return [];
         },
         validate: (input: string) => {
             if (input.length > 0) {
                 return true;
             }
+
             return 'An operator is required';
         },
     };
@@ -591,6 +606,7 @@ function promptBrandSetFilter(client: Client): inquirer.CheckboxQuestion {
             if (input.length > 0) {
                 return true;
             }
+
             return 'Please select at least one Brand Set';
         },
     };
@@ -617,9 +633,11 @@ function promptFilterListValue(client: Client): inquirer.CheckboxQuestion {
             if (input.length === 0) {
                 return 'Please select a filter value';
             }
+
             if (ses.operator === '=' && input.length > 1) {
                 return 'Select only one value in an equal expression';
             }
+
             return true;
         },
     };
@@ -645,6 +663,7 @@ function promptFilterValue(): inquirer.InputQuestion {
             if (input.length > 0) {
                 return true;
             }
+
             return 'Enter a valid filter value';
         },
     };
@@ -669,6 +688,7 @@ function promptFilterBetweenLhs(): inquirer.InputQuestion {
             if (input.length > 0) {
                 return true;
             }
+
             return 'Enter a valid filter value';
         },
     };
@@ -693,6 +713,7 @@ function promptFilterBetweenRhs(): inquirer.InputQuestion {
             if (input.length > 0) {
                 return true;
             }
+
             return 'Enter a valid filter value';
         },
     };
@@ -729,13 +750,15 @@ async function filtersBuilder(
                     message: 'Add a filter expression?',
                 },
             ];
-            filterQuestions.push(promptFilterField(filterFields));
-            filterQuestions.push(promptFilterOperator(filterFields));
-            filterQuestions.push(promptBrandSetFilter(client));
-            filterQuestions.push(promptFilterListValue(client));
-            filterQuestions.push(promptFilterValue());
-            filterQuestions.push(promptFilterBetweenLhs());
-            filterQuestions.push(promptFilterBetweenRhs());
+            filterQuestions.push(
+                promptFilterField(filterFields),
+                promptFilterOperator(filterFields),
+                promptBrandSetFilter(client),
+                promptFilterListValue(client),
+                promptFilterValue(),
+                promptFilterBetweenLhs(),
+                promptFilterBetweenRhs()
+            );
 
             // eslint-disable-next-line no-await-in-loop
             const filterAnswers = await inquirer.prompt(filterQuestions);
@@ -743,8 +766,10 @@ async function filtersBuilder(
             if (filterAnswers.add_filter_expr) {
                 let values = [];
                 if (filterAnswers.operator === FilterOperator.BETWEEN) {
-                    values.push(filterAnswers.between_value_lhs);
-                    values.push(filterAnswers.between_value_rhs);
+                    values.push(
+                        filterAnswers.between_value_lhs,
+                        filterAnswers.between_value_rhs
+                    );
                 } else if (filterAnswers.field_list_values) {
                     values = filterAnswers.field_list_values;
                 } else if (filterAnswers.brand_set_values) {
@@ -795,16 +820,18 @@ export async function analyticsQueryBuilder(client: Client) {
     const datasets = await fetchDatasets(client);
     // const parts = _.split(res.records, (ds) => ds.id )
     const questions = [];
-    questions.push(promptAnalysisType());
-    questions.push(prompDataset(datasets));
-    questions.push(promptStartDate());
-    questions.push(promptCustomStartDate());
-    questions.push(promptEndDate());
-    questions.push(promptCustomEndDate());
-    questions.push(promptMetrics(client));
-    questions.push(promptGroupBy());
-    questions.push(promptMetaDims());
-    questions.push(promptPerPage());
+    questions.push(
+        promptAnalysisType(),
+        prompDataset(datasets),
+        promptStartDate(),
+        promptCustomStartDate(),
+        promptEndDate(),
+        promptCustomEndDate(),
+        promptMetrics(client),
+        promptGroupBy(),
+        promptMetaDims(),
+        promptPerPage()
+    );
     const answers = await inquirer.prompt(questions);
     const query: AnalyticalQuery = buildAnalyticsQuery(answers);
 
@@ -812,7 +839,7 @@ export async function analyticsQueryBuilder(client: Client) {
     const sortables = _filter(
         _uniq(_concat(query.metrics, query.group_by, query.meta_dimensions)),
         (f: string | undefined) => f !== undefined
-    );
+    ) as Array<string>;
     const sortRules = await sortRuleBuilder(answers.dataset_record, sortables);
     const filters = await filtersBuilder(client, answers.dataset_record);
 
@@ -835,8 +862,7 @@ export async function brandViewsQueryBuilder(client: Client) {
     const dataset = await fetchDataset(client, 'dataset_brand_metadata');
 
     const questions = [];
-    questions.push(promptBrandDims(dataset));
-    questions.push(promptPerPage());
+    questions.push(promptBrandDims(dataset), promptPerPage());
     const answers = await inquirer.prompt(questions);
     const query: BrandViewQuery = {
         fields: answers.fields,

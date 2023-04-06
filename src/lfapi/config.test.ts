@@ -1,7 +1,7 @@
 import { Config } from './config';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as os from 'node:os';
 
 describe('lfapi config', () => {
     test('can save and load config', async () => {
@@ -44,6 +44,7 @@ describe('lfapi config', () => {
             expect(tc1?.is_default).toEqual(true);
             expect(tc1.account_id).toBeUndefined();
         }
+
         expect(config2.getProfile('test2')?.account_id).toEqual(2);
         const dtc = config2.getDefaultProfile();
         expect(dtc).toBeTruthy();
