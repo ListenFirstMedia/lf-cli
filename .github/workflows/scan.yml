@@ -1,0 +1,84 @@
+name: Code Scans
+
+on:
+  push:
+    tags:
+      - v*
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * *'
+
+jobs:
+  rapid-detect:
+    name: Rapid Scan
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event.schedule != '0 5 * * *'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Synopsys Detect (Rapid Mode)
+        uses: synopsys-sig/detect-action@v0.3.0
+        env:
+          DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+          DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+          DETECT_PROJECT_VERSION_PHRASE: DEVELOPMENT
+          DETECT_PROJECT_VERSION_UPDATE: true
+          DETECT_DETECTOR_SEARCH_DEPTH: 2
+          DETECT_PROJECT_VERSION_DISTRIBUTION: EXTERNAL
+
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          detect-version: 7.14.0
+          scan-mode: RAPID
+          blackduck-url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+
+  intelligent-detect:
+    name: Intelligent Scan
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 5 * * *' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Synopsys Detect (Intelligent Mode)
+        uses: synopsys-sig/detect-action@v0.3.0
+        env:
+          DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+          DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+          DETECT_PROJECT_VERSION_PHRASE: DEVELOPMENT
+          DETECT_PROJECT_VERSION_UPDATE: true
+          DETECT_DETECTOR_SEARCH_DEPTH: 2
+          DETECT_PROJECT_VERSION_DISTRIBUTION: EXTERNAL
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          detect-version: 7.14.0
+          scan-mode: INTELLIGENT
+          blackduck-url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+
+  release-detect:
+    name: Production Intelligent Scan
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/prod'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set variables for scan
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Run Synopsys Detect (Intelligent Mode)
+        uses: synopsys-sig/detect-action@v0.3.0
+        env:
+          DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+          DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}-${{steps.vars.outputs.sha_short}}
+          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}-${{steps.vars.outputs.sha_short}}
+          DETECT_PROJECT_VERSION_PHRASE: RELEASED
+          DETECT_PROJECT_VERSION_UPDATE: true
+          DETECT_DETECTOR_SEARCH_DEPTH: 2
+          DETECT_PROJECT_VERSION_DISTRIBUTION: EXTERNAL
+
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          detect-version: 7.14.0
+          blackduck-url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
