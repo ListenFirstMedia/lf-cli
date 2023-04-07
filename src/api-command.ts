@@ -3,7 +3,7 @@ import BaseCommand from './base-command';
 import cli, { Table } from 'cli-ux';
 import * as _ from 'lodash';
 import { ClientFetchError } from './lfapi/client';
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 import { format, FormatterOptions } from '@fast-csv/format';
 
 export interface RecordsResponse {
@@ -74,12 +74,13 @@ export default abstract class ApiCommand extends BaseCommand {
     parsedApiFlags(): flags.Output {
         // a bit of typescript gynmnastics with static flags
         const opts = this.parse(
-            (this.constructor as unknown) as flags.Input<any>
+            this.constructor as unknown as flags.Input<any>
         );
         const flags = opts.flags as flags.Output;
         if (flags.csv === true) {
             flags.format = 'csv';
         }
+
         return flags;
     }
 
@@ -99,6 +100,7 @@ export default abstract class ApiCommand extends BaseCommand {
         if (!this.silent()) {
             cli.action.start(actionMsg || 'fetching');
         }
+
         const res = await client.fetch(relPath, fetchOpts);
         cli.action.stop();
         return res;
@@ -119,8 +121,8 @@ export default abstract class ApiCommand extends BaseCommand {
         let queryStr = '';
         if (relPath.includes('?')) {
             const idx = relPath.indexOf('?');
-            queryStr = relPath.substr(idx + 1);
-            path = relPath.substr(0, idx);
+            queryStr = relPath.slice(idx + 1);
+            path = relPath.slice(0, Math.max(0, idx));
 
             if (queryStr.length > 0) {
                 queryArgs = querystring.parse(queryStr);
@@ -162,6 +164,7 @@ export default abstract class ApiCommand extends BaseCommand {
             } else {
                 queryArgs.page = nextPage;
             }
+
             const nextPath = `${path}?${querystring.stringify(queryArgs)}`;
             return this.fetchAllPages(
                 { relPath: nextPath, fetchOpts, actionMsg },
@@ -169,6 +172,7 @@ export default abstract class ApiCommand extends BaseCommand {
                 pageCB
             );
         }
+
         return true;
     }
 
@@ -181,11 +185,7 @@ export default abstract class ApiCommand extends BaseCommand {
         const apiFlags = this.parsedApiFlags();
 
         let unwrappedRecords: Array<any>;
-        if ('records' in res) {
-            unwrappedRecords = res.records;
-        } else {
-            unwrappedRecords = [res.record];
-        }
+        unwrappedRecords = 'records' in res ? res.records : [res.record];
 
         const tableOpts = _.pick(apiFlags as any, _.keys(cli.table.flags()));
         switch (apiFlags.format) {
@@ -195,6 +195,7 @@ export default abstract class ApiCommand extends BaseCommand {
                 } else {
                     this.log(JSON.stringify(res));
                 }
+
                 break;
             case 'doc':
                 if ('columns' in res) {
@@ -203,18 +204,23 @@ export default abstract class ApiCommand extends BaseCommand {
                         return _.zipObject(keys, row);
                     });
                 }
+
                 if (apiFlags.pretty) {
-                    unwrappedRecords.forEach((rec: any) => this.pp(rec));
+                    for (const rec of unwrappedRecords) {
+                        this.pp(rec);
+                    }
                 } else {
-                    unwrappedRecords.forEach((rec: any) =>
-                        this.log(JSON.stringify(rec))
-                    );
+                    for (const rec of unwrappedRecords) {
+                        this.log(JSON.stringify(rec));
+                    }
                 }
+
                 break;
             case 'table':
                 if ('page' in res && res.page && res.page > 1) {
                     tableOpts['no-header'] = true;
                 }
+
                 cli.table(unwrappedRecords, cols, {
                     printLine: this.log,
                     ...tableOpts,
@@ -272,15 +278,17 @@ export default abstract class ApiCommand extends BaseCommand {
 
         const csvStream = format(csvOpts);
         csvStream.pipe(process.stdout);
-        unwrappedRecords.forEach((row) => {
+        for (const row of unwrappedRecords) {
             const cleanRow = _.map(row, (val) => {
                 if (typeof val === 'string' || val instanceof String) {
                     return val.replace(/\n/gi, ' ');
                 }
+
                 return val;
             });
             csvStream.write(cleanRow);
-        });
+        }
+
         csvStream.end();
     }
 }

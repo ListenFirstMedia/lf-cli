@@ -1,8 +1,8 @@
-import * as fs from 'fs';
-import * as querystring from 'querystring';
+import * as fs from 'node:fs';
+import * as querystring from 'node:querystring';
 import ApiCommand from '../../api-command';
 import { uploadFileViaSignedUrl } from '../../upload/signed-url';
-import * as crypto from 'crypto';
+import * as crypto from 'node:crypto';
 
 export default class BulkTagIngestGet extends ApiCommand {
     static description = `Ingest tags`;

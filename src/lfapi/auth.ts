@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 import { ProfileSettings } from './config';
 import { AccessToken } from './types';
 
@@ -45,7 +45,9 @@ export async function obtainAccessToken(
         if (data && data.access_token) {
             return data as AccessToken;
         }
+
         throw new AuthError('Invalid token response', res.status, data);
     }
+
     throw new AuthError('Failed to obtain access token', res.status, data);
 }

@@ -1,7 +1,7 @@
 import ApiCommand from '../../api-command';
 import { pagingFlags } from '../../support/paging';
 import BrandViewsList from '../brand-views/list';
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 
 export default class BrandViewSetsList extends ApiCommand {
     static description = `List Brand View Sets

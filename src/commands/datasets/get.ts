@@ -41,7 +41,7 @@ dataset's attributes and fields will be returned.`;
             this.exit(0);
         }
 
-        if (!opts.args.ID.match(/^[\w_]+$/i)) {
+        if (!/^\w+$/i.test(opts.args.ID)) {
             this.error('Invalid Dataset ID');
             this.exit(1);
         }

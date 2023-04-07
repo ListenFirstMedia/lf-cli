@@ -2,7 +2,7 @@ import Client from './client';
 import { obtainAccessToken } from './auth';
 import { ProfileSettings } from './config';
 import * as moment from 'moment';
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 
 const LFM_API_CONFIG = {
     api_key: process.env.LFM_API_KEY,
@@ -33,7 +33,11 @@ describe('Client', () => {
             start_date: nDaysAgo(7),
             end_date: nDaysAgo(1),
             filters: [
-                { field: 'lfm.brand_view.id', operator: '=', values: [176817] },
+                {
+                    field: 'lfm.brand_view.id',
+                    operator: '=',
+                    values: [176_817],
+                },
             ],
             metrics: [
                 'lfm.audience_ratings.public_fan_acquisition_score',
@@ -92,9 +96,10 @@ describe('Client', () => {
 
         expect(data).toBeDefined();
         expect(data.records.length).toBe(1);
-        data.records.forEach((bv: any) => {
-            expect(bv.id).toBe(144392);
-        });
+        for (const bv of data.records) {
+            expect(bv.id).toBe(144_392);
+        }
+
         expect(data.records.length).toBe(1);
     });
 });

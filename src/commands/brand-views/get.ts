@@ -37,7 +37,7 @@ Retrieve a Brand View by id.`;
             this.exit(0);
         }
 
-        if (!opts.args.ID.match(/^[\d]+$/i)) {
+        if (!/^\d+$/i.test(opts.args.ID)) {
             this.error('Invalid Brand View ID', { exit: 1 });
         }
 

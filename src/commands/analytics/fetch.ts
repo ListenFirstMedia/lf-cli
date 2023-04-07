@@ -1,12 +1,8 @@
 import ApiCommand from '../../api-command';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import { parseStdin } from '../../utils';
 import { pagingFlags } from '../../support/paging';
-import {
-    AnalyticalQuery,
-    TableObjectResponse,
-    FieldBasic,
-} from '../../lfapi/types';
+import { AnalyticalQuery, TableObjectResponse } from '../../lfapi/types';
 
 export default class AnalyticsFetch extends ApiCommand {
     static description = `Perform an analytical query
@@ -81,6 +77,7 @@ Fields and their capabilities.
         if (opts.flags.page) {
             query.page = Number(opts.flags.page);
         }
+
         if (opts.flags['per-page']) {
             query.per_page = Number(opts.flags['per-page']);
         }
@@ -99,12 +96,13 @@ Fields and their capabilities.
             opts.flags['max-page'],
             (res: TableObjectResponse) => {
                 const cols: { [index: string]: any } = {};
-                res.columns.forEach((col: FieldBasic, idx: number) => {
+                for (const [idx, col] of res.columns.entries()) {
                     cols[col.id as string] = {
                         header: col.name as string,
                         get: (row: any) => row[idx],
                     };
-                });
+                }
+
                 this.outputRecords(res, cols);
             }
         );

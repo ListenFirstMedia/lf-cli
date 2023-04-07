@@ -3,7 +3,7 @@ import { Config, Profile } from './lfapi/config';
 import { obtainAccessToken } from './lfapi/auth';
 import Client from './lfapi/client';
 
-import * as path from 'path';
+import * as path from 'node:path';
 
 export default abstract class BaseCommand extends Command {
     static flags = {
@@ -26,7 +26,7 @@ export default abstract class BaseCommand extends Command {
     parsedGlobalFlags(): flags.Output {
         // a bit of typescript gymnastics with static flags
         const opts = this.parse(
-            (this.constructor as unknown) as flags.Input<any>
+            this.constructor as unknown as flags.Input<any>
         );
         const flags = opts.flags as flags.Output;
         return flags;
@@ -45,12 +45,10 @@ export default abstract class BaseCommand extends Command {
     async lfapiConfigProfile(): Promise<Profile> {
         const cfg = await this.lfapiConfig();
         const flags = this.parsedGlobalFlags();
-        let profile;
-        if (flags.profile === undefined) {
-            profile = cfg.getDefaultProfile();
-        } else {
-            profile = cfg.getProfile(flags.profile);
-        }
+        const profile =
+            flags.profile === undefined
+                ? cfg.getDefaultProfile()
+                : cfg.getProfile(flags.profile);
 
         if (profile === undefined) {
             throw new Error('Configuration profile does not exist');
