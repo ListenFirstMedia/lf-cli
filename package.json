@@ -133,7 +133,7 @@
         "lint": "eslint --fix --ext ts src/",
         "lint-check": "eslint --ext ts src/",
         "compile": "npx tsc -b ./",
-        "prepare": "husky install"
+        "prepare": "npx lint-staged"
     },
     "types": "lib/index.d.ts",
     "lint-staged": {
