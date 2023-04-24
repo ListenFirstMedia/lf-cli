@@ -23,7 +23,7 @@ export default class ConfigEdit extends BaseCommand {
             editor = process.platform === 'win32' ? 'edit' : 'vi';
         }
 
-        const cmd = [..._split(editor, /\s+/), ...fn];
+        const cmd = [..._split(editor, /\s+/), fn];
 
         await new Promise<void>((resolve) => {
             const child = child_process.spawn(cmd[0], cmd.slice(1), {
