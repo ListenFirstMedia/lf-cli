@@ -10,8 +10,10 @@ const LFM_API_CONFIG = {
     client_secret: process.env.LFM_API_CLIENT_SECRET,
     auth_host: process.env.LFM_API_AUTH_HOST || 'auth.lfmdev.in',
     api_host: process.env.LFM_API_HOST || 'api.lfmdev.in',
-    account_id: 443,
+    account_id: process.env.LFM_API_ACCOUNT_ID,
 };
+
+const { LFM_API_BRAND_ID: BRAND_ID } = process.env;
 
 function nDaysAgo(n: number): string {
     return moment().subtract(n, 'days').format('YYYY-MM-DD');
@@ -36,7 +38,7 @@ describe('Client', () => {
                 {
                     field: 'lfm.brand_view.id',
                     operator: '=',
-                    values: [176_817],
+                    values: [Number(BRAND_ID)],
                 },
             ],
             metrics: [
@@ -77,7 +79,7 @@ describe('Client', () => {
             {
                 field: 'lfm.brand_view.id',
                 operator: '=',
-                values: ['144392'],
+                values: [BRAND_ID],
             },
             {
                 field: 'lfm.brand_view.type',
@@ -97,7 +99,7 @@ describe('Client', () => {
         expect(data).toBeDefined();
         expect(data.records.length).toBe(1);
         for (const bv of data.records) {
-            expect(bv.id).toBe(144_392);
+            expect(bv.id).toBe(Number(BRAND_ID));
         }
 
         expect(data.records.length).toBe(1);

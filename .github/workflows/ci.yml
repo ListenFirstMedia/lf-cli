@@ -61,5 +61,7 @@ jobs:
           LFM_API_KEY: ${{ secrets.LFM_API_KEY }}
           LFM_API_CLIENT_ID: ${{ secrets.LFM_API_CLIENT_ID }}
           LFM_API_CLIENT_SECRET: ${{ secrets.LFM_API_CLIENT_SECRET }}
+          LFM_API_ACCOUNT_ID: 181
           LFM_API_AUTH_HOST: auth.lfmdev.in
           LFM_API_HOST: api.lfmdev.in
+          LFM_API_BRAND_ID: 144392
