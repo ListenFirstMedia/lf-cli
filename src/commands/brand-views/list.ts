@@ -76,7 +76,7 @@ and sorted by Brand Metadata Dimensions.`;
             optionalParams = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
             optionalParams = JSON.parse(
-                fs.readFileSync(opts.args.query_file, 'utf-8')
+                fs.readFileSync(opts.args.query_file, 'utf8')
             );
         }
 

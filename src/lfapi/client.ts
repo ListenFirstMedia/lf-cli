@@ -100,7 +100,6 @@ export default class Client {
             delete defaultOpts.headers['User-Agent'];
             delete defaultOpts.headers['lf-cli-version'];
         } else {
-            // eslint-disable-next-line no-useless-escape
             const rx = new RegExp(/^@listenfirst\/lf-cli\/([\d.]+)/);
             const rxRes = rx.exec(this.user_agent);
             if (rxRes === null) {

@@ -536,34 +536,49 @@ function promptFilterOperator(
             if (field !== undefined) {
                 ses.field_record = field;
                 switch (field.data_type) {
-                    case FieldDataType.DATETIME:
+                    case FieldDataType.DATETIME: {
                         return [FilterOperator.EQ, FilterOperator.BETWEEN];
-                    case FieldDataType.FLOAT:
+                    }
+
+                    case FieldDataType.FLOAT: {
                         return [
                             FilterOperator.EQ,
                             FilterOperator.IN,
                             FilterOperator.BETWEEN,
                         ];
-                    case FieldDataType.INTEGER:
+                    }
+
+                    case FieldDataType.INTEGER: {
                         return [
                             FilterOperator.EQ,
                             FilterOperator.IN,
                             FilterOperator.BETWEEN,
                         ];
-                    case FieldDataType.STRING:
+                    }
+
+                    case FieldDataType.STRING: {
                         return [
                             FilterOperator.EQ,
                             FilterOperator.IN,
                             FilterOperator.ILIKE,
                         ];
-                    case FieldDataType.STRINGSET:
+                    }
+
+                    case FieldDataType.STRINGSET: {
                         return [FilterOperator.IN, FilterOperator.ILIKE];
-                    case FieldDataType.INTEGERSET:
+                    }
+
+                    case FieldDataType.INTEGERSET: {
                         return [FilterOperator.IN];
-                    case FieldDataType.BOOLEAN:
+                    }
+
+                    case FieldDataType.BOOLEAN: {
                         return [FilterOperator.EQ, FilterOperator.IN];
-                    default:
+                    }
+
+                    default: {
                         return [FilterOperator.IN];
+                    }
                 }
             }
 

@@ -189,7 +189,7 @@ export default abstract class ApiCommand extends BaseCommand {
 
         const tableOpts = _.pick(apiFlags as any, _.keys(cli.table.flags()));
         switch (apiFlags.format) {
-            case 'raw':
+            case 'raw': {
                 if (apiFlags.pretty) {
                     this.pp(res);
                 } else {
@@ -197,7 +197,9 @@ export default abstract class ApiCommand extends BaseCommand {
                 }
 
                 break;
-            case 'doc':
+            }
+
+            case 'doc': {
                 if ('columns' in res) {
                     const keys = _.map(res.columns, (val) => val.id);
                     unwrappedRecords = _.map(res.records, (row) => {
@@ -216,7 +218,9 @@ export default abstract class ApiCommand extends BaseCommand {
                 }
 
                 break;
-            case 'table':
+            }
+
+            case 'table': {
                 if ('page' in res && res.page && res.page > 1) {
                     tableOpts['no-header'] = true;
                 }
@@ -226,18 +230,24 @@ export default abstract class ApiCommand extends BaseCommand {
                     ...tableOpts,
                 });
                 break;
-            case 'csv':
+            }
+
+            case 'csv': {
                 this.outputCsv(res, cols, unwrappedRecords, ',');
 
                 break;
+            }
 
-            case 'tsv':
+            case 'tsv': {
                 this.outputCsv(res, cols, unwrappedRecords, '\t');
 
                 break;
-            default:
+            }
+
+            default: {
                 this.error('Unexpected output format');
                 this.exit(1);
+            }
         }
     }
 
@@ -281,7 +291,7 @@ export default abstract class ApiCommand extends BaseCommand {
         for (const row of unwrappedRecords) {
             const cleanRow = _.map(row, (val) => {
                 if (typeof val === 'string' || val instanceof String) {
-                    return val.replace(/\n/gi, ' ');
+                    return val.replaceAll(/\n/gi, ' ');
                 }
 
                 return val;

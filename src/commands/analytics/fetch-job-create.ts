@@ -49,10 +49,7 @@ to check for job completion.
 
             query_req = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
-            const queryTemplate = fs.readFileSync(
-                opts.args.query_file,
-                'utf-8'
-            );
+            const queryTemplate = fs.readFileSync(opts.args.query_file, 'utf8');
             query_req = await JSON.parse(queryTemplate);
         } else {
             this.error(`query file ${opts.args.query_file} does not exist`, {
