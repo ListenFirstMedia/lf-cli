@@ -1,6 +1,6 @@
 import ApiCommand from '../../api-command';
 import * as querystring from 'node:querystring';
-import { flags } from '@oclif/command';
+import { Flags as flags } from '@oclif/core';
 
 export default class ScheduleConfigList extends ApiCommand {
     static description = `Return schedule configs submitted by the user.`;
@@ -20,7 +20,7 @@ export default class ScheduleConfigList extends ApiCommand {
     ];
 
     async run() {
-        const opts = this.parse(ScheduleConfigList);
+        const opts = await this.parse(ScheduleConfigList);
 
         const queryArgs: { [index: string]: any } = {};
 

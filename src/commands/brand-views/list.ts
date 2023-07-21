@@ -51,7 +51,7 @@ and sorted by Brand Metadata Dimensions.`;
     ];
 
     async run() {
-        const opts = this.parse(BrandViewsList);
+        const opts = await this.parse(BrandViewsList);
         const queryArgs: { [index: string]: any } = {
             per_page: 1000,
             page: opts.flags.page,
@@ -76,7 +76,7 @@ and sorted by Brand Metadata Dimensions.`;
             optionalParams = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
             optionalParams = JSON.parse(
-                fs.readFileSync(opts.args.query_file, 'utf-8')
+                fs.readFileSync(opts.args.query_file, 'utf8')
             );
         }
 

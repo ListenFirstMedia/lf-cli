@@ -15,7 +15,7 @@ export default class ConfigEdit extends BaseCommand {
     ];
 
     async run() {
-        this.parse(ConfigEdit);
+        await this.parse(ConfigEdit);
 
         const fn = await this.lfapiConfgFn();
         let editor = process.env.EDITOR;

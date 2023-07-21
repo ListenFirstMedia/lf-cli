@@ -1,4 +1,4 @@
-import { flags } from '@oclif/command';
+import { Flags as flags } from '@oclif/core';
 import ApiCommand from '../../api-command';
 import * as _ from 'lodash';
 import { table } from 'cli-ux/lib/styled/table';
@@ -34,7 +34,7 @@ dataset's attributes and fields will be returned.`;
     ];
 
     async run() {
-        const opts = this.parse(DatasetsGet);
+        const opts = await this.parse(DatasetsGet);
 
         if (opts.args.ID === 'help') {
             await DatasetsGet.run(['-h']);

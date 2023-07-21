@@ -18,7 +18,7 @@ Brand View Set`;
     ];
 
     async run() {
-        const opts = this.parse(BrandViewsMyBrands);
+        const opts = await this.parse(BrandViewsMyBrands);
         await this.process(opts.flags, 'My Brands');
     }
 }

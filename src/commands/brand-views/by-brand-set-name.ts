@@ -79,7 +79,7 @@ Brand View Set`;
     ];
 
     async run() {
-        const opts = this.parse(BrandViewsByBrandSetName);
+        const opts = await this.parse(BrandViewsByBrandSetName);
         if (opts.args.brand_set_name === 'help') {
             await BrandViewsByBrandSetName.run(['-h']);
             this.exit(0);

@@ -31,7 +31,7 @@ to check for job completion.
     static examples = ['$ lf-cli analytics:fetch-job-create my-request.json'];
 
     async run() {
-        const opts = this.parse(FetchJobCreate);
+        const opts = await this.parse(FetchJobCreate);
         let query_req: FetchJob;
 
         if (opts.args.query_file === 'help') {
@@ -49,10 +49,7 @@ to check for job completion.
 
             query_req = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
-            const queryTemplate = fs.readFileSync(
-                opts.args.query_file,
-                'utf-8'
-            );
+            const queryTemplate = fs.readFileSync(opts.args.query_file, 'utf8');
             query_req = await JSON.parse(queryTemplate);
         } else {
             this.error(`query file ${opts.args.query_file} does not exist`, {

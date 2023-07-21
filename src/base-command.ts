@@ -1,4 +1,4 @@
-import { Command, flags } from '@oclif/command';
+import { Command, Flags as flags, Interfaces as I } from '@oclif/core';
 import { Config, Profile } from './lfapi/config';
 import { obtainAccessToken } from './lfapi/auth';
 import Client from './lfapi/client';
@@ -23,12 +23,12 @@ export default abstract class BaseCommand extends Command {
         }),
     };
 
-    parsedGlobalFlags(): flags.Output {
+    async parsedGlobalFlags(): Promise<I.FlagOutput> {
         // a bit of typescript gymnastics with static flags
-        const opts = this.parse(
-            this.constructor as unknown as flags.Input<any>
+        const opts = await this.parse(
+            this.constructor as unknown as I.FlagInput<any>
         );
-        const flags = opts.flags as flags.Output;
+        const flags = opts.flags as I.FlagOutput;
         return flags;
     }
 
@@ -44,7 +44,7 @@ export default abstract class BaseCommand extends Command {
 
     async lfapiConfigProfile(): Promise<Profile> {
         const cfg = await this.lfapiConfig();
-        const flags = this.parsedGlobalFlags();
+        const flags = await this.parsedGlobalFlags();
         const profile =
             flags.profile === undefined
                 ? cfg.getDefaultProfile()
@@ -69,8 +69,9 @@ export default abstract class BaseCommand extends Command {
         return client;
     }
 
-    silent(): boolean {
-        return this.parsedGlobalFlags().silent;
+    async silent(): Promise<boolean> {
+        const flags = await this.parsedGlobalFlags();
+        return flags.silent;
     }
 
     pp(data: any): void {

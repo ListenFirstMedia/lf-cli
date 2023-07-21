@@ -13,7 +13,7 @@ export default class DataStatus extends ApiCommand {
     async run() {
         const path = `/v20200626/platform/data_status`;
         const res = await this.fetch(path, undefined, `fetching data_status`);
-        const apiFlags = this.parsedApiFlags();
+        const apiFlags = await this.parsedApiFlags();
         let cols = {};
         cols = _mapValues(res, () => {
             return {};

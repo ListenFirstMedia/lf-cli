@@ -30,7 +30,7 @@ Retrieve a Brand View by id.`;
     ];
 
     async run() {
-        const opts = this.parse(BrandViewGet);
+        const opts = await this.parse(BrandViewGet);
 
         if (opts.args.ID === 'help') {
             await BrandViewGet.run(['-h']);

@@ -11,7 +11,7 @@ export default class ConfigCreate extends BaseCommand {
     static examples = ['$ lf-cli config:create'];
 
     async run() {
-        const opts = this.parse(ConfigCreate);
+        const opts = await this.parse(ConfigCreate);
         const config = await this.lfapiConfig();
         const questions = [
             {

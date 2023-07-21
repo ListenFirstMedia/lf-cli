@@ -44,7 +44,7 @@ Fields and their capabilities.
     ];
 
     async run() {
-        const opts = this.parse(AnalyticsFetch);
+        const opts = await this.parse(AnalyticsFetch);
 
         let query: AnalyticalQuery;
 
@@ -63,10 +63,7 @@ Fields and their capabilities.
 
             query = await parseStdin();
         } else if (fs.existsSync(opts.args.query_file)) {
-            const queryTemplate = fs.readFileSync(
-                opts.args.query_file,
-                'utf-8'
-            );
+            const queryTemplate = fs.readFileSync(opts.args.query_file, 'utf8');
             query = JSON.parse(queryTemplate);
         } else {
             this.error(`query file ${opts.args.query_file} does not exist`, {

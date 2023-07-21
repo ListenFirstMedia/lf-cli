@@ -1,6 +1,6 @@
 import BaseCommand from '../../base-command';
 
-import { flags } from '@oclif/command';
+import { Flags as flags } from '@oclif/core';
 import * as fs from 'node:fs';
 import { analyticsQueryBuilder } from '../../query-builders';
 
@@ -23,7 +23,7 @@ export default class QueryBuilder extends BaseCommand {
     ];
 
     async run() {
-        const opts = this.parse(QueryBuilder);
+        const opts = await this.parse(QueryBuilder);
         const client = await this.lfapiClient();
 
         const query = await analyticsQueryBuilder(client);

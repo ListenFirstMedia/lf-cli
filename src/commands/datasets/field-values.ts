@@ -25,7 +25,7 @@ export default class DatasetsFieldValues extends ApiCommand {
     ];
 
     async run() {
-        const opts = this.parse(DatasetsFieldValues);
+        const opts = await this.parse(DatasetsFieldValues);
 
         if (opts.args.field === 'help') {
             await DatasetsFieldValues.run(['-h']);
@@ -33,7 +33,7 @@ export default class DatasetsFieldValues extends ApiCommand {
         }
 
         // eslint doesn't like the \. escape in the regexp but it's required
-        // eslint-disable-next-line no-useless-escape
+
         if (!/^[\w.]+$/i.test(opts.args.field)) {
             this.error('Invalid dataset field ID');
             this.exit(1);

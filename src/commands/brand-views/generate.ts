@@ -22,7 +22,7 @@ a complex example that can be used as a template.`;
     ];
 
     async run() {
-        this.parse(BrandViewsGenerate);
+        await this.parse(BrandViewsGenerate);
 
         const fields = [
             'lfm.brand.broadcast_dayparts',
