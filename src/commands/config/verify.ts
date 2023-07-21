@@ -16,7 +16,7 @@ export default class ConfigVerify extends BaseCommand {
     ];
 
     async run() {
-        this.parse(ConfigVerify);
+        await this.parse(ConfigVerify);
 
         this.log(`Verifying configuration profile`);
 

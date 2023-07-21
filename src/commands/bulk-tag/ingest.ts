@@ -30,7 +30,7 @@ export default class BulkTagIngestGet extends ApiCommand {
     }
 
     async run() {
-        const opts = this.parse(BulkTagIngestGet);
+        const opts = await this.parse(BulkTagIngestGet);
 
         if (opts.args.ID === 'help') {
             await BulkTagIngestGet.run(['-h']);

@@ -25,7 +25,7 @@ export default class DatasetsFieldValues extends ApiCommand {
     ];
 
     async run() {
-        const opts = this.parse(DatasetsFieldValues);
+        const opts = await this.parse(DatasetsFieldValues);
 
         if (opts.args.field === 'help') {
             await DatasetsFieldValues.run(['-h']);

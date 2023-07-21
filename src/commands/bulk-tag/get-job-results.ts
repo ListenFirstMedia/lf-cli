@@ -27,7 +27,7 @@ export default class BulkTagGetJobResults extends ApiCommand {
     ];
 
     async run() {
-        const opts = this.parse(BulkTagGetJobResults);
+        const opts = await this.parse(BulkTagGetJobResults);
 
         if (opts.args.ID === 'help') {
             await BulkTagGetJobResults.run(['-h']);

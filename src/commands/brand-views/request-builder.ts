@@ -1,6 +1,6 @@
 import BaseCommand from '../../base-command';
 
-import { flags } from '@oclif/command';
+import { Flags as flags } from '@oclif/core';
 import * as fs from 'node:fs';
 import { brandViewsQueryBuilder } from '../../query-builders';
 import { join as _join } from 'lodash';
@@ -30,7 +30,7 @@ export default class RequestBuilder extends BaseCommand {
     ];
 
     async run() {
-        const opts = this.parse(RequestBuilder);
+        const opts = await this.parse(RequestBuilder);
         const client = await this.lfapiClient();
 
         const query = await brandViewsQueryBuilder(client);

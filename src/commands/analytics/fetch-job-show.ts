@@ -26,7 +26,7 @@ export default class FetchJobShow extends ApiCommand {
     displayJob = fetchJobCommand.displayJob.bind(this);
 
     async run() {
-        const opts = this.parse(FetchJobShow);
+        const opts = await this.parse(FetchJobShow);
 
         if (opts.args.ID === 'help') {
             await FetchJobShow.run(['-h']);

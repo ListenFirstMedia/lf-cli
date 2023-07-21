@@ -51,7 +51,7 @@ and sorted by Brand Metadata Dimensions.`;
     ];
 
     async run() {
-        const opts = this.parse(BrandViewsList);
+        const opts = await this.parse(BrandViewsList);
         const queryArgs: { [index: string]: any } = {
             per_page: 1000,
             page: opts.flags.page,

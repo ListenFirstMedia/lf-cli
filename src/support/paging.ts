@@ -1,4 +1,4 @@
-import { flags } from '@oclif/command';
+import { Flags as flags } from '@oclif/core';
 
 export const pagingFlags = {
     'per-page': flags.integer({

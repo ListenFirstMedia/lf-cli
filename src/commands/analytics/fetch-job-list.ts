@@ -18,7 +18,7 @@ export default class FetchJobList extends ApiCommand {
 
     async run() {
         const endpoint = `/v20200626/analytics/fetch_job`;
-        const opts = this.parse(FetchJobList);
+        const opts = await this.parse(FetchJobList);
         const path = fetchJobCommand.processFilters(endpoint, opts);
 
         const res = await this.fetch(path, undefined, `Fetching fetch jobs.`);

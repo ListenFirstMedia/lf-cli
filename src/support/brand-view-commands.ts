@@ -1,4 +1,4 @@
-import { flags } from '@oclif/command';
+import { Flags as flags } from '@oclif/core';
 import { split as _split } from 'lodash';
 import { Table } from 'cli-ux';
 import { normTitlecase } from '../utils';

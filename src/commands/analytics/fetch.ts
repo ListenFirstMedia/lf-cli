@@ -44,7 +44,7 @@ Fields and their capabilities.
     ];
 
     async run() {
-        const opts = this.parse(AnalyticsFetch);
+        const opts = await this.parse(AnalyticsFetch);
 
         let query: AnalyticalQuery;
 

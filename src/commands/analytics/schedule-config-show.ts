@@ -18,7 +18,7 @@ export default class ScheduleConfigShow extends ApiCommand {
     static examples = ['$ lf-cli analytics:schedule-config-show 42'];
 
     async run() {
-        const opts = this.parse(ScheduleConfigShow);
+        const opts = await this.parse(ScheduleConfigShow);
 
         if (!/^\d+$/i.test(opts.args.ID)) {
             this.error('Invalid Schedule Config ID', { exit: 1 });

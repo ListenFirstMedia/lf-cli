@@ -31,7 +31,7 @@ to check for job completion.
     static examples = ['$ lf-cli analytics:fetch-job-create my-request.json'];
 
     async run() {
-        const opts = this.parse(FetchJobCreate);
+        const opts = await this.parse(FetchJobCreate);
         let query_req: FetchJob;
 
         if (opts.args.query_file === 'help') {

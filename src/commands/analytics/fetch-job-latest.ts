@@ -21,7 +21,7 @@ export default class FetchJobLatest extends ApiCommand {
 
     async run() {
         const endpoint = `/v20200626/analytics/fetch_job/latest`;
-        const opts = this.parse(FetchJobLatest);
+        const opts = await this.parse(FetchJobLatest);
         const path = fetchJobCommand.processFilters(endpoint, opts);
 
         await this.displayJob(path, opts, `Fetching latest fetch job.`);

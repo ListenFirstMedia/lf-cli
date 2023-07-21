@@ -23,7 +23,7 @@ Retrieve a Brand View Set by id.`;
     ];
 
     async run() {
-        const opts = this.parse(BrandViewSetGet);
+        const opts = await this.parse(BrandViewSetGet);
 
         if (opts.args.ID === 'help') {
             await BrandViewSetGet.run(['-h']);

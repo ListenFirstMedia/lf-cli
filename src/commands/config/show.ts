@@ -13,7 +13,7 @@ export default class ConfigShow extends BaseCommand {
     ];
 
     async run() {
-        this.parse(ConfigShow);
+        await this.parse(ConfigShow);
         const profile = await this.lfapiConfigProfile();
         this.log(JSON.stringify(profile, null, 2));
     }

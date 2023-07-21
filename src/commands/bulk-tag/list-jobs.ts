@@ -12,7 +12,7 @@ export default class BulkTagListJobs extends ApiCommand {
     static examples = ['$ lf-cli bulk-tag-list-jobs:get'];
 
     async run() {
-        const opts = this.parse(BulkTagListJobs);
+        const opts = await this.parse(BulkTagListJobs);
 
         if (opts.args.ID === 'help') {
             await BulkTagListJobs.run(['-h']);

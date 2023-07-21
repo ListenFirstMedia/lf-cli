@@ -1,7 +1,7 @@
 import ApiCommand from '../api-command';
 import { mapValues as _mapValues } from 'lodash';
 import * as querystring from 'node:querystring';
-import { flags } from '@oclif/command';
+import { Flags as flags } from '@oclif/core';
 import { Output as optsType } from '@oclif/parser';
 import _fetch from 'node-fetch';
 import { cli } from 'cli-ux';

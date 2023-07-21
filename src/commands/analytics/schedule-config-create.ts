@@ -28,7 +28,7 @@ A schedule configuration creates a series of fetch job based on the cron express
     ];
 
     async run() {
-        const opts = this.parse(ScheduleConfigCreate);
+        const opts = await this.parse(ScheduleConfigCreate);
         let query_req: ScheduleConfig;
 
         if (opts.args.query_file === 'help') {
