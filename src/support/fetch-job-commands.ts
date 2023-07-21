@@ -1,8 +1,7 @@
 import ApiCommand from '../api-command';
 import { mapValues as _mapValues } from 'lodash';
 import * as querystring from 'node:querystring';
-import { Flags as flags } from '@oclif/core';
-import { Output as optsType } from '@oclif/parser';
+import { Flags as flags, Interfaces as I } from '@oclif/core';
 import _fetch from 'node-fetch';
 import { cli } from 'cli-ux';
 import * as cliProgress from 'cli-progress';
@@ -28,7 +27,7 @@ export const filterFlags = {
 export async function displayJob(
     this: ApiCommand,
     path: string,
-    opts: optsType<any, any>,
+    opts: I.ParserOutput<any, any>,
     msg: string
 ) {
     // fields: string[]): Table.table.Columns<any> {
@@ -86,7 +85,10 @@ export async function displayJob(
     }
 }
 
-export function processFilters(endpoint: string, opts: optsType<any, any>) {
+export function processFilters(
+    endpoint: string,
+    opts: I.ParserOutput<any, any>
+) {
     const queryArgs: { [index: string]: any } = {};
 
     if (opts.flags['schedule-config-id']) {
