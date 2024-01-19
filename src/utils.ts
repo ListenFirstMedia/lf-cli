@@ -4,10 +4,8 @@ import {
     capitalize as _capitalize,
     join as _join,
     map as _map,
-    each as _each,
 } from 'lodash';
 
-import * as Handlebars from 'handlebars';
 import moment = require('moment');
 
 const DATE_FMT = 'YYYY-MM-DD';
@@ -80,19 +78,10 @@ export const dateUtils = {
     },
 };
 
-_each(dateUtils, (val: (params?: any) => string, key: string) => {
-    Handlebars.registerHelper(key, val);
-});
-
 export function verifyDateRange(startDateStr: string, endDateStr: string) {
     return moment(startDateStr, DATE_FMT)
         .startOf('day')
         .isBefore(moment(endDateStr, DATE_FMT).endOf('day'));
-}
-
-export function parseTemplate(data: string, ctx?: any): string {
-    const template = Handlebars.compile(data);
-    return template(ctx);
 }
 
 export async function parseStdin(): Promise<any> {
@@ -103,7 +92,7 @@ export async function parseStdin(): Promise<any> {
             data += l;
         });
         rl.on('close', () => {
-            resolve(JSON.parse(parseTemplate(data)));
+            resolve(JSON.parse(data));
         });
     });
 }
