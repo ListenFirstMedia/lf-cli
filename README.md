@@ -1249,14 +1249,12 @@ _See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1
 
 ## Templates
 
-The queries parsed by the analytics:fetch command are actually [Handlebar templates](https://handlebarsjs.com/).
-This allows some level of scripting, which aids in automation workflows that use the CLI. There are a
-number of date related helpers available to use in the template, which provide a means to configure query
-windows using relative dates. At some point, this behavior may be available in the API. For now, this
-is a feature of the CLI.
+There are a number of date related helpers supported in the API available to use in analytic queries
+(the `analytics` commands), which provide a means to configure query windows using relative dates.
 
 _Functions Available as Helpers:_
 
+-   `maxDateAvailable`
 -   `yesterday`
 -   `startOfMonth`
 -   `startOfLastMonth`
@@ -1273,8 +1271,7 @@ _Functions Available as Helpers:_
 -   `startOfNMonthsAgo(n)`
 -   `endOfNMonthsAgo(n)`
 
-To call one of the functions that takes a parameter, exclude the parenthesis. e.g. `{{nDaysAgo n}}`. More information
-on helpers can be found [here](https://handlebarsjs.com/guide/expressions.html#helpers).
+To call one of the functions that takes a parameter, exclude the parenthesis. e.g. `{{nDaysAgo n}}`.
 
 _Example Usage:_
 
