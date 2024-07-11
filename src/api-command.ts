@@ -227,7 +227,7 @@ export default abstract class ApiCommand extends BaseCommand {
                 }
 
                 cli.table(unwrappedRecords, cols, {
-                    printLine: this.log,
+                    printLine: this.log.bind(this),
                     ...tableOpts,
                 });
                 break;
